@@ -96,5 +96,5 @@ feeds:
     table: ieso_ontario_demand
     sla:
       write_recency_max_hours: 30
-      head_lag_max_hours: 36
+      head_lag_max_hours: 54        # file publishes once a day (~07:30 ET) with the PREVIOUS day's hours, so the head is 24-48h behind by design (ops/SLA_CHANGES.md)
       flat_value: { column: ontario_demand, max_consecutive: 6 }

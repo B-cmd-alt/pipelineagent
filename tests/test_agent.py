@@ -196,3 +196,17 @@ def test_three_rejected_attempts_escalate(fleet, wh, tmp_path):
     assert d["disposition"] == "ESCALATED" and "gate rejected" in d["note"]
     gates = [s for s in wh.agent_steps([f["finding_id"]]) if s["step"] == "gate"]
     assert len(gates) == MAX_ATTEMPTS and all(g["outcome"] == "failed" and "REPLAY_FAILED" in g["detail"] for g in gates)
+
+
+def test_one_issue_per_feed_when_several_axes_escalate(fleet, wh, tmp_path):
+    f1 = _open_finding(wh, "usgs_earthquakes_hour", "write_recency")
+    f2 = _open_finding(wh, "usgs_earthquakes_hour", "head_lag")
+    from pipelineagent.schema import RUNS
+    wh.append("_runs", [{**run_row("ok"), "feed": "usgs_earthquakes_hour"}], RUNS)  # green job, no rows -> escalate on both axes
+    open_now = {(f["feed"], f["axis"]): f for f in wh.open_findings()}
+    Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}), "r1", NOW).run([f1, f2], [], open_now)
+    issues = list((tmp_path / "site" / "agent" / "issues").glob("*.md"))
+    assert len(issues) == 1
+    d = wh.latest_dispositions()
+    assert d[f1["finding_id"]]["disposition"] == d[f2["finding_id"]]["disposition"] == "ESCALATED"
+    assert d[f1["finding_id"]]["evidence_ref"] == d[f2["finding_id"]]["evidence_ref"]  # both point at the same issue

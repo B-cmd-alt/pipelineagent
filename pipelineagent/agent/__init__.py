@@ -48,6 +48,7 @@ class AgentContext:
 class Agent:
     def __init__(self, wh: Warehouse, ctx: AgentContext, run_id: str, now: datetime):
         self.wh, self.ctx, self.run_id, self.now = wh, ctx, run_id, now
+        self.open_now: dict[tuple[str, str], dict] = {}
 
     # ---- bookkeeping -------------------------------------------------------------------
     def step(self, fid: str, attempt: int, step: str, outcome: str, detail: str = "", ref: str | None = None) -> None:
@@ -63,6 +64,7 @@ class Agent:
 
     # ---- entry -------------------------------------------------------------------------
     def run(self, opened: list[dict], deferred: list[dict], open_now: dict[tuple[str, str], dict]) -> None:
+        self.open_now = open_now
         self.verify_pending(open_now)
         queue = list(opened) + [f for f in deferred if f["finding_id"] not in {o["finding_id"] for o in opened}]
         # The unit of work is a FEED, not a finding: three axes breaching on one feed are one
@@ -92,7 +94,7 @@ class Agent:
         attempt = 1 + sum(1 for s in prior if s["step"] == "patch" and s["outcome"] in ("ok", "failed"))
         if attempt > MAX_ATTEMPTS:
             return self.escalate(fid, attempt, f, "max attempts reached", prior)
-        runs = self.wh.runs_for_feed(feed_id, 6)
+        runs = self.wh.runs_for_feed(feed_id, 30)  # daily feeds are mostly 'skipped' rows; triage filters those out
         t = triage_mod.classify(f, runs, spec, self.now, first_seen=not prior)
         self.step(fid, attempt, "triage", "ok", f"{t.failure_class} -> {t.action}: {t.rationale}")
         if t.action == "benign":
@@ -198,17 +200,23 @@ class Agent:
                 self.step(fid, attempt, "verify", "skipped", f"still open; run {runs_since + 1}/{VERIFY_RUNS} after deploy", deployed_sha)
 
     def escalate(self, fid: str, attempt: int, f: dict, reason: str, prior: list[dict], failure_class: str = "unknown") -> None:
-        already = [s for s in prior if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref")]
-        if already:
-            self.disposition(fid, "ESCALATED", reason)
+        """ESCALATED + exactly one GitHub issue per FEED: three axes of one feed breaching is one
+        upstream problem, so sibling findings reuse the issue already opened for the feed."""
+        sibling_ids = [g["finding_id"] for g in self.open_now.values() if g["feed"] == f["feed"]] + [fid]
+        prior_issue = next((s for s in self.wh.agent_steps(sorted(set(sibling_ids))) if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref")), None)
+        if prior_issue:
+            if prior_issue["finding_id"] != fid:
+                self.step(fid, attempt, "escalate", "ok", f"{reason} (joined the feed's open issue)", prior_issue["ref"])
+            self.disposition(fid, "ESCALATED", reason, prior_issue["ref"])
             return
         try:
-            url = self.ctx.github.open_issue(fid, f"PipelineAgent: {f['feed']}/{f['axis']} {f.get('state','')} needs a human ({failure_class})",
+            url = self.ctx.github.open_issue(fid, f"PipelineAgent: {f['feed']} needs a human ({failure_class}: {f['axis']} {f.get('state','')})",
                                              _issue_body(fid, prior, f=f, reason=reason))
             self.step(fid, attempt, "escalate", "ok", reason, url)
+            self.disposition(fid, "ESCALATED", reason, url)
         except GitHubError as e:
             self.step(fid, attempt, "escalate", "failed", f"{reason} (issue not opened: {e})")
-        self.disposition(fid, "ESCALATED", reason)
+            self.disposition(fid, "ESCALATED", reason)
 
 
 def _pr_body(f: dict, t: triage_mod.Triage, proposal: PatchProposal, verdict: dict, attempt: int) -> str:
