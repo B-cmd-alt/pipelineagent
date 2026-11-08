@@ -1,20 +1,20 @@
 {
- "generated_at": "2026-11-08T17:53:31.202323+00:00",
+ "generated_at": "2026-11-08T19:17:02.727977+00:00",
  "project": "PipelineAgent",
  "renderer": {
   "version": "0.1.0",
-  "code_sha256": "30bf412754573f34d46ed40824583f570c0189a3cf0bb689b0ab48267a428d12",
-  "git_commit": "dd6ce522264c8fba614a221c7d548e448a846f51"
+  "code_sha256": "0836cae1f2cd6718ab8cd66483b48b5014e269b81c0f8592f88d95580d621b1a",
+  "git_commit": "004eaf87383f76d43470480522cd1a0ebb5df805"
  },
  "heartbeat_max_age_hours": 26.0,
  "errors": [],
  "heartbeat": {
   "state": "ALIVE",
   "age_hours": 0.0,
-  "last_ts": "2026-11-08T17:53:20.151931+00:00",
+  "last_ts": "2026-11-08T19:16:49.158098+00:00",
   "max_age_hours": 26.0,
-  "code_sha256": "30bf412754573f34d46ed40824583f570c0189a3cf0bb689b0ab48267a428d12",
-  "git_commit": "dd6ce522264c8fba614a221c7d548e448a846f51"
+  "code_sha256": "0836cae1f2cd6718ab8cd66483b48b5014e269b81c0f8592f88d95580d621b1a",
+  "git_commit": "004eaf87383f76d43470480522cd1a0ebb5df805"
  },
  "grid": [
   {
@@ -34,40 +34,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T19:15:12.172120+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:20:00+00:00 (0.6h behind now)",
-     "observed": 0.56,
+     "detail": "newest event_ts 2026-11-08T18:45:00+00:00 (0.5h behind now)",
+     "observed": 0.53,
      "threshold": 4.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
      "state": "OK",
      "detail": "longest identical run 3 < 12 on temperature_c",
      "observed": 3.0,
      "threshold": 12.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:51:49.272224+00:00",
+    "finished_at": "2026-11-08T19:15:18.206120+00:00",
     "rows_written": 4,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 18,
+    "ok": 22,
     "no_change": 1,
-    "failed": 0,
+    "failed": 1,
     "skipped": 0,
-    "rows": 72
+    "rows": 88
    },
    "timeline": [
     {
@@ -183,6 +183,36 @@
      "status": "ok",
      "rows": 4,
      "error": null
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "all stations failed: KOKC: HTTP 403 for https://api.weather.gov/stations/KOKC/observations/latest; KDFW: HTTP 403 for https://api.weather.gov/stations/KDFW/observations/latest; KORD: HTTP 403 for https://api.weather.gov/stations/KORD/observations/latest; KDEN: HTTP 403 for https://api.weather.gov/stations/KDEN/observations/latest"
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
     }
    ]
   },
@@ -203,40 +233,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T19:15:12.172120+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:45:00+00:00 (0.1h behind now)",
-     "observed": 0.14,
+     "detail": "newest event_ts 2026-11-08T19:15:00+00:00 (0.0h behind now)",
+     "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
      "state": "OK",
-     "detail": "longest identical run 2 < 12 on temperature_2m",
-     "observed": 2.0,
+     "detail": "longest identical run 1 < 12 on temperature_2m",
+     "observed": 1.0,
      "threshold": 12.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:51:42.078224+00:00",
+    "finished_at": "2026-11-08T19:15:15.699120+00:00",
     "rows_written": 2,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 19,
+    "ok": 24,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 38
+    "rows": 48
    },
    "timeline": [
     {
@@ -349,6 +379,36 @@
     },
     {
      "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
      "status": "ok",
      "rows": 2,
      "error": null
@@ -372,40 +432,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T19:15:12.172120+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:51:15+00:00 (0.0h behind now)",
-     "observed": 0.03,
+     "detail": "newest event_ts 2026-11-08T19:15:20+00:00 (0.0h behind now)",
+     "observed": 0.02,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
-     "state": "UNKNOWN",
-     "detail": "insufficient history: feature_count(19<24)",
-     "observed": 19.0,
+     "state": "OK",
+     "detail": "longest identical run 6 < 24 on feature_count",
+     "observed": 6.0,
      "threshold": 24.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:51:43.555224+00:00",
+    "finished_at": "2026-11-08T19:15:14.104120+00:00",
     "rows_written": 1,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 19,
+    "ok": 24,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 19
+    "rows": 24
    },
    "timeline": [
     {
@@ -518,6 +578,36 @@
     },
     {
      "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
      "status": "ok",
      "rows": 1,
      "error": null
@@ -544,27 +634,27 @@
      "detail": "no rows captured inside the lookback window",
      "observed": null,
      "threshold": 80.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "UNKNOWN",
      "detail": "no rows to read a head from",
      "observed": null,
      "threshold": 120.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
      "detail": "no rows to evaluate value",
      "observed": 0.0,
      "threshold": 5.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     }
    },
    "last_run": {
     "status": "failed",
     "reason": "source_error",
-    "finished_at": "2026-11-08T17:52:41.800224+00:00",
+    "finished_at": "2026-11-08T19:16:14.396120+00:00",
     "rows_written": 0,
     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)",
     "ago": "0m ago"
@@ -572,7 +662,7 @@
    "runs_24h": {
     "ok": 0,
     "no_change": 0,
-    "failed": 19,
+    "failed": 24,
     "skipped": 0,
     "rows": 0
    },
@@ -690,6 +780,36 @@
      "status": "failed",
      "rows": 0,
      "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
     }
    ]
   },
@@ -706,17 +826,17 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T19:15:12.172120+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:14:42.136000+00:00 (0.6h behind now)",
-     "observed": 0.64,
+     "detail": "newest event_ts 2026-11-08T17:14:42.136000+00:00 (2.0h behind now)",
+     "observed": 2.04,
      "threshold": 240.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
      "state": "N/A",
@@ -726,17 +846,17 @@
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:51:41.874224+00:00",
+    "finished_at": "2026-11-08T19:15:14.130120+00:00",
     "rows_written": 1,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 18,
+    "ok": 23,
     "no_change": 1,
     "failed": 0,
     "skipped": 0,
-    "rows": 18
+    "rows": 23
    },
    "timeline": [
     {
@@ -852,6 +972,36 @@
      "status": "ok",
      "rows": 1,
      "error": null
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
     }
    ]
   },
@@ -872,40 +1022,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T19:15:12.172120+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:53:07+00:00 (0.0h behind now)",
-     "observed": 0.0,
+     "detail": "newest event_ts 2026-11-08T19:16:06+00:00 (0.0h behind now)",
+     "observed": 0.01,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
      "state": "OK",
      "detail": "longest identical run 1 < 6 on price_usd",
      "observed": 1.0,
      "threshold": 6.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:51:41.427224+00:00",
+    "finished_at": "2026-11-08T19:15:14.440120+00:00",
     "rows_written": 2,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 19,
+    "ok": 24,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 38
+    "rows": 48
    },
    "timeline": [
     {
@@ -1021,6 +1171,36 @@
      "status": "ok",
      "rows": 2,
      "error": null
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
     }
    ]
   },
@@ -1031,7 +1211,7 @@
    "table": "ieso_ontario_demand",
    "sla": {
     "write_recency_max_hours": 30.0,
-    "head_lag_max_hours": 36.0,
+    "head_lag_max_hours": 54.0,
     "flat_value": {
      "column": "ontario_demand",
      "max_consecutive": 6,
@@ -1041,39 +1221,39 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (13.9h ago)",
-     "observed": 13.88,
+     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (15.3h ago)",
+     "observed": 15.27,
      "threshold": 30.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (35.9h behind now)",
-     "observed": 35.89,
-     "threshold": 36.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (37.3h behind now)",
+     "observed": 37.28,
+     "threshold": 54.0,
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     },
     "flat_value": {
      "state": "OK",
      "detail": "longest identical run 1 < 6 on ontario_demand",
      "observed": 1.0,
      "threshold": 6.0,
-     "detected_at": "2026-11-08T17:53:20.151931+00:00"
+     "detected_at": "2026-11-08T19:16:49.158098+00:00"
     }
    },
    "last_run": {
     "status": "skipped",
     "reason": "not_due",
-    "finished_at": "2026-11-08T17:51:39.573224+00:00",
+    "finished_at": "2026-11-08T19:15:12.172120+00:00",
     "rows_written": 0,
-    "error": "daily feed refreshed 13.8h ago (< 20h)",
+    "error": "daily feed refreshed 15.2h ago (< 20h)",
     "ago": "1m ago"
    },
    "runs_24h": {
     "ok": 1,
     "no_change": 0,
     "failed": 0,
-    "skipped": 18,
+    "skipped": 23,
     "rows": 7441
    },
    "timeline": [
@@ -1190,6 +1370,36 @@
      "status": "skipped",
      "rows": 0,
      "error": "daily feed refreshed 13.8h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T18:23:20.728479+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 14.4h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T18:45:14.097033+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 14.7h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T18:52:35.382815+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 14.9h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T19:00:14.515687+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 15.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T19:15:12.172120+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 15.2h ago (< 20h)"
     }
    ]
   }
@@ -1208,10 +1418,42 @@
    "threshold": 5.0,
    "detail": "no rows to evaluate value",
    "opened_at": "2026-11-08T17:48:09.419230+00:00",
-   "disposition": "UNKNOWN",
-   "disposition_by": "auto",
-   "disposition_note": "awaiting triage",
-   "open_for": "5m ago"
+   "disposition": "ESCALATED",
+   "disposition_by": "agent",
+   "disposition_note": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "open_for": "1.5h ago",
+   "agent_steps": [
+    {
+     "finding_id": "207080fdb07b08a2",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "207080fdb07b08a2",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    },
+    {
+     "finding_id": "207080fdb07b08a2",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    }
+   ]
   },
   {
    "finding_id": "80e43604e3680013",
@@ -1225,10 +1467,42 @@
    "threshold": 120.0,
    "detail": "no rows to read a head from",
    "opened_at": "2026-11-08T17:48:09.419230+00:00",
-   "disposition": "UNKNOWN",
-   "disposition_by": "auto",
-   "disposition_note": "awaiting triage",
-   "open_for": "5m ago"
+   "disposition": "ESCALATED",
+   "disposition_by": "agent",
+   "disposition_note": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "open_for": "1.5h ago",
+   "agent_steps": [
+    {
+     "finding_id": "80e43604e3680013",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "80e43604e3680013",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    },
+    {
+     "finding_id": "80e43604e3680013",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source (joined the feed's open issue)",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    }
+   ]
   },
   {
    "finding_id": "b7152e86005cca2f",
@@ -1242,10 +1516,42 @@
    "threshold": 80.0,
    "detail": "no rows captured inside the lookback window",
    "opened_at": "2026-11-08T17:48:09.419230+00:00",
-   "disposition": "UNKNOWN",
-   "disposition_by": "auto",
-   "disposition_note": "awaiting triage",
-   "open_for": "5m ago"
+   "disposition": "ESCALATED",
+   "disposition_by": "agent",
+   "disposition_note": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "open_for": "1.5h ago",
+   "agent_steps": [
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source (joined the feed's open issue)",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    }
+   ]
   }
  ],
  "open_findings_unavailable": false,
@@ -1323,46 +1629,6 @@
   {
    "ts": "2026-11-08T04:02:30.137619+00:00",
    "kind": "OPENED",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:02:30.137619+00:00",
-   "kind": "OPENED",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: chicago(1<12), oklahoma_city(1<12)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:02:30.137619+00:00",
-   "kind": "OPENED",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:02:30.137619+00:00",
-   "kind": "OPENED",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(1<24)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:02:30.137619+00:00",
-   "kind": "OPENED",
    "finding_id": "6c21373465091519",
    "feed": "fred_dgs10",
    "axis": "head_lag",
@@ -1383,26 +1649,6 @@
   {
    "ts": "2026-11-08T04:02:30.137619+00:00",
    "kind": "OPENED",
-   "finding_id": "cd270015ddd986f0",
-   "feed": "coingecko_prices",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: ethereum(1<6), bitcoin(1<6)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:10:02.383758+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: chicago(2<12), oklahoma_city(2<12)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:10:02.383758+00:00",
-   "kind": "STILL_OPEN",
    "finding_id": "29847e08a7ac575f",
    "feed": "nws_observations",
    "axis": "flat_value",
@@ -1411,13 +1657,43 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T04:10:02.383758+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
+   "detail": "insufficient history: chicago(1<12), oklahoma_city(1<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: ethereum(1<6), bitcoin(1<6)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(1<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
@@ -1443,11 +1719,11 @@
   {
    "ts": "2026-11-08T04:10:02.383758+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(2<12), oklahoma_city(2<12)",
    "actor": "detector"
   },
   {
@@ -1461,23 +1737,53 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "ts": "2026-11-08T04:10:02.383758+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
+   "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
    "actor": "detector"
   },
   {
    "ts": "2026-11-08T04:20:03.644150+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "cd270015ddd986f0",
-   "feed": "coingecko_prices",
-   "axis": "flat_value",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
    "value": "UNKNOWN",
-   "detail": "insufficient history: bitcoin(3<6), ethereum(3<6)",
+   "detail": "no rows to read a head from",
    "actor": "detector"
   },
   {
@@ -1493,6 +1799,16 @@
   {
    "ts": "2026-11-08T04:20:03.644150+00:00",
    "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(3<12), oklahoma_city(3<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
    "finding_id": "92acc5d494f8c529",
    "feed": "usgs_earthquakes_hour",
    "axis": "flat_value",
@@ -1503,41 +1819,21 @@
   {
    "ts": "2026-11-08T04:20:03.644150+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
+   "detail": "insufficient history: bitcoin(3<6), ethereum(3<6)",
    "actor": "detector"
   },
   {
    "ts": "2026-11-08T04:20:03.644150+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
+   "finding_id": "19142d7fe1f0613f",
    "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:20:03.644150+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "insufficient history: chicago(3<12), oklahoma_city(3<12)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:25:06.263531+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: oklahoma_city(4<12), chicago(4<12)",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
@@ -1553,31 +1849,21 @@
   {
    "ts": "2026-11-08T04:25:06.263531+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:25:06.263531+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T04:25:06.263531+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
+   "detail": "insufficient history: feature_count(4<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: oklahoma_city(4<12), chicago(4<12)",
    "actor": "detector"
   },
   {
@@ -1593,16 +1879,6 @@
   {
    "ts": "2026-11-08T04:25:06.263531+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(4<24)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T05:25:04.334577+00:00",
-   "kind": "STILL_OPEN",
    "finding_id": "6c21373465091519",
    "feed": "fred_dgs10",
    "axis": "head_lag",
@@ -1611,23 +1887,23 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "ts": "2026-11-08T04:25:06.263531+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "insufficient history: KDFW(4<12), KDEN(4<12), KOKC(4<12), KORD(4<12)",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "ts": "2026-11-08T04:25:06.263531+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: chicago(5<12), oklahoma_city(5<12)",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
    "actor": "detector"
   },
   {
@@ -1643,21 +1919,11 @@
   {
    "ts": "2026-11-08T05:25:04.334577+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(5<24)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T05:25:04.334577+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
+   "detail": "insufficient history: chicago(5<12), oklahoma_city(5<12)",
    "actor": "detector"
   },
   {
@@ -1671,13 +1937,53 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDFW(4<12), KDEN(4<12), KOKC(4<12), KORD(4<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
    "kind": "STILL_OPEN",
    "finding_id": "27ce026a77cd1733",
    "feed": "fred_dgs10",
    "axis": "write_recency",
    "value": "BREACH",
    "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(5<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(6<24)",
    "actor": "detector"
   },
   {
@@ -1703,11 +2009,31 @@
   {
    "ts": "2026-11-08T06:25:06.673411+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
-   "axis": "flat_value",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
    "value": "UNKNOWN",
-   "detail": "insufficient history: chicago(6<12), oklahoma_city(6<12)",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "CLOSED",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "back to OK: longest identical run 1 < 6 on price_usd",
    "actor": "detector"
   },
   {
@@ -1722,72 +2048,12 @@
   },
   {
    "ts": "2026-11-08T06:25:06.673411+00:00",
-   "kind": "CLOSED",
-   "finding_id": "cd270015ddd986f0",
-   "feed": "coingecko_prices",
-   "axis": "flat_value",
-   "value": "OK",
-   "detail": "back to OK: longest identical run 1 < 6 on price_usd",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T06:25:06.673411+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(6<24)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T06:25:06.673411+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T07:25:09.359251+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T07:25:09.359251+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: KDEN(6<12), KDFW(6<12), KOKC(6<12), KORD(6<12)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T07:25:09.359251+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T07:25:09.359251+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
+   "detail": "insufficient history: chicago(6<12), oklahoma_city(6<12)",
    "actor": "detector"
   },
   {
@@ -1803,6 +2069,26 @@
   {
    "ts": "2026-11-08T07:25:09.359251+00:00",
    "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
    "finding_id": "6e5d3a9a6de9ef0f",
    "feed": "open_meteo_current",
    "axis": "flat_value",
@@ -1811,43 +2097,23 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "ts": "2026-11-08T07:25:09.359251+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(8<24)",
+   "detail": "insufficient history: KDEN(6<12), KDFW(6<12), KOKC(6<12), KORD(6<12)",
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T08:26:38.727319+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": "open_meteo_current",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: oklahoma_city(8<12), chicago(8<12)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "ts": "2026-11-08T07:25:09.359251+00:00",
    "kind": "STILL_OPEN",
    "finding_id": "19142d7fe1f0613f",
    "feed": "fred_dgs10",
    "axis": "flat_value",
    "value": "UNKNOWN",
    "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T08:26:38.727319+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: KORD(7<12), KDFW(7<12), KDEN(7<12), KOKC(7<12)",
    "actor": "detector"
   },
   {
@@ -1863,6 +2129,26 @@
   {
    "ts": "2026-11-08T08:26:38.727319+00:00",
    "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(8<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
    "finding_id": "6c21373465091519",
    "feed": "fred_dgs10",
    "axis": "head_lag",
@@ -1871,13 +2157,43 @@
    "actor": "detector"
   },
   {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KORD(7<12), KDFW(7<12), KDEN(7<12), KOKC(7<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: oklahoma_city(8<12), chicago(8<12)",
+   "actor": "detector"
+  },
+  {
    "ts": "2026-11-08T09:26:40.410729+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
+   "detail": "insufficient history: KDEN(8<12), KORD(8<12), KDFW(8<12), KOKC(8<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
@@ -1903,11 +2219,11 @@
   {
    "ts": "2026-11-08T09:26:40.410729+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
    "value": "UNKNOWN",
-   "detail": "insufficient history: KDEN(8<12), KORD(8<12), KDFW(8<12), KOKC(8<12)",
+   "detail": "no rows to read a head from",
    "actor": "detector"
   },
   {
@@ -1921,16 +2237,6 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T09:26:40.410729+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
    "ts": "2026-11-08T10:26:33.576749+00:00",
    "kind": "STILL_OPEN",
    "finding_id": "29847e08a7ac575f",
@@ -1938,6 +2244,26 @@
    "axis": "flat_value",
    "value": "UNKNOWN",
    "detail": "insufficient history: KDEN(9<12), KORD(9<12), KDFW(9<12), KOKC(9<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(10<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
    "actor": "detector"
   },
   {
@@ -1963,51 +2289,11 @@
   {
    "ts": "2026-11-08T10:26:33.576749+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(10<24)",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T10:26:33.576749+00:00",
-   "kind": "STILL_OPEN",
    "finding_id": "19142d7fe1f0613f",
    "feed": "fred_dgs10",
    "axis": "flat_value",
    "value": "UNKNOWN",
    "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T10:26:33.576749+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T11:26:30.032530+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T11:26:30.032530+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: KDFW(10<12), KOKC(10<12), KDEN(10<12), KORD(10<12)",
    "actor": "detector"
   },
   {
@@ -2023,11 +2309,21 @@
   {
    "ts": "2026-11-08T11:26:30.032530+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "92acc5d494f8c529",
-   "feed": "usgs_earthquakes_hour",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
    "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "insufficient history: feature_count(11<24)",
+   "detail": "insufficient history: KDFW(10<12), KOKC(10<12), KDEN(10<12), KORD(10<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
@@ -2048,6 +2344,46 @@
    "axis": "write_recency",
    "value": "BREACH",
    "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(11<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "self-healed without intervention",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(11<12), KORD(11<12), KDFW(11<12), KOKC(11<12)",
    "actor": "detector"
   },
   {
@@ -2062,22 +2398,22 @@
   },
   {
    "ts": "2026-11-08T12:26:42.808151+00:00",
-   "kind": "DISPOSITION",
-   "finding_id": "6e5d3a9a6de9ef0f",
-   "feed": null,
-   "axis": null,
-   "value": "BENIGN",
-   "detail": "self-healed without intervention",
-   "actor": "auto"
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
   },
   {
    "ts": "2026-11-08T12:26:42.808151+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "insufficient history: KDEN(11<12), KORD(11<12), KDFW(11<12), KOKC(11<12)",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
    "actor": "detector"
   },
   {
@@ -2091,33 +2427,33 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T12:26:42.808151+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T12:26:42.808151+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
-   "feed": "fred_dgs10",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "ts": "2026-11-08T13:26:17.180479+00:00",
    "kind": "STILL_OPEN",
    "finding_id": "27ce026a77cd1733",
    "feed": "fred_dgs10",
    "axis": "write_recency",
    "value": "BREACH",
    "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "CLOSED",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "back to OK: longest identical run 3 < 12 on temperature_c",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
    "actor": "detector"
   },
   {
@@ -2133,21 +2469,11 @@
   {
    "ts": "2026-11-08T13:26:17.180479+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
+   "finding_id": "19142d7fe1f0613f",
    "feed": "fred_dgs10",
-   "axis": "head_lag",
+   "axis": "flat_value",
    "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T13:26:17.180479+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
@@ -2161,23 +2487,13 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "ts": "2026-11-08T14:26:12.480677+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
+   "finding_id": "6c21373465091519",
    "feed": "fred_dgs10",
-   "axis": "flat_value",
+   "axis": "head_lag",
    "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T13:26:17.180479+00:00",
-   "kind": "CLOSED",
-   "finding_id": "29847e08a7ac575f",
-   "feed": "nws_observations",
-   "axis": "flat_value",
-   "value": "OK",
-   "detail": "back to OK: longest identical run 3 < 12 on temperature_c",
+   "detail": "no rows to read a head from",
    "actor": "detector"
   },
   {
@@ -2211,16 +2527,6 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T14:26:12.480677+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
    "ts": "2026-11-08T15:26:13.020277+00:00",
    "kind": "STILL_OPEN",
    "finding_id": "92acc5d494f8c529",
@@ -2228,6 +2534,16 @@
    "axis": "flat_value",
    "value": "UNKNOWN",
    "detail": "insufficient history: feature_count(15<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T15:26:13.020277+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
    "actor": "detector"
   },
   {
@@ -2251,13 +2567,13 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T15:26:13.020277+00:00",
+   "ts": "2026-11-08T16:26:29.893062+00:00",
    "kind": "STILL_OPEN",
-   "finding_id": "19142d7fe1f0613f",
+   "finding_id": "6c21373465091519",
    "feed": "fred_dgs10",
-   "axis": "flat_value",
+   "axis": "head_lag",
    "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
+   "detail": "no rows to read a head from",
    "actor": "detector"
   },
   {
@@ -2273,41 +2589,21 @@
   {
    "ts": "2026-11-08T16:26:29.893062+00:00",
    "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T16:26:29.893062+00:00",
+   "kind": "STILL_OPEN",
    "finding_id": "19142d7fe1f0613f",
    "feed": "fred_dgs10",
    "axis": "flat_value",
    "value": "UNKNOWN",
    "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T16:26:29.893062+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "6c21373465091519",
-   "feed": "fred_dgs10",
-   "axis": "head_lag",
-   "value": "UNKNOWN",
-   "detail": "no rows to read a head from",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T16:26:29.893062+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T17:26:33.676787+00:00",
-   "kind": "STILL_OPEN",
-   "finding_id": "27ce026a77cd1733",
-   "feed": "fred_dgs10",
-   "axis": "write_recency",
-   "value": "BREACH",
-   "detail": "no rows captured inside the lookback window",
    "actor": "detector"
   },
   {
@@ -2341,39 +2637,9 @@
    "actor": "detector"
   },
   {
-   "ts": "2026-11-08T17:48:09.419230+00:00",
-   "kind": "OPENED",
-   "finding_id": "207080fdb07b08a2",
-   "feed": "fred_dgs10",
-   "axis": "flat_value",
-   "value": "UNKNOWN",
-   "detail": "no rows to evaluate value",
-   "actor": "detector"
-  },
-  {
-   "ts": "2026-11-08T17:48:09.419230+00:00",
-   "kind": "DISPOSITION",
-   "finding_id": "207080fdb07b08a2",
-   "feed": null,
-   "axis": null,
-   "value": "UNKNOWN",
-   "detail": "awaiting triage",
-   "actor": "auto"
-  },
-  {
-   "ts": "2026-11-08T17:48:09.419230+00:00",
-   "kind": "DISPOSITION",
-   "finding_id": "b7152e86005cca2f",
-   "feed": null,
-   "axis": null,
-   "value": "UNKNOWN",
-   "detail": "awaiting triage",
-   "actor": "auto"
-  },
-  {
-   "ts": "2026-11-08T17:48:09.419230+00:00",
-   "kind": "OPENED",
-   "finding_id": "b7152e86005cca2f",
+   "ts": "2026-11-08T17:26:33.676787+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
    "feed": "fred_dgs10",
    "axis": "write_recency",
    "value": "BREACH",
@@ -2392,6 +2658,36 @@
   },
   {
    "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "OPENED",
+   "finding_id": "b7152e86005cca2f",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "207080fdb07b08a2",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
    "kind": "DISPOSITION",
    "finding_id": "80e43604e3680013",
    "feed": null,
@@ -2399,19 +2695,219 @@
    "value": "UNKNOWN",
    "detail": "awaiting triage",
    "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "OPENED",
+   "finding_id": "207080fdb07b08a2",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "92acc5d494f8c529",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "6c21373465091519",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "27ce026a77cd1733",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T18:25:01.232051+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "1855a49cd2088146",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T18:25:01.232051+00:00",
+   "kind": "OPENED",
+   "finding_id": "1855a49cd2088146",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "value": "BREACH",
+   "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (36.4h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "80e43604e3680013",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "207080fdb07b08a2",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "1855a49cd2088146",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "no triage rule matched (axis=head_lag, state=BREACH, runs=[])",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:56:43.846376+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "1855a49cd2088146",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "mis-specified SLA: IESO publishes once a day with the previous day's hours, head lag is 24-48h by design; head_lag SLA corrected 36->54h in ops/SLA_CHANGES.md",
+   "actor": "human:isabelle"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "80e43604e3680013",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "CLOSED",
+   "finding_id": "1855a49cd2088146",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-07T06:00:00+00:00 (37.0h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "207080fdb07b08a2",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
   }
  ],
  "disposition_counts": {
   "FIXED": 0,
-  "BENIGN": 3,
-  "ESCALATED": 0,
+  "BENIGN": 8,
+  "ESCALATED": 3,
   "DEFERRED": 0,
-  "UNKNOWN": 7
+  "UNKNOWN": 0
  },
  "summary": {
   "breach": 1,
-  "unknown": 3,
-  "ok": 16,
+  "unknown": 2,
+  "ok": 17,
   "not_declared": 1,
   "open_findings": 3
  }
