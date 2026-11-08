@@ -69,7 +69,8 @@ def cmd_run(args) -> int:
     if not args.no_render:
         from .render_site import render
 
-        out = render(fleet, wh, Path(args.site_dir), bucket=os.environ.get("PIPELINEAGENT_SITE_BUCKET"))
+        ctx = _agent_ctx(fleet, args)
+        out = render(fleet, wh, Path(args.site_dir), bucket=os.environ.get("PIPELINEAGENT_SITE_BUCKET"), github=ctx.github if ctx else None)
         print(f"site rendered -> {out}")
     print(json.dumps({"run_id": report.run_id, "feeds": {r['feed']: r['status'] for r in report.runs},
                       "breaches": report.breaches, "unknowns": report.unknowns,

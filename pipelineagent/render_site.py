@@ -13,6 +13,7 @@ from __future__ import annotations
 import html
 import json
 import logging
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -314,12 +315,20 @@ def render_healthlog(data: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render(fleet: Fleet, wh: Warehouse, site_dir: Path, bucket: str | None = None, now: datetime | None = None) -> Path:
+def render(fleet: Fleet, wh: Warehouse, site_dir: Path, bucket: str | None = None, now: datetime | None = None, github=None) -> Path:
     data = collect(fleet, wh, now)
     site_dir.mkdir(parents=True, exist_ok=True)
     (site_dir / "data.json").write_text(json.dumps(data, indent=1, default=str), encoding="utf-8")
     (site_dir / "index.html").write_text(render_html(data), encoding="utf-8")
     (site_dir / "HEALTHLOG.md").write_text(render_healthlog(data), encoding="utf-8")
+    if github is not None and os.environ.get("PIPELINEAGENT_PAGES", "1") == "1":
+        try:
+            sha = github.publish_pages({"index.html": (site_dir / "index.html").read_bytes(), "data.json": (site_dir / "data.json").read_bytes(),
+                                        "HEALTHLOG.md": (site_dir / "HEALTHLOG.md").read_bytes(), ".nojekyll": b""})
+            if sha:
+                log.info("dashboard published to gh-pages (%s)", sha[:10])
+        except Exception:  # noqa: BLE001
+            log.exception("gh-pages publish failed (bucket/local copies still written)")
     if bucket:
         files = {"index.html": site_dir / "index.html", "data.json": site_dir / "data.json", "HEALTHLOG.md": site_dir / "HEALTHLOG.md"}
         # the agent's dry-run artifacts (PR drafts, issues it would have opened) live under site/agent/

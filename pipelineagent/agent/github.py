@@ -105,6 +105,23 @@ class GitHub:
         r = self._req("POST", "/issues", json={"title": title, "body": body, "labels": ["pipelineagent", "needs-human"]})
         return r["html_url"]
 
+    def publish_pages(self, files: dict[str, bytes], branch: str = "gh-pages") -> str:
+        """Replace the `branch` tree with `files` (one commit, no parents needed: the branch is a
+        publication, not history). GitHub Pages serves it once the owner points Pages at it."""
+        blobs = []
+        for path, content in sorted(files.items()):
+            b = self._req("POST", "/git/blobs", json={"content": base64.b64encode(content).decode(), "encoding": "base64"})
+            blobs.append({"path": path, "mode": "100644", "type": "blob", "sha": b["sha"]})
+        tree = self._req("POST", "/git/trees", json={"tree": blobs})["sha"]
+        commit = self._req("POST", "/git/commits", json={"message": "PipelineAgent dashboard publish", "tree": tree, "parents": []})["sha"]
+        try:
+            self._req("PATCH", f"/git/refs/heads/{branch}", json={"sha": commit, "force": True})
+        except GitHubError as e:
+            if "422" not in str(e) and "404" not in str(e):
+                raise
+            self._req("POST", "/git/refs", json={"ref": f"refs/heads/{branch}", "sha": commit})
+        return commit
+
     def tarball(self, ref: str) -> bytes:
         r = self.s.get(f"{self.api}/repos/{self.repo}/tarball/{ref}", timeout=60, allow_redirects=True)
         if r.status_code >= 400:
@@ -143,6 +160,9 @@ class DryRunGitHub(GitHub):
 
     def revert(self, merge_sha):
         raise GitHubError("dry run: nothing to revert")
+
+    def publish_pages(self, files, branch="gh-pages"):
+        return ""  # dry run: the local site/ directory is the publication
 
     def open_issue(self, finding_id, title, body):
         d = self.out_dir / "agent" / "issues"

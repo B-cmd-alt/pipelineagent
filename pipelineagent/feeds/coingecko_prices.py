@@ -22,6 +22,10 @@ def parse(payload: dict, coins: list[str]) -> tuple[list[dict], list[str]]:
         if not isinstance(d, dict):
             anomalies.append(f"{c}: missing from response")
             continue
+        if "usd" not in d:
+            # a renamed/missing key is schema drift and must FAIL the run (the repair agent's trigger);
+            # a null value under the right key is data and stays a NULL with an anomaly
+            raise ValueError(f"schema: expected key 'usd' under {c}; got {sorted(d)}")
         lu = d.get("last_updated_at")
         rows.append({
             "coin": c,
