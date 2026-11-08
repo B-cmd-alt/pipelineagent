@@ -100,11 +100,12 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
         if not due:
             row.update(status="skipped", reason="not_due", error=why)
         else:
-            ctx = FetchContext(http=http, params=spec.params, last_run=last_runs.get(spec.id), warehouse=wh, table=spec.table, now=now)
+            ctx = FetchContext(http=http, params=spec.params, last_run=last_runs.get(spec.id), warehouse=wh, table=spec.table, now=now, on_unchanged=spec.on_unchanged)
             res = feed.fetch(ctx)
             row.update(http_status=res.http_status, source_modified=res.source_modified, content_sha256=res.content_sha256, etag=res.etag)
             prev = last_runs.get(spec.id)
-            if res.not_modified or (prev and prev.content_sha256 and prev.content_sha256 == res.content_sha256 and prev.status != "failed"):
+            same = bool(prev and prev.content_sha256 and prev.content_sha256 == res.content_sha256 and prev.status != "failed")
+            if res.not_modified or (same and spec.on_unchanged == "skip"):
                 row.update(status="no_change", reason="304" if res.not_modified else "same_content_sha256")
             elif not res.rows:
                 row.update(status="no_change", reason="no_new_rows", error=res.note or None)
@@ -127,6 +128,8 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
     except Exception as e:  # noqa: BLE001 — isolate the feed, record the class, move on
         log.exception("feed %s crashed", spec.id)
         row.update(status="failed", reason=f"exception:{e.__class__.__name__}", error=str(e)[:500])
+    if row["status"] == "failed":
+        row["etag"] = None  # the content never landed: next run must re-fetch unconditionally, not get a 304
     row["requests_used"] = http.used - used0
     row["duration_s"] = round(time.monotonic() - t0, 3)
     row["finished_at"] = now + timedelta(seconds=row["duration_s"])
@@ -161,15 +164,16 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
         at = now + timedelta(seconds=time.monotonic() - t0)
         for spec in specs:
             report.detections.extend(detect_feed(spec, wh, at))
-        wh.append("detections", [d.as_row(report.run_id, at) for d in report.detections], DETECTIONS)
         try:
+            wh.append("detections", [d.as_row(report.run_id, at) for d in report.detections], DETECTIONS)
             open_f = wh.open_findings()
             cur_d = wh.latest_dispositions()
-        except Exception:  # noqa: BLE001
-            log.exception("ledger read failed; skipping reconcile this run (findings are append-only, nothing is lost)")
+            ledger = reconcile(report.detections, open_f, cur_d, report.run_id, at)
+            apply_ledger(ledger, wh)
+        except Exception:  # noqa: BLE001 — no ledger => no heartbeat => the dead-man's switch shows it
+            log.exception("detections/ledger write failed; no heartbeat this run (findings are append-only, nothing is lost)")
         else:
-            report.ledger = reconcile(report.detections, open_f, cur_d, report.run_id, at)
-            apply_ledger(report.ledger, wh)
+            report.ledger = ledger
         for d in report.detections:
             log.info("detect %-22s %-13s %-7s %s", d.feed, d.axis, d.state, d.detail)
 

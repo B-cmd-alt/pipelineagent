@@ -6,6 +6,7 @@ import hashlib
 import json
 from datetime import datetime, timezone
 
+from ..http import SourceError
 from ..schema import Column
 from .base import Feed, FetchContext, FetchResult, to_float
 
@@ -29,7 +30,11 @@ def fetch(ctx: FetchContext) -> FetchResult:
     stations = list(ctx.params.get("stations") or ["KOKC"])
     rows, anomalies, digest, status, lm, raw = [], [], hashlib.sha256(), None, None, []
     for st in stations:
-        r = ctx.http.get(f"https://api.weather.gov/stations/{st}/observations/latest", accept="application/geo+json", expect="json")
+        try:
+            r = ctx.http.get(f"https://api.weather.gov/stations/{st}/observations/latest", accept="application/geo+json", expect="json")
+        except SourceError as e:  # one dark station must not discard the others
+            anomalies.append(f"{st}: {e}")
+            continue
         status = r.status
         digest.update(r.body)
         raw.append(r.body)
@@ -44,6 +49,8 @@ def fetch(ctx: FetchContext) -> FetchResult:
             "text_description": p.get("textDescription"),
             "raw_timestamp": p.get("timestamp"),
         })
+    if not rows:
+        raise SourceError("all stations failed: " + "; ".join(anomalies))
     return FetchResult(rows, digest.hexdigest(), lm, status, anomalies=anomalies, raw=b"\n".join(raw))
 
 

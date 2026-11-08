@@ -89,8 +89,6 @@ class Client:
         params: dict | None = None,
         retries: int = 1,
     ) -> Response:
-        if self.used >= self.budget:
-            raise BudgetExhausted(f"request budget {self.budget} exhausted")
         headers = {"Accept": accept}
         if etag:
             headers["If-None-Match"] = etag
@@ -99,6 +97,8 @@ class Client:
         host = urlsplit(url).netloc
         attempt = 0
         while True:
+            if self.used >= self.budget:  # checked per attempt: retries count against the hard budget too
+                raise BudgetExhausted(f"request budget {self.budget} exhausted")
             self._pace(host)
             self.used += 1
             t0 = time.monotonic()

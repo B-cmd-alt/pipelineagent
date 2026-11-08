@@ -58,8 +58,6 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
 
     hb = guarded("heartbeat", wh.latest_heartbeat, None)
     data["heartbeat"] = heartbeat_status(hb, fleet.heartbeat_max_age_hours, now)
-    if hb is None and not data["errors"]:
-        data["heartbeat"]["state"] = "MISSING"
     data["deploy_drift"] = None
     if hb and hb.get("code_sha256"):
         data["deploy_drift"] = {"runtime_code_sha256": hb["code_sha256"], "renderer_code_sha256": data["renderer"]["code_sha256"],
@@ -117,8 +115,7 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
         findings.append({**{k: _iso(v) for k, v in f.items()},
                          "disposition": d["disposition"] if d else "UNKNOWN",
                          "disposition_by": d["decided_by"] if d else "none",
-                         "disposition_note": d["note"] if d else "no disposition row (should not happen)",
-                         "open_for": _hours_ago(f["event_at"], now) if f["event"] == "OPENED" else None})
+                         "disposition_note": d["note"] if d else "no disposition row (should not happen)"})
     # opened_at for each open finding = first event; approximate from recent events
     events = guarded("events", lambda: wh.recent_finding_events(200), []) or []
     opened_at = {e["finding_id"]: e["event_at"] for e in events if e["event"] == "OPENED"}

@@ -115,7 +115,7 @@ class BigQueryWarehouse:
         SELECT
           (SELECT MAX(captured_at) FROM recent) AS c,
           (SELECT MAX(event_ts) FROM recent) AS e,
-          ARRAY(SELECT AS STRUCT g, v, captured_at FROM recent ORDER BY captured_at DESC LIMIT @n) AS vals
+          ARRAY(SELECT AS STRUCT g, v, captured_at FROM recent ORDER BY captured_at DESC, event_ts DESC LIMIT @n) AS vals
         """
         rows = self._query(sql, [
             self.bq.ScalarQueryParameter("lookback", "INT64", int(lookback_hours)),

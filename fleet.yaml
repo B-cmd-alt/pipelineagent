@@ -9,6 +9,12 @@
 #   flat_value              : N consecutive identical values on one column
 #                             (optionally per group) => frozen upstream
 #
+# on_unchanged (per feed, default append): what to do when a fetch returns byte-identical
+# content to the last run. `append` = every poll is an observation ("at captured_at the
+# source said X"), so liveness shows in the DATA and the flat-value detector can see a frozen
+# upstream. `skip` = vintage-first growing series (a restated file is a new vintage, an
+# identical one is nothing): write only when content changed; a 304 is always no_change.
+#
 # Changing an SLA to make a breach go away is a policy violation
 # (see tests/test_policy.py and ops/SLA_CHANGES.md).
 version: 1
@@ -57,12 +63,13 @@ feeds:
     description: "FRED 10-year Treasury constant-maturity yield (DGS10) via the public fredgraph CSV; '.' marks a missing value."
     cadence: daily
     table: fred_dgs10
+    on_unchanged: skip
     params:
       series_id: DGS10
       keep_last_n: 30
     sla:
-      write_recency_max_hours: 30
-      head_lag_max_hours: 120       # business-day series: a Friday print is current until Tuesday evening
+      write_recency_max_hours: 80   # business-day series + skip-on-unchanged: Friday's file is byte-identical until Monday evening (ops/SLA_CHANGES.md)
+      head_lag_max_hours: 120       # a Friday print is current until Tuesday evening
       flat_value: { column: value, group_by: series_id, max_consecutive: 5 }
 
   - id: github_status
@@ -86,9 +93,10 @@ feeds:
       flat_value: { column: price_usd, group_by: coin, max_consecutive: 6 }
 
   - id: ieso_ontario_demand
-    description: "IESO hourly Ontario demand (PUB_Demand.csv); hour-ending local time, so DST transitions are a live hazard."
+    description: "IESO hourly Ontario demand (PUB_Demand.csv); hour-ending in fixed Eastern Standard Time all year (no DST), a classic timezone trap."
     cadence: daily
     table: ieso_ontario_demand
+    on_unchanged: skip
     sla:
       write_recency_max_hours: 30
       head_lag_max_hours: 36

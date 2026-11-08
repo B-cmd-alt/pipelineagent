@@ -44,16 +44,17 @@ def test_fred_schema_rename_fails_loudly():
         fred_dgs10.parse("DATE,VALUE\n2026-01-01,4.0\n", "DGS10", 5)
 
 
-def test_ieso_parse_incremental_and_dst():
+def test_ieso_parse_fixed_est_and_incremental():
     rows, anomalies = ieso_ontario_demand.parse(fixture_text("ieso_demand_tail.csv"), after=None)
-    assert rows and rows[-1]["hour_ending"] >= 1 and rows[-1]["event_ts"].tzinfo == timezone.utc
-    # HE1 on 2026-11-07 (EST, UTC-5) ends at 01:00 local = 06:00Z
+    assert rows and rows[-1]["event_ts"].tzinfo == timezone.utc
+    # HE1 on 2026-11-07 in fixed EST (UTC-5) ends 01:00 EST = 06:00Z
     he1 = [r for r in rows if r["local_date"] == date(2026, 11, 7) and r["hour_ending"] == 1][0]
     assert he1["event_ts"] == datetime(2026, 11, 7, 6, 0, tzinfo=timezone.utc)
-    # DST fall-back day (2026-11-01) is 25h long: parser flags the 24-label squeeze instead of hiding it
-    a = []
-    ieso_ontario_demand.hour_ending_to_utc(date(2026, 11, 1), 24, a)
-    assert a and "DST" in a[0]
+    # IESO does NOT observe DST: a July hour-ending converts with the same -5h offset as a January one
+    assert ieso_ontario_demand.hour_ending_to_utc(date(2026, 7, 1), 24) == datetime(2026, 7, 2, 5, 0, tzinfo=timezone.utc)
+    assert ieso_ontario_demand.hour_ending_to_utc(date(2026, 1, 1), 24) == datetime(2026, 1, 2, 5, 0, tzinfo=timezone.utc)
+    # the fixture's partial first day is older than the newest day -> flagged as not having 24 labels
+    assert any("hour-ending labels" in a for a in anomalies)
     # incremental: nothing older than the newest stored event_ts comes back
     newest = max(r["event_ts"] for r in rows)
     rows2, _ = ieso_ontario_demand.parse(fixture_text("ieso_demand_tail.csv"), after=newest)

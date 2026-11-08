@@ -46,7 +46,7 @@ def fetch(ctx: FetchContext) -> FetchResult:
     n = int(ctx.params.get("keep_last_n", 30))
     last = ctx.last_run
     r = ctx.http.get("https://fred.stlouisfed.org/graph/fredgraph.csv", params={"id": sid}, accept="text/csv,*/*",
-                     expect="csv", etag=last.etag if last else None)
+                     expect="csv", etag=ctx.etag)
     if r.not_modified:
         return FetchResult([], last.content_sha256 if last else None, r.last_modified, 304, r.etag, True)
     rows, anomalies = parse(r.text(), sid, n)

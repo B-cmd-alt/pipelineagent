@@ -46,6 +46,7 @@ class FeedSpec:
     table: str
     sla: FeedSLA
     params: dict[str, Any] = field(default_factory=dict)
+    on_unchanged: str = "append"  # append | skip
 
     @property
     def cadence_hours(self) -> int:
@@ -107,6 +108,8 @@ def load_fleet(path: str | os.PathLike | None = None) -> Fleet:
                 raise ManifestError(f"{where} missing {k}")
         if f["cadence"] not in ("hourly", "daily"):
             raise ManifestError(f"{where}.cadence must be hourly|daily")
+        if f.get("on_unchanged", "append") not in ("append", "skip"):
+            raise ManifestError(f"{where}.on_unchanged must be append|skip")
         if f["id"] in seen:
             raise ManifestError(f"duplicate feed id {f['id']!r}")
         seen.add(f["id"])
@@ -118,6 +121,7 @@ def load_fleet(path: str | os.PathLike | None = None) -> Fleet:
                 table=str(f["table"]),
                 sla=_sla(f["sla"], where),
                 params=dict(f.get("params") or {}),
+                on_unchanged=str(f.get("on_unchanged", "append")),
             )
         )
     if not feeds:

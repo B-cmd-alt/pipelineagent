@@ -14,9 +14,9 @@ def open_warehouse(url: str | None = None) -> Warehouse:
         from .sqlite import SQLiteWarehouse
 
         path = url[len("sqlite://"):]
-        if path.startswith("/") and not path.startswith("//") and path != "/:memory:":
-            path = path  # sqlite:///abs/path -> /abs/path ; sqlite://rel -> rel
-        if path in ("/:memory:", ":memory:"):
+        if path.startswith("/"):
+            path = path[1:]  # sqlite:///rel.db -> rel.db ; sqlite:////abs/x.db -> /abs/x.db (SQLAlchemy convention)
+        if path in ("", ":memory:"):
             path = ":memory:"
         return SQLiteWarehouse(path)
     if url.startswith("bigquery://"):

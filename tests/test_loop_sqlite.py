@@ -96,3 +96,20 @@ def test_daily_feed_is_not_refetched_within_window(fleet, wh, monkeypatch):
     run(fleet, wh, http=StubHttp(), now=NOW, feeds=["fred_dgs10"])
     rep = run(fleet, wh, http=StubHttp(), now=NOW + timedelta(hours=2), feeds=["fred_dgs10"])
     assert rep.runs[0]["status"] == "skipped" and rep.runs[0]["reason"] == "not_due"
+
+
+def test_on_unchanged_policy(fleet, wh, monkeypatch):
+    """append (default): byte-identical content is still an observation and lands as a row;
+    skip: identical content is no_change. Both decided BEFORE any write."""
+    const = lambda fid, ctx: FetchResult([{"event_ts": ctx.now, "feature_count": 3}] if fid == "usgs_earthquakes_hour"
+                                         else [{"series_id": "DGS10", "observation_date": ctx.now.date(), "event_ts": ctx.now, "value": 4.0}],
+                                         "same-sha", None, 200)
+    stub_all(monkeypatch, const)
+    assert fleet.feed("usgs_earthquakes_hour").on_unchanged == "append" and fleet.feed("fred_dgs10").on_unchanged == "skip"
+    run(fleet, wh, http=StubHttp(), now=NOW, feeds=["usgs_earthquakes_hour", "fred_dgs10"])
+    later = NOW + timedelta(hours=25)
+    wh.now_override = later
+    rep = run(fleet, wh, http=StubHttp(), now=later, feeds=["usgs_earthquakes_hour", "fred_dgs10"])
+    by = {r["feed"]: r for r in rep.runs}
+    assert by["usgs_earthquakes_hour"]["status"] == "ok" and by["usgs_earthquakes_hour"]["rows_written"] == 1
+    assert by["fred_dgs10"]["status"] == "no_change" and by["fred_dgs10"]["reason"] == "same_content_sha256"

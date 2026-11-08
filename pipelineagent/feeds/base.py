@@ -6,6 +6,7 @@ the runner does, so every feed shares one append-only, audited write path.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Callable
@@ -23,6 +24,12 @@ class FetchContext:
     warehouse: Warehouse
     table: str
     now: datetime
+    on_unchanged: str = "append"
+
+    @property
+    def etag(self) -> str | None:
+        """Send If-None-Match only when an unchanged body would be discarded anyway."""
+        return self.last_run.etag if (self.last_run and self.on_unchanged == "skip") else None
 
 
 @dataclass
@@ -54,7 +61,11 @@ def to_float(v: Any, anomalies: list[str], label: str) -> float | None:
     if v is None or v == "":
         return None
     try:
-        return float(v)
+        f = float(v)
     except (TypeError, ValueError):
         anomalies.append(f"{label}: non-numeric {v!r} -> NULL")
         return None
+    if not math.isfinite(f):  # NaN/inf is not valid JSON for the BigQuery load job
+        anomalies.append(f"{label}: non-finite {v!r} -> NULL")
+        return None
+    return f

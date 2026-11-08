@@ -9,3 +9,4 @@ rejects such a change (`SLA_WIDENED`).
 | date | feed/axis | old → new | reason | finding ids affected |
 |---|---|---|---|---|
 | 2026-11-08 | (baseline) | — | initial SLAs pinned in `fleet.baseline.json` | — |
+| 2026-11-08 | fred_dgs10/write_recency_max_hours | 30 → 80 | pre-deploy script review: the feed is `on_unchanged: skip` and DGS10 does not print on weekends, so Friday's file is byte-identical until Monday evening (~72h); 30h would raise a false BREACH every weekend. Baseline re-pinned the same day, before the first scheduled run. | none (pre-production) |

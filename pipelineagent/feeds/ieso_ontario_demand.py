@@ -1,20 +1,22 @@
-"""IESO hourly Ontario demand. The CSV is one growing file per year with
-comment lines prefixed by a backslash and HOUR-ENDING values 1..24 in local
-Toronto time, so the DST fall-back day has 25 wall-clock hours squeezed into
-24 labels: event_ts is derived with the America/Toronto zone and the ambiguity
-is recorded as an anomaly rather than papered over. Incremental: only rows
-newer than the newest event_ts already stored are appended."""
+"""IESO hourly Ontario demand. The CSV is one growing file per year with comment lines
+prefixed by a backslash and HOUR-ENDING labels 1..24. IESO publishes in fixed Eastern
+Standard Time all year (UTC-5, no daylight saving): every day has exactly 24 labels,
+including the March and November transition days (verified against the live file, which
+carries 24 rows on both). Converting with a DST-aware zone would shift every summer row
+by an hour, so event_ts is derived with a constant offset and a day with != 24 labels
+is reported as an anomaly. Incremental: only rows newer than the newest event_ts already
+stored are appended."""
 from __future__ import annotations
 
 import csv
 import io
+from collections import Counter
 from datetime import date, datetime, timedelta, timezone
-from zoneinfo import ZoneInfo
 
 from ..schema import Column
 from .base import Feed, FetchContext, FetchResult, to_float
 
-TZ = ZoneInfo("America/Toronto")
+EST = timezone(timedelta(hours=-5))  # fixed; IESO does not observe DST in its reports
 
 COLUMNS = (
     Column("local_date", "DATE", True),
@@ -24,18 +26,9 @@ COLUMNS = (
 )
 
 
-def hour_ending_to_utc(d: date, he: int, anomalies: list[str]) -> datetime:
-    """Hour-ending HE (1..24) local -> the UTC instant at the END of that hour.
-    Computed from the local midnight + HE hours so DST days keep 24 labels."""
-    local_midnight = datetime(d.year, d.month, d.day, tzinfo=TZ)
-    start_utc = local_midnight.astimezone(timezone.utc)
-    end = start_utc + timedelta(hours=he)
-    # A day with a DST transition is 23 or 25 hours long; flag it once.
-    next_midnight = datetime.combine(d + timedelta(days=1), datetime.min.time(), tzinfo=TZ).astimezone(timezone.utc)
-    day_len = (next_midnight - start_utc).total_seconds() / 3600
-    if he == 24 and day_len != 24:
-        anomalies.append(f"{d}: DST day is {day_len:g}h long but file has 24 hour-ending labels")
-    return end
+def hour_ending_to_utc(d: date, he: int) -> datetime:
+    """Hour-ending HE (1..24) in fixed EST -> the UTC instant at the END of that hour."""
+    return (datetime(d.year, d.month, d.day, tzinfo=EST) + timedelta(hours=he)).astimezone(timezone.utc)
 
 
 def parse(text: str, after: datetime | None) -> tuple[list[dict], list[str]]:
@@ -46,6 +39,7 @@ def parse(text: str, after: datetime | None) -> tuple[list[dict], list[str]]:
     if not reader.fieldnames or not need.issubset(set(reader.fieldnames)):
         raise ValueError(f"schema: expected {sorted(need)}, got {reader.fieldnames}")
     rows = []
+    labels_per_day: Counter = Counter()
     for rec in reader:
         try:
             d = date.fromisoformat(rec["Date"])
@@ -53,7 +47,8 @@ def parse(text: str, after: datetime | None) -> tuple[list[dict], list[str]]:
         except (ValueError, TypeError):
             anomalies.append(f"unparseable row {rec!r}")
             continue
-        ts = hour_ending_to_utc(d, he, anomalies)
+        labels_per_day[d] += 1
+        ts = hour_ending_to_utc(d, he)
         if after is not None and ts <= after:
             continue
         rows.append({
@@ -63,13 +58,18 @@ def parse(text: str, after: datetime | None) -> tuple[list[dict], list[str]]:
             "market_demand": to_float(rec["Market Demand"], anomalies, f"{d} HE{he} market"),
             "ontario_demand": to_float(rec["Ontario Demand"], anomalies, f"{d} HE{he} ontario"),
         })
+    if rows:
+        newest_day = max(r["local_date"] for r in rows)
+        for d, n in sorted(labels_per_day.items()):
+            if n != 24 and d < newest_day:  # the current (still-filling) day is legitimately short
+                anomalies.append(f"{d}: {n} hour-ending labels (expected 24)")
     return rows, anomalies
 
 
 def fetch(ctx: FetchContext) -> FetchResult:
     last = ctx.last_run
     r = ctx.http.get("https://reports-public.ieso.ca/public/Demand/PUB_Demand.csv", accept="text/csv,*/*", expect="csv",
-                     etag=last.etag if last else None)
+                     etag=ctx.etag)
     if r.not_modified:
         return FetchResult([], last.content_sha256 if last else None, r.last_modified, 304, r.etag, True)
     # incremental-before-write: what do we already hold? (the data, not the job log)

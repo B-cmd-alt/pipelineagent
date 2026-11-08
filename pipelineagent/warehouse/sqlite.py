@@ -89,7 +89,7 @@ class SQLiteWarehouse:
             grp = f'"{group_by}"' if group_by else "''"
             cur = self.conn.execute(
                 f'SELECT {grp} AS g, "{value_column}" AS v, captured_at FROM "{table}" WHERE captured_at >= ? '
-                f"ORDER BY captured_at DESC LIMIT ?",
+                f'ORDER BY captured_at DESC, "{event_ts_column}" DESC LIMIT ?',
                 (since, max_rows),
             )
             for r in cur:
