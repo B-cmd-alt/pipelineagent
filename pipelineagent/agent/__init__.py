@@ -203,7 +203,9 @@ class Agent:
         """ESCALATED + exactly one GitHub issue per FEED: three axes of one feed breaching is one
         upstream problem, so sibling findings reuse the issue already opened for the feed."""
         sibling_ids = [g["finding_id"] for g in self.open_now.values() if g["feed"] == f["feed"]] + [fid]
-        prior_issue = next((s for s in self.wh.agent_steps(sorted(set(sibling_ids))) if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref")), None)
+        # a dry-run ref is not an issue anybody can see: once live, open the real one
+        prior_issue = next((s for s in self.wh.agent_steps(sorted(set(sibling_ids)))
+                            if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref") and not str(s["ref"]).startswith("dry-run://")), None)
         if prior_issue:
             if prior_issue["finding_id"] != fid:
                 self.step(fid, attempt, "escalate", "ok", f"{reason} (joined the feed's open issue)", prior_issue["ref"])
