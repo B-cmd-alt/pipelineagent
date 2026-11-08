@@ -82,7 +82,8 @@ After the ledger and heartbeat, `agent.run()` takes this run's newly OPENED find
 DEFERRED ones, at most **2 per run**. Triage is deterministic (`agent/triage.py`): a parser
 `schema:` error is `schema_drift` and gets a patch; a failing upstream is `stale_source` and is
 escalated after one run of patience; a green job with no rows is `green_job_dead_data` and is
-escalated (nothing to patch). Only the patch step calls a model (Claude, structured output);
+escalated (nothing to patch). Only the patch step calls a model (any OpenRouter model, default DeepSeek V4 Pro,
+strict JSON-schema output; measured on the FRED column-rename case: one call, $0.0018, 87 s);
 it proposes a minimal change to the one failing fetcher module plus a regression test. The
 proposal is judged by **replay** (archived failing bytes must break the old code and load
 cleanly with the new one; the last 5 healthy payloads must produce identical rows) and by the
@@ -96,6 +97,14 @@ step is a row in `agent_steps`, rendered as the chain on the finding card.
 Without `GITHUB_TOKEN` + `GITHUB_REPO` and `OPENROUTER_API_KEY` the agent runs **dry**: it
 triages and replays for real, writes the PR it would open under `site/agent/`, and opens
 nothing. The hourly job is deployed in that mode until the owner mounts the two secrets.
+
+### Fault injection and the live drill
+
+`PIPELINEAGENT_INJECT=<feed>=<kind>` on the job corrupts that feed's payload between the HTTP
+layer and the parser (`schema_rename`, `stale_source`, `html_error`), writes ground truth to
+`harness_injections`, and lets everything downstream react for real. `ops/DRILL.md` is the
+runbook for proving the whole loop (patch → PR → auto-merge → deploy → `FIXED`) on the deployed
+job, and for the "correct refusal" drill where the right answer is one issue and no PR.
 
 ### Dead-man's switch and deploy drift
 
@@ -138,7 +147,11 @@ not re-fetched inside 20h and identical content is never re-written, a 404 is a 
 
 One hourly Cloud Run Job (1 vCPU, 512 MiB, ~1 minute), one Cloud Scheduler trigger, BigQuery
 load jobs (free) and a handful of KB-scale queries per run, a static site in a bucket.
-Steady state is well under $2/month.
+Steady state is well under $2/month, plus a fraction of a cent per model call (only when a patch
+is attempted).
+
+The dashboard is published to the `gh-pages` branch after every render when the GitHub token is
+mounted (`PIPELINEAGENT_PAGES=0` disables); point GitHub Pages at that branch for a public URL.
 
 ## The seam to a release gate
 

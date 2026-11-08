@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 from . import feeds as feed_registry
+from . import harness
 from .config import Fleet, FeedSpec
 from .detectors import Detection, detect_feed
 from .heartbeat import beat
@@ -147,6 +148,8 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
     if hasattr(http, "last_body"):
         http.last_body = None
     due, why = _due(spec, last_runs, now, fleet.daily_feed_refetch_after_hours)
+    if isinstance(http, harness.InjectingClient):
+        due, why = True, ""  # an injected feed is always due, so a daily feed's drill does not wait 20h
     try:
         if not due:
             row.update(status="skipped", reason="not_due", error=why)
@@ -206,8 +209,11 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
         except Exception:  # noqa: BLE001
             log.exception("could not read last runs; proceeding as first run")
             last_runs = {}
+        injections = harness.rules_from_env()
+        harness.record(wh, {k: v for k, v in injections.items() if any(s.id == k for s in specs)}, report.run_id, now)
         for spec in specs:
-            r = run_feed(spec, fleet, wh, http, last_runs, report.run_id, now)
+            client = harness.InjectingClient(http, injections[spec.id]) if spec.id in injections else http
+            r = run_feed(spec, fleet, wh, client, last_runs, report.run_id, now)
             report.runs.append(r)
             log.info("feed %-22s %-9s rows=%-4d %5.1fs %s", spec.id, r["status"], r["rows_written"], r["duration_s"], r["error"] or "")
 

@@ -235,7 +235,7 @@ a detector, SLA or test (those are gate rejections, not judgement calls).
 
 ---
 
-## 4. Fault-injection harness (next)
+## 4. Fault-injection harness (injection layer shipped; drills in ops/DRILL.md)
 
 Four classes first; they map onto existing axes and exercise both outcomes
 of the loop (a patch, and a correct refusal to patch):
@@ -251,7 +251,11 @@ Class 5 (DST / timezone shift) is the showcase for week 4 if time allows;
 IESO's fixed-EST file is the natural fixture. Classes 4 (flat value) and 6
 (duplicate / partial load) are deferred: 6 needs a fetcher-side row-count
 invariant reported through `_runs`, which is the one open design question.
-Each injection writes a ground-truth row (class, injected_at, feed); fixtures
+Each injection writes a ground-truth row (`harness_injections`: ts, run_id, feed,
+kind, failure_class); the benchmark joins it against `findings` for MTTD and
+`dispositions` for MTTR. Injection happens between the HTTP client and the
+parser (`harness.InjectingClient`), so the archive, detectors, ledger, agent,
+gate and deploy all react to it exactly as to a real upstream change. Fixtures
 are synthetic, so recorded upstream payloads are never published.
 
 ---

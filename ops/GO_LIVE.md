@@ -65,3 +65,10 @@ merge discipline (review gates, protected branches, a monorepo shared with other
 `PIPELINEAGENT_AUTO_MERGE=0` until the project lives in its own repository, where the gate is the
 only required check. The agent never force-pushes and never touches files outside the failing
 fetcher module and new tests; a revert is a new commit.
+
+## 6. Public dashboard (GitHub Pages)
+
+With the token mounted, every render also force-pushes `index.html`, `data.json`, `HEALTHLOG.md`
+and `.nojekyll` to the `gh-pages` branch (single-commit publication, no history). Enable it once:
+repository Settings → Pages → Source "Deploy from a branch" → `gh-pages` / `/ (root)`. The page is
+then served at `https://<owner>.github.io/<repo>/`. `PIPELINEAGENT_PAGES=0` turns publishing off.
