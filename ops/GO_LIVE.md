@@ -29,7 +29,7 @@ gcloud run jobs update pipelineagent-run --project=<PROJECT> --region=<REGION> \
   --set-secrets=GITHUB_TOKEN=<github-secret-name>:latest,OPENROUTER_API_KEY=<openrouter-secret-name>:latest \
   --update-env-vars=GITHUB_REPO=<owner>/<repo>,GITHUB_BASE_BRANCH=main,GITHUB_SUBDIR=<subdir-or-empty>,\
 PIPELINEAGENT_AUTO_MERGE=<0|1>,CLOUD_BUILD_PROJECT=<PROJECT>,CLOUD_BUILD_REGION=<REGION>,\
-CLOUD_BUILD_SA=<runtime-sa-email>,CLOUD_RUN_JOB=pipelineagent-run
+CLOUD_BUILD_SA=<runtime-sa-email>
 ```
 
 Variables the agent reads:
@@ -43,6 +43,7 @@ Variables the agent reads:
 | `OPENROUTER_API_KEY` | without it the patch step is a dry run (triage/replay still real) |
 | `PIPELINEAGENT_MODEL` | optional OpenRouter model id; default `deepseek/deepseek-v4-pro`. A comma-separated list makes the rest fallbacks (e.g. `deepseek/deepseek-v4-pro,z-ai/glm-5.3`). Only providers that honour strict JSON-schema output are used. |
 | `CLOUD_BUILD_PROJECT`, `CLOUD_BUILD_REGION`, `CLOUD_BUILD_SA`, `CLOUD_RUN_JOB` | enable the post-merge build + deploy trigger; the build runs as `CLOUD_BUILD_SA`, which needs permission to push images and update the job |
+| `CLOUD_RUN_JOB` | job to redeploy; Cloud Run sets it to the job's own name automatically and rejects it in `--update-env-vars` (reserved), so never pass it |
 | `PIPELINEAGENT_AGENT` | `0` turns the agent off entirely (default on) |
 
 ## 4. Verify
