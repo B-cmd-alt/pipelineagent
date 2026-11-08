@@ -118,7 +118,7 @@ Two properties hold across the diagram:
 
 ---
 
-## 3. The agent (next)
+## 3. The agent (v1 shipped in dry-run; live once the two secrets are mounted)
 
 Design rule for everything below: **truth lives in two places, the ledger and
 GitHub.** The dashboard reads both; nothing else is written anywhere.
@@ -307,12 +307,15 @@ v0 and are not threats to the agent.
 Decided, not open: the agent runs inside the hourly job; payloads are kept
 with a bucket lifecycle rule and never published; the gate is a script.
 
-- **Week 2 — agent end to end on class 2.** Triage table; replay runner;
-  patch step for `schema_drift`; PR with `verdict.json`; `proofgate check`
-  as the linter + replay; auto-merge → `deploy.sh` verify → FIXED/revert;
-  ESCALATED issue on the live FRED incident (expected outcome: upstream
-  refuses the connection, nothing to patch). Dashboard cards gain the chain
-  line: triage → PR → gate → merged → verified → disposition.
+- **Week 2 — agent end to end on class 2. DONE (dry-run live).** Triage
+  table; replay runner; patch step for `schema_drift`; PR with
+  `verdict.json`; `proofgate check` as the linter + replay; auto-merge →
+  Cloud Build deploy → verify by the next 2 runs → FIXED/revert; ESCALATED
+  with one issue per feed. First live outcome: the FRED incident was triaged
+  `stale_source`, deferred one run, then escalated with a single (dry-run)
+  issue shared by its three axes — the expected result. Dashboard cards show
+  the chain. Remaining to go live: `GITHUB_TOKEN`/`GITHUB_REPO` and
+  `ANTHROPIC_API_KEY` mounted into the job.
 - **Week 3 — harness for classes 1, 2, 3, 7** with ground truth; the
   3-attempts-then-escalate path exercised by a deliberately unfixable
   injection; 24-hour summary line on the dashboard.

@@ -321,7 +321,12 @@ def render(fleet: Fleet, wh: Warehouse, site_dir: Path, bucket: str | None = Non
     (site_dir / "index.html").write_text(render_html(data), encoding="utf-8")
     (site_dir / "HEALTHLOG.md").write_text(render_healthlog(data), encoding="utf-8")
     if bucket:
-        _upload(bucket, {"index.html": site_dir / "index.html", "data.json": site_dir / "data.json", "HEALTHLOG.md": site_dir / "HEALTHLOG.md"})
+        files = {"index.html": site_dir / "index.html", "data.json": site_dir / "data.json", "HEALTHLOG.md": site_dir / "HEALTHLOG.md"}
+        # the agent's dry-run artifacts (PR drafts, issues it would have opened) live under site/agent/
+        for p in (site_dir / "agent").rglob("*"):
+            if p.is_file():
+                files[p.relative_to(site_dir).as_posix()] = p
+        _upload(bucket, files)
     return site_dir / "index.html"
 
 
