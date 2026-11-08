@@ -33,10 +33,20 @@ gcloud builds submit "$HERE" --project="$PROJECT" --region="$REGION" --config="$
 
 echo "[deploy] job ${JOB}"
 # --task-timeout/--max-retries/--parallelism are mandatory per project policy; 1 vCPU / 512 MiB is far below the ceiling.
-gcloud run jobs deploy "$JOB" --image="$IMAGE" \
-  --project="$PROJECT" --region="$REGION" --service-account="$SA" \
-  --cpu=1 --memory=512Mi --task-timeout=7200s --max-retries=1 --parallelism=1 --tasks=1 \
-  --set-env-vars="$ENV_VARS" --quiet
+# --update-env-vars, never --set-env-vars: the latter wipes every variable and secret mounted on
+# the job by hand (GITHUB_TOKEN, ANTHROPIC_API_KEY, ...; see ops/GO_LIVE.md). deploy.sh owns only
+# the variables it lists; everything else on the job is left exactly as it was.
+if gcloud run jobs describe "$JOB" --project="$PROJECT" --region="$REGION" >/dev/null 2>&1; then
+  gcloud run jobs update "$JOB" --image="$IMAGE" \
+    --project="$PROJECT" --region="$REGION" --service-account="$SA" \
+    --cpu=1 --memory=512Mi --task-timeout=7200s --max-retries=1 --parallelism=1 --tasks=1 \
+    --update-env-vars="$ENV_VARS" --quiet
+else
+  gcloud run jobs create "$JOB" --image="$IMAGE" \
+    --project="$PROJECT" --region="$REGION" --service-account="$SA" \
+    --cpu=1 --memory=512Mi --task-timeout=7200s --max-retries=1 --parallelism=1 --tasks=1 \
+    --set-env-vars="$ENV_VARS" --quiet
+fi
 
 JOB_URI="https://${REGION}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${PROJECT}/jobs/${JOB}:run"
 if gcloud scheduler jobs describe "$SCHED" --project="$PROJECT" --location="$REGION" >/dev/null 2>&1; then verb=update; else verb=create; fi
