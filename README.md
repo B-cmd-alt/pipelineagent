@@ -7,10 +7,11 @@ Most pipeline monitoring watches the *job*: did it exit 0? PipelineAgent watches
 moving? A job that exits 0 while writing nothing is the failure this project is built
 around, and it is far more common than a crash.
 
-v0 (this repo, week 1) ships the fleet, the detectors, the ledger, the dead-man's
-switch and the dashboard, so a real incident history starts accruing on day one.
-The repair agent, the fault-injection harness and the benchmark are specified in
-[`DESIGN.md`](DESIGN.md) and come next.
+v0 ships the fleet, the detectors, the ledger, the dead-man's switch and the dashboard,
+so a real incident history starts accruing on day one. v1 adds the repair agent (triage →
+replay → patch → PR → gate → merge → deploy → verify, with revert and escalation). The
+fault-injection harness and the benchmark are specified in [`DESIGN.md`](DESIGN.md) and
+come next.
 
 ## What runs
 
@@ -74,6 +75,27 @@ but opens no finding. `site/HEALTHLOG.md` is generated from the two tables on ev
 - `tests/test_no_private_leakage.py`: the tree contains no project ids, service
   accounts, tokens, or references to any private codebase.
 - Removing a detector never auto-closes its findings (`test_ledger.py`).
+
+### The repair agent (v1, runs inside the hourly job)
+
+After the ledger and heartbeat, `agent.run()` takes this run's newly OPENED findings plus any
+DEFERRED ones, at most **2 per run**. Triage is deterministic (`agent/triage.py`): a parser
+`schema:` error is `schema_drift` and gets a patch; a failing upstream is `stale_source` and is
+escalated after one run of patience; a green job with no rows is `green_job_dead_data` and is
+escalated (nothing to patch). Only the patch step calls a model (Claude, structured output);
+it proposes a minimal change to the one failing fetcher module plus a regression test. The
+proposal is judged by **replay** (archived failing bytes must break the old code and load
+cleanly with the new one; the last 5 healthy payloads must produce identical rows) and by the
+**gate** (`proofgate check`): a diff linter (`SLA_WIDENED`, `DETECTOR_DISABLED`,
+`TEST_WEAKENED`, `SCOPE_EXCEEDED`, `POLICY_FILE_TOUCHED`, `SECRET_IN_DIFF`) plus the replay
+re-run and the test suite. On `PASS` the agent opens the PR, merges it, triggers the build and
+deploy, and the next live detector runs decide: cleared → `FIXED`; still open after 2 runs →
+revert + redeploy; three failed attempts → `ESCALATED` with exactly one GitHub issue. Every
+step is a row in `agent_steps`, rendered as the chain on the finding card.
+
+Without `GITHUB_TOKEN` + `GITHUB_REPO` and `ANTHROPIC_API_KEY` the agent runs **dry**: it
+triages and replays for real, writes the PR it would open under `site/agent/`, and opens
+nothing. The hourly job is deployed in that mode until the owner mounts the two secrets.
 
 ### Dead-man's switch and deploy drift
 

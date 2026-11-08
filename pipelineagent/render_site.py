@@ -26,6 +26,8 @@ log = logging.getLogger("pipelineagent.site")
 
 AXIS_LABEL = {"write_recency": "Write recency", "head_lag": "Head lag", "flat_value": "Flat value"}
 STATE_ICON = {"OK": "✓", "BREACH": "✕", "UNKNOWN": "?", "N/A": "–"}
+STEP_ICON = {"ok": "✓", "failed": "✕", "skipped": "·", "dry_run": "◌"}
+CHAIN = ("triage", "replay", "patch", "pr", "gate", "merge", "deploy", "verify")
 RUN_ICON = {"ok": "●", "no_change": "○", "failed": "✕", "skipped": "·"}
 PAGE_STALE_AMBER_HOURS = 3.0  # an hourly loop that has not re-rendered in 3h is already suspicious
 
@@ -118,6 +120,12 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
                          "disposition_by": d["decided_by"] if d else "none",
                          "disposition_note": d["note"] if d else "no disposition row (should not happen)",
                          "open_for": _hours_ago(f.get("opened_at"), now)})
+    steps = guarded("agent_steps", lambda: wh.agent_steps([f["finding_id"] for f in findings]), []) or []
+    by_f: dict[str, list] = {}
+    for st in steps:
+        by_f.setdefault(st["finding_id"], []).append({k: _iso(v) for k, v in st.items()})
+    for f in findings:
+        f["agent_steps"] = by_f.get(f["finding_id"], [])
     findings.sort(key=lambda f: f.get("opened_at") or "", reverse=True)
     data["open_findings"] = findings
     data["open_findings_unavailable"] = open_f is None
@@ -161,6 +169,9 @@ tr:last-child td{border-bottom:0}.feed b{display:block}.feed small{color:var(--m
 .badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;border:1px solid var(--ring)}
 .badge.UNKNOWN{background:var(--unknown);color:var(--unknown-ink)}.badge.BENIGN{background:var(--ok);color:#fff}.badge.FIXED{background:var(--ok);color:#fff}
 .badge.ESCALATED{background:var(--breach);color:#fff}.badge.DEFERRED{border-color:var(--muted);color:var(--ink2)}
+.chain{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.chain span{font-size:12px;border:1px solid var(--grid);border-radius:999px;padding:1px 8px;color:var(--ink2)}
+.chain span.ok{border-color:var(--ok);color:var(--ink)}.chain span.failed{border-color:var(--breach);color:var(--ink)}.chain span.dry_run{border-style:dashed}.chain span.todo{color:var(--muted);border-style:dotted}
+.chain small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:color-mix(in srgb,var(--ink) 6%,transparent);padding:1px 4px;border-radius:4px}
 .err{background:var(--breach);color:#fff;padding:8px 12px;border-radius:6px;margin:8px 0}footer{margin-top:40px;color:var(--muted);font-size:12px}
 #page-stale{display:none}#page-stale.amber{display:flex;background:color-mix(in srgb,var(--unknown) 30%,var(--surface));border:1px solid var(--unknown);color:var(--ink)}#page-stale.red{display:flex;background:var(--breach);color:#fff;font-size:17px}
@@ -189,6 +200,32 @@ var h=(Date.now()-g)/36e5;var el=document.getElementById("page-stale");if(!el||i
 if(h>max){el.className="banner red";el.textContent="\u26a0 DEAD-MAN SWITCH: this page was rendered "+h.toFixed(1)+"h ago, over the "+max+"h limit. The loop that renders it has stopped; every cell below is stale.";}
 else if(h>%s){el.className="banner amber";el.textContent="\u26a0 Page rendered "+h.toFixed(1)+"h ago; the loop is hourly, so it may be falling behind.";}})();
 """ % PAGE_STALE_AMBER_HOURS
+
+
+def _chain(steps: list[dict]) -> str:
+    """The agent's decision chain for one finding: latest outcome per step, in order, plus
+    the last attempt's detail. Steps not reached yet are dotted, never green."""
+    if not steps:
+        return '<div class="chain"><span class="todo">agent: not yet run on this finding</span></div>'
+    last_attempt = max(int(s.get("attempt") or 0) for s in steps)
+    latest: dict[str, dict] = {}
+    for st in steps:
+        if int(st.get("attempt") or 0) == last_attempt or st["step"] in ("escalate", "defer", "revert"):
+            latest[st["step"]] = st
+    pills = []
+    for step in CHAIN:
+        st = latest.get(step)
+        if st:
+            pills.append(f'<span class="{_e(st["outcome"])}" title="{_e(st.get("detail"))}">{STEP_ICON.get(st["outcome"], "?")} {step}</span>')
+        else:
+            pills.append(f'<span class="todo">{step}</span>')
+    for extra in ("revert", "escalate", "defer"):
+        if extra in latest:
+            st = latest[extra]
+            pills.append(f'<span class="{_e(st["outcome"])}" title="{_e(st.get("detail"))}">{STEP_ICON.get(st["outcome"], "?")} {extra}</span>')
+    tail = sorted(steps, key=lambda s: s.get("ts") or "")[-1]
+    ref = f' · <a href="{_e(tail["ref"])}">{_e(tail["ref"][:60])}</a>' if tail.get("ref") and str(tail["ref"]).startswith("http") else ""
+    return (f'<div class="chain">{"".join(pills)}<small>attempt {last_attempt} · last: {_e(tail["step"])} {_e(tail["outcome"])} — {_e((tail.get("detail") or "")[:160])}{ref}</small></div>')
 
 
 def render_html(data: dict[str, Any]) -> str:
@@ -232,11 +269,13 @@ def render_html(data: dict[str, Any]) -> str:
 
     cards = []
     for f in data["open_findings"]:
+        f["chain_html"] = _chain(f.get("agent_steps") or [])
         cards.append(f"""<div class="card {_e(f['state'])}">
  <h3>{STATE_ICON.get(f['state'], '?')} {_e(f['feed'])} / {_e(AXIS_LABEL.get(f['axis'], f['axis']))} — {_e(f['state'])} <span class="badge {_e(f['disposition'])}">{_e(f['disposition'])}</span></h3>
  <div class="meta">finding <code>{_e(f['finding_id'])}</code> · opened {_e((f.get('opened_at') or '?')[:16])}Z ({_e(f['open_for'])})</div>
  <div style="margin-top:6px"><b>Evidence:</b> {_e(f['detail'])} <span class="sub">(observed {_e(f.get('observed'))} vs threshold {_e(f.get('threshold'))})</span></div>
- <div class="meta" style="margin-top:4px"><b>Disposition</b> by {_e(f['disposition_by'])}: {_e(f['disposition_note'])} · diagnosis / patch / gate verdict: not built yet (v0)</div>
+ <div class="meta" style="margin-top:4px"><b>Disposition</b> by {_e(f['disposition_by'])}: {_e(f['disposition_note'])}</div>
+ {f['chain_html']}
 </div>""")
     if data["open_findings_unavailable"]:
         findings_html = '<div class="err">Open findings could not be read — treat as UNKNOWN, not as "no findings".</div>'

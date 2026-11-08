@@ -5,7 +5,9 @@ WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY pipelineagent ./pipelineagent
 COPY fleet.yaml ./fleet.yaml
-RUN pip install --quiet ".[bigquery]"
+COPY tests ./tests
+# tests ship in the image: the gate re-runs the suite against a patched copy of this tree
+RUN pip install --quiet ".[bigquery,agent,dev]"
 ENV PIPELINEAGENT_FLEET=/app/fleet.yaml PIPELINEAGENT_SITE_DIR=/app/site
 ENTRYPOINT ["python", "-m", "pipelineagent"]
 CMD ["run"]

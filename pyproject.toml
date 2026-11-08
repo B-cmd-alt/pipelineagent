@@ -16,13 +16,16 @@ dependencies = [
 
 [project.optional-dependencies]
 bigquery = ["google-cloud-bigquery>=3.25", "google-cloud-storage>=2.16"]
+agent = ["anthropic>=2.4"]
 dev = ["pytest>=8"]
 
 [project.scripts]
 pipelineagent = "pipelineagent.cli:main"
+proofgate = "pipelineagent.agent.gate:main"
 
 [tool.setuptools.packages.find]
 include = ["pipelineagent*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["agent_e2e: spawns the replay/gate subprocesses; excluded when the gate re-runs the suite"]

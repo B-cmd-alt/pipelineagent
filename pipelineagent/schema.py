@@ -80,12 +80,26 @@ HEARTBEAT = (
     Column("git_commit", "STRING"),
 )
 
+# The repair agent's chain, one row per step per finding (append-only). The dashboard card
+# renders these rows in order: triage -> replay -> patch -> pr -> gate -> merge -> deploy -> verify.
+AGENT_STEPS = (
+    Column("finding_id", "STRING", True),
+    Column("ts", "TIMESTAMP", True),
+    Column("run_id", "STRING", True),
+    Column("attempt", "INT64", True, "1-based repair attempt on this finding"),
+    Column("step", "STRING", True, "triage | replay | patch | pr | gate | merge | deploy | verify | revert | escalate | defer"),
+    Column("outcome", "STRING", True, "ok | failed | skipped | dry_run"),
+    Column("detail", "STRING"),
+    Column("ref", "STRING", False, "PR/issue URL, commit sha, or artifact path"),
+)
+
 SYSTEM_TABLES: dict[str, tuple[Column, ...]] = {
     "_runs": RUNS,
     "detections": DETECTIONS,
     "findings": FINDINGS,
     "dispositions": DISPOSITIONS,
     "heartbeat": HEARTBEAT,
+    "agent_steps": AGENT_STEPS,
 }
 
 # Partition column per system table (DAY partitioning in BigQuery).
@@ -95,6 +109,7 @@ SYSTEM_PARTITION = {
     "findings": "event_at",
     "dispositions": "decided_at",
     "heartbeat": "ts",
+    "agent_steps": "ts",
 }
 
 DISPOSITION_VALUES = ("FIXED", "BENIGN", "ESCALATED", "DEFERRED", "UNKNOWN")

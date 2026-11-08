@@ -7,12 +7,14 @@ detection + ledger completed, so "alive" means the whole loop ran.
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import os
 import time
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 from . import feeds as feed_registry
@@ -60,20 +62,66 @@ def ensure_warehouse(fleet: Fleet, wh: Warehouse) -> None:
         wh.ensure_table(spec.table, FEED_COMMON + feed.columns, "captured_at", True, description=spec.description)
 
 
-def archive_payload(feed_id: str, sha: str | None, raw: bytes | None) -> None:
-    """Keep the exact bytes a vintage came from, keyed by content hash, so a failure can be
-    replayed later. Fail-soft and optional: set PIPELINEAGENT_PAYLOAD_BUCKET (GCS)."""
+def _payload_store():
+    """(writer, reader) for raw payloads keyed by feed + content sha. GCS when
+    PIPELINEAGENT_PAYLOAD_BUCKET is set, else a local directory (PIPELINEAGENT_PAYLOAD_DIR,
+    default ./payloads). Both fail soft on write; the row is already in the warehouse."""
     bucket = os.environ.get("PIPELINEAGENT_PAYLOAD_BUCKET")
-    if not bucket or not sha or raw is None:
+    if bucket:
+        def write(feed_id: str, sha: str, raw: bytes) -> None:
+            from google.cloud import storage
+
+            blob = storage.Client().bucket(bucket).blob(f"raw/{feed_id}/{sha}")
+            if not blob.exists():
+                blob.upload_from_string(raw, content_type="application/octet-stream")
+
+        def read(feed_id: str, sha: str) -> bytes | None:
+            from google.cloud import storage
+
+            blob = storage.Client().bucket(bucket).blob(f"raw/{feed_id}/{sha}")
+            return blob.download_as_bytes() if blob.exists() else None
+        return write, read
+    root = Path(os.environ.get("PIPELINEAGENT_PAYLOAD_DIR", "payloads"))
+
+    def write_local(feed_id: str, sha: str, raw: bytes) -> None:
+        p = root / feed_id / sha
+        p.parent.mkdir(parents=True, exist_ok=True)
+        if not p.exists():
+            p.write_bytes(raw)
+
+    def read_local(feed_id: str, sha: str) -> bytes | None:
+        p = root / feed_id / sha
+        return p.read_bytes() if p.exists() else None
+    return write_local, read_local
+
+
+def archive_payload(feed_id: str, sha: str | None, raw: bytes | None) -> None:
+    """Keep the exact bytes a run saw, keyed by content hash, so a failure can be replayed later."""
+    if not sha or raw is None:
         return
     try:
-        from google.cloud import storage
-
-        blob = storage.Client().bucket(bucket).blob(f"raw/{feed_id}/{sha}")
-        if not blob.exists():
-            blob.upload_from_string(raw, content_type="application/octet-stream")
+        _payload_store()[0](feed_id, sha, raw)
     except Exception:  # noqa: BLE001
         log.exception("payload archive failed for %s (data row already written)", feed_id)
+
+
+def load_payload(feed_id: str, sha: str) -> bytes | None:
+    try:
+        return _payload_store()[1](feed_id, sha)
+    except Exception:  # noqa: BLE001
+        log.exception("payload load failed for %s/%s", feed_id, sha)
+        return None
+
+
+def _archive_failed_body(feed_id: str, http: Client, row: dict[str, Any]) -> None:
+    """A parser that rejects a payload is exactly the case the agent must replay later:
+    archive the bytes the failing run saw and record their hash on the failed run row."""
+    body = getattr(http, "last_body", None)
+    if body:
+        sha = hashlib.sha256(body).hexdigest()
+        row["content_sha256"] = sha
+        archive_payload(feed_id, sha, body)
+    http.last_body = None if hasattr(http, "last_body") else None
 
 
 def _due(spec: FeedSpec, last_runs: dict, now: datetime, refetch_after_h: float) -> tuple[bool, str]:
@@ -96,6 +144,8 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
                            "rows_written": 0, "duration_s": 0.0, "http_status": None, "requests_used": 0, "source_modified": None,
                            "content_sha256": None, "error": None, "code_sha256": code_sha256(str(fleet.path))}
     used0 = http.used
+    if hasattr(http, "last_body"):
+        http.last_body = None
     due, why = _due(spec, last_runs, now, fleet.daily_feed_refetch_after_hours)
     try:
         if not due:
@@ -126,9 +176,11 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
         row.update(status="skipped", reason="budget_exhausted", error=str(e)[:500])
     except SourceError as e:
         row.update(status="failed", reason="source_error", error=str(e)[:500])
+        _archive_failed_body(spec.id, http, row)
     except Exception as e:  # noqa: BLE001 — isolate the feed, record the class, move on
         log.exception("feed %s crashed", spec.id)
         row.update(status="failed", reason=f"exception:{e.__class__.__name__}", error=str(e)[:500])
+        _archive_failed_body(spec.id, http, row)
     row["requests_used"] = http.used - used0
     row["duration_s"] = round(time.monotonic() - t0, 3)
     row["finished_at"] = now + timedelta(seconds=row["duration_s"])
@@ -140,7 +192,7 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
 
 
 def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: bool = True, detect: bool = True,
-        http: Client | None = None, now: datetime | None = None) -> RunReport:
+        http: Client | None = None, now: datetime | None = None, agent_ctx=None) -> RunReport:
     now = now or datetime.now(timezone.utc)
     t0 = time.monotonic()
     report = RunReport(run_id=uuid.uuid4().hex[:12], started_at=now)
@@ -175,8 +227,25 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
             report.ledger = ledger
             # the heartbeat means "the WHOLE loop completed", so it is written only after the ledger
             report.heartbeat = beat(wh, report.run_id, at, str(fleet.path))
+            if agent_ctx is not None:
+                _run_agent(fleet, wh, report, agent_ctx, at)
         for d in report.detections:
             log.info("detect %-22s %-13s %-7s %s", d.feed, d.axis, d.state, d.detail)
 
     report.duration_s = time.monotonic() - t0
     return report
+
+
+def _run_agent(fleet: Fleet, wh: Warehouse, report: RunReport, agent_ctx, at: datetime) -> None:
+    """The repair agent runs after the ledger + heartbeat, inside the same job. It gets this
+    run's OPENED findings plus the DEFERRED ones, never anything else."""
+    from .agent import Agent
+
+    try:
+        open_now = {(f["feed"], f["axis"]): f for f in wh.open_findings()}
+        disps = wh.latest_dispositions()
+        deferred = [f for f in open_now.values() if disps.get(f["finding_id"], {}).get("disposition") == "DEFERRED"]
+        opened = [dict(o) for o in (report.ledger.opened if report.ledger else [])]
+        Agent(wh, agent_ctx, report.run_id, at).run(opened, deferred, open_now)
+    except Exception:  # noqa: BLE001 — the agent is downstream of everything that matters
+        log.exception("agent stage failed")

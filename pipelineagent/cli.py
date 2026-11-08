@@ -43,13 +43,29 @@ def cmd_fetch(args) -> int:
     return 0
 
 
+def _agent_ctx(fleet, args):
+    """Agent on by default (PIPELINEAGENT_AGENT=0 disables). Without GITHUB_TOKEN/ANTHROPIC_API_KEY it
+    runs dry: triages, replays, writes PR drafts under <site>/agent/, opens nothing."""
+    if os.environ.get("PIPELINEAGENT_AGENT", "1") != "1":
+        return None
+    from .agent import AgentContext
+    from .agent import deploy as deploy_mod
+    from .agent import github as gh_mod
+    from .runner import load_payload
+
+    gh = gh_mod.from_env(Path(args.site_dir))
+    return AgentContext(fleet=fleet, package_root=Path(fleet.path).resolve().parent, github=gh, payload_loader=load_payload,
+                        deployer=deploy_mod.from_env(gh), auto_merge=os.environ.get("PIPELINEAGENT_AUTO_MERGE", "1") == "1",
+                        current_commit=os.environ.get("GIT_COMMIT") or None)
+
+
 def cmd_run(args) -> int:
     from .runner import run
 
     fleet = load_fleet(args.fleet)
     wh = _wh(args)
     feeds = args.feeds.split(",") if args.feeds else None
-    report = run(fleet, wh, feeds=feeds, fetch=not args.no_fetch, detect=not args.no_detect)
+    report = run(fleet, wh, feeds=feeds, fetch=not args.no_fetch, detect=not args.no_detect, agent_ctx=_agent_ctx(fleet, args))
     if not args.no_render:
         from .render_site import render
 

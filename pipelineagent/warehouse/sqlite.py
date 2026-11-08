@@ -140,6 +140,17 @@ class SQLiteWarehouse:
         )
         return [self._row(r) for r in cur]
 
+    def agent_steps(self, finding_ids):
+        if not finding_ids:
+            return []
+        q = ",".join("?" for _ in finding_ids)
+        cur = self.conn.execute(f"SELECT * FROM agent_steps WHERE finding_id IN ({q}) ORDER BY ts, attempt", list(finding_ids))
+        return [self._row(r) for r in cur]
+
+    def runs_for_feed(self, feed, limit):
+        cur = self.conn.execute("SELECT * FROM _runs WHERE feed = ? ORDER BY started_at DESC LIMIT ?", (feed, limit))
+        return [self._row(r) for r in cur]
+
     def _row(self, r: sqlite3.Row) -> dict[str, Any]:
         d = dict(r)
         for k, v in list(d.items()):

@@ -180,3 +180,18 @@ class BigQueryWarehouse:
           WHERE detected_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 14 DAY)
         ) WHERE rn = 1"""
         return self._query(sql)
+
+    def agent_steps(self, finding_ids):
+        if not finding_ids:
+            return []
+        return self._query(
+            f"SELECT * FROM {self._ref('agent_steps')} WHERE finding_id IN UNNEST(@ids) ORDER BY ts, attempt",
+            [self.bq.ArrayQueryParameter("ids", "STRING", list(finding_ids))],
+        )
+
+    def runs_for_feed(self, feed, limit):
+        return self._query(
+            f"SELECT * FROM {self._ref('_runs')} WHERE feed = @feed AND started_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 14 DAY) "
+            f"ORDER BY started_at DESC LIMIT {int(limit)}",
+            [self.bq.ScalarQueryParameter("feed", "STRING", feed)],
+        )

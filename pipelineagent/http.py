@@ -67,6 +67,7 @@ class Client:
         self.used = 0
         self.min_interval_s = min_interval_s
         self._last_by_host: dict[str, float] = {}
+        self.last_body: bytes | None = None  # the most recent 2xx body, so a parser failure can still be archived for replay
 
     def _pace(self, host: str) -> None:
         last = self._last_by_host.get(host)
@@ -120,6 +121,7 @@ class Client:
         if r.status_code >= 400:
             raise SourceError(f"HTTP {r.status_code} for {url}")
         body = r.content
+        self.last_body = body
         if expect in ("json", "csv") and looks_like_html(body, ct):
             raise SourceError(f"html_error_page: expected {expect}, got HTML ({len(body)} bytes) from {host}")
         if expect == "json" and not body.lstrip()[:1] in (b"{", b"["):
