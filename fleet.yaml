@@ -1,0 +1,95 @@
+# PipelineAgent fleet manifest — the single machine-readable source of truth for
+# WHAT is monitored and WHAT counts as healthy. Detectors read only this file
+# and the data tables; they never look at job exit codes.
+#
+# Every feed declares three detector axes. An axis that is not declared is
+# rendered as "not declared" (grey), never as healthy.
+#   write_recency_max_hours : newest captured_at (when WE last wrote) vs now
+#   head_lag_max_hours      : newest event_ts (the DATA's own clock) vs now
+#   flat_value              : N consecutive identical values on one column
+#                             (optionally per group) => frozen upstream
+#
+# Changing an SLA to make a breach go away is a policy violation
+# (see tests/test_policy.py and ops/SLA_CHANGES.md).
+version: 1
+project: PipelineAgent
+user_agent: "PipelineAgent/0.1 (automated data-pipeline monitor; open-source portfolio project; contact via the repository issue tracker)"
+request_budget_per_run: 40        # hard cap on outbound HTTP requests per loop run
+min_seconds_between_requests: 1.0 # per-host pacing
+heartbeat_max_age_hours: 26       # dead-man's switch threshold for the dashboard banner
+daily_feed_refetch_after_hours: 20
+
+feeds:
+  - id: nws_observations
+    description: "NOAA/NWS latest surface observations for four airport stations (api.weather.gov)."
+    cadence: hourly
+    table: nws_observations
+    params:
+      stations: [KOKC, KDFW, KORD, KDEN]
+    sla:
+      write_recency_max_hours: 3
+      head_lag_max_hours: 4
+      flat_value: { column: temperature_c, group_by: station, max_consecutive: 12 }
+
+  - id: open_meteo_current
+    description: "Open-Meteo current conditions for two points (no key)."
+    cadence: hourly
+    table: open_meteo_current
+    params:
+      points:
+        - { name: oklahoma_city, latitude: 35.47, longitude: -97.52 }
+        - { name: chicago, latitude: 41.88, longitude: -87.63 }
+    sla:
+      write_recency_max_hours: 3
+      head_lag_max_hours: 3
+      flat_value: { column: temperature_2m, group_by: location, max_consecutive: 12 }
+
+  - id: usgs_earthquakes_hour
+    description: "USGS 'all earthquakes, past hour' GeoJSON summary feed."
+    cadence: hourly
+    table: usgs_earthquakes_hour
+    sla:
+      write_recency_max_hours: 3
+      head_lag_max_hours: 3
+      flat_value: { column: feature_count, max_consecutive: 24 }
+
+  - id: fred_dgs10
+    description: "FRED 10-year Treasury constant-maturity yield (DGS10) via the public fredgraph CSV; '.' marks a missing value."
+    cadence: daily
+    table: fred_dgs10
+    params:
+      series_id: DGS10
+      keep_last_n: 30
+    sla:
+      write_recency_max_hours: 30
+      head_lag_max_hours: 120       # business-day series: a Friday print is current until Tuesday evening
+      flat_value: { column: value, group_by: series_id, max_consecutive: 5 }
+
+  - id: github_status
+    description: "GitHub public status page summary (Statuspage API)."
+    cadence: hourly
+    table: github_status
+    sla:
+      write_recency_max_hours: 3
+      head_lag_max_hours: 240       # the page's updated_at only moves on an incident or maintenance
+      # flat_value intentionally NOT declared: a long run of identical 'operational' rows is the normal state.
+
+  - id: coingecko_prices
+    description: "CoinGecko simple price endpoint for BTC and ETH (free tier, aggressively rate limited)."
+    cadence: hourly
+    table: coingecko_prices
+    params:
+      coins: [bitcoin, ethereum]
+    sla:
+      write_recency_max_hours: 3
+      head_lag_max_hours: 3
+      flat_value: { column: price_usd, group_by: coin, max_consecutive: 6 }
+
+  - id: ieso_ontario_demand
+    description: "IESO hourly Ontario demand (PUB_Demand.csv); hour-ending local time, so DST transitions are a live hazard."
+    cadence: daily
+    table: ieso_ontario_demand
+    sla:
+      write_recency_max_hours: 30
+      head_lag_max_hours: 36
+      flat_value: { column: ontario_demand, max_consecutive: 6 }

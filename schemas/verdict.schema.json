@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pipelineagent.dev/schemas/verdict.schema.json",
+  "title": "PipelineAgent repair verdict / evidence",
+  "description": "The seam between the repair agent and the release gate. The agent fills run_manifest, patch_sha256 and evidence; the gate fills verdict and reason_codes. A FIXED disposition requires a reference to one of these with verdict=PASS.",
+  "type": "object",
+  "required": ["schema_version", "finding_id", "run_manifest", "patch_sha256", "verdict", "reason_codes", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": 1 },
+    "finding_id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+    "run_manifest": {
+      "type": "object",
+      "description": "What exactly was run to produce the evidence, so a reviewer can replay it.",
+      "required": ["agent_run_id", "base_commit", "code_sha256_before", "code_sha256_after", "replay_inputs", "started_at", "finished_at"],
+      "properties": {
+        "agent_run_id": { "type": "string" },
+        "base_commit": { "type": "string" },
+        "code_sha256_before": { "type": "string" },
+        "code_sha256_after": { "type": "string" },
+        "replay_inputs": {
+          "type": "array",
+          "description": "content_sha256 of each captured upstream payload replayed in the sandbox.",
+          "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        },
+        "started_at": { "type": "string", "format": "date-time" },
+        "finished_at": { "type": "string", "format": "date-time" },
+        "sandbox": { "type": "string", "description": "sandbox identity/image used for the replay" }
+      }
+    },
+    "patch_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 of the unified diff the PR carries." },
+    "verdict": { "type": "string", "enum": ["PASS", "FAIL", "NEEDS_HUMAN"] },
+    "reason_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "REPLAY_PASSED", "REPLAY_FAILED", "TESTS_PASSED", "TESTS_FAILED",
+          "SLA_WIDENED", "DETECTOR_DISABLED", "FIXED_WITHOUT_REPLAY", "TEST_WEAKENED",
+          "SCOPE_EXCEEDED", "SECRET_IN_DIFF", "POLICY_FILE_TOUCHED", "UNKNOWN_FAILURE_CLASS"
+        ]
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["failure_class", "diagnosis", "before", "after"],
+      "properties": {
+        "failure_class": {
+          "type": "string",
+          "enum": ["green_job_dead_data", "schema_drift", "stale_source", "flat_value", "timezone_shift", "duplicate_or_partial_load", "deploy_drift", "unknown"]
+        },
+        "diagnosis": { "type": "string", "maxLength": 4000 },
+        "before": { "type": "object", "description": "detector states before the patch, {feed/axis: state}" },
+        "after": { "type": "object", "description": "detector states after replay with the patch, {feed/axis: state}" },
+        "artifacts": { "type": "array", "items": { "type": "string" }, "description": "paths/URLs of logs, diffs, replay outputs" }
+      }
+    }
+  }
+}
