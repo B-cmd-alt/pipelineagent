@@ -1,6 +1,9 @@
 """End-to-end against SQLite with stubbed fetchers: the green-job-dead-data
 scenario, UNKNOWN never rendering green, heartbeat staleness."""
 from datetime import timedelta
+from pathlib import Path
+
+import pytest
 
 from conftest import NOW
 
@@ -137,3 +140,22 @@ def test_client_side_staleness_script_is_valid_js(tmp_path):
     out = subprocess.run(["node", str(js)], capture_output=True, text=True, timeout=30)
     assert out.returncode == 0, out.stderr
     assert "DEAD-MAN" in out.stdout
+
+
+@pytest.mark.agent_e2e
+def test_agent_picks_up_untriaged_backlog_not_only_this_runs_openings(fleet, wh, monkeypatch, tmp_path):
+    """Findings opened before the agent existed carry the auto 'awaiting triage' disposition;
+    the patrol must queue them, not only the findings OPENED in the current run."""
+    from pipelineagent.agent import AgentContext
+    from pipelineagent.agent.github import DryRunGitHub
+    from pipelineagent.detectors import Detection
+    from pipelineagent.ledger import apply as apply_ledger, reconcile
+
+    apply_ledger(reconcile([Detection("fred_dgs10", "write_recency", "BREACH", 1.0, 2.0, "old")], [], {}, "r0", NOW - timedelta(hours=5)), wh)
+    # every feed healthy except FRED, which keeps returning nothing -> its old finding stays open
+    stub_all(monkeypatch, lambda fid, ctx: FetchResult([], "none", None, 200) if fid == "fred_dgs10" else healthy_result(fid, ctx))
+    ctx = AgentContext(fleet=fleet, package_root=Path(__file__).resolve().parent.parent, github=DryRunGitHub(tmp_path),
+                       payload_loader=lambda f, s: None, deployer=lambda s: None, proposer=lambda **k: None)
+    run(fleet, wh, http=StubHttp(), now=NOW, agent_ctx=ctx)
+    steps = wh.conn.execute("SELECT finding_id, step, outcome, detail FROM agent_steps").fetchall()
+    assert any(r["step"] == "triage" and "green_job_dead_data" in r["detail"] for r in steps), [tuple(r) for r in steps]

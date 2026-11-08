@@ -244,8 +244,20 @@ def _run_agent(fleet: Fleet, wh: Warehouse, report: RunReport, agent_ctx, at: da
     try:
         open_now = {(f["feed"], f["axis"]): f for f in wh.open_findings()}
         disps = wh.latest_dispositions()
-        deferred = [f for f in open_now.values() if disps.get(f["finding_id"], {}).get("disposition") == "DEFERRED"]
         opened = [dict(o) for o in (report.ledger.opened if report.ledger else [])]
-        Agent(wh, agent_ctx, report.run_id, at).run(opened, deferred, open_now)
+        opened_ids = {o["finding_id"] for o in opened}
+
+        def queued(f: dict) -> bool:
+            d = disps.get(f["finding_id"])
+            if d is None:
+                return True  # open with no disposition row at all: never looked at
+            if d["disposition"] == "DEFERRED":
+                return True  # the patrol re-queues deferred work
+            # untriaged backlog: the auto 'awaiting triage' row the ledger writes on OPENED
+            # (an agent-written UNKNOWN 'awaiting verification' is handled by verify_pending instead)
+            return d["disposition"] == "UNKNOWN" and d["decided_by"] == "auto"
+
+        backlog = [f for f in open_now.values() if f["finding_id"] not in opened_ids and queued(f)]
+        Agent(wh, agent_ctx, report.run_id, at).run(opened, backlog, open_now)
     except Exception:  # noqa: BLE001 — the agent is downstream of everything that matters
         log.exception("agent stage failed")
