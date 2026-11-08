@@ -28,6 +28,8 @@ class PullRequest:
 
 
 class GitHub:
+    dry_run = False
+
     def __init__(self, token: str, repo: str, base_branch: str = "main", subdir: str = "", api: str = "https://api.github.com"):
         self.repo, self.base_branch, self.subdir, self.api = repo, base_branch, subdir.strip("/"), api
         self.s = requests.Session()
@@ -131,6 +133,7 @@ class GitHub:
 
 class DryRunGitHub(GitHub):
     """Same interface, writes artifacts to `out_dir/agent/<branch>/...` instead of calling GitHub."""
+    dry_run = True
 
     def __init__(self, out_dir: Path, base_branch: str = "main"):
         self.out_dir, self.base_branch, self.repo, self.subdir = Path(out_dir), base_branch, "dry-run/local", ""
