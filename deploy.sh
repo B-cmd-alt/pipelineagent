@@ -6,7 +6,8 @@
 # Required env (no values live in this tree):
 #   PROJECT   GCP project id            REGION    e.g. us-central1
 #   SA        runtime service account   DATASET   BigQuery dataset (default pipelineagent)
-#   SITE_BUCKET  (optional) GCS bucket that receives index.html/data.json/HEALTHLOG.md
+#   SITE_BUCKET  (optional) GCS bucket that receives index.html/data.json/HEALTHLOG.md + raw/ payload archive
+#   AR_REPO      (optional) Artifact Registry docker repo name (default cloud-run-source-deploy)
 # Cost posture: 1 vCPU / 512 MiB, ~1 min/run, hourly => well under $2/month.
 set -euo pipefail
 : "${PROJECT:?}" "${REGION:?}" "${SA:?}"
@@ -19,11 +20,20 @@ GIT_COMMIT="$(git -C "$HERE" rev-parse HEAD 2>/dev/null || echo unknown)"
 LOCAL_HASH="$(cd "$HERE" && PYTHONPATH=. python3 -m pipelineagent version | python3 -c 'import json,sys; print(json.load(sys.stdin)["code_sha256"])')"
 
 ENV_VARS="PIPELINEAGENT_WAREHOUSE=bigquery://${PROJECT}/${DATASET},GIT_COMMIT=${GIT_COMMIT},LOG_LEVEL=INFO"
-[[ -n "${SITE_BUCKET:-}" ]] && ENV_VARS="${ENV_VARS},PIPELINEAGENT_SITE_BUCKET=${SITE_BUCKET}"
+[[ -n "${SITE_BUCKET:-}" ]] && ENV_VARS="${ENV_VARS},PIPELINEAGENT_SITE_BUCKET=${SITE_BUCKET},PIPELINEAGENT_PAYLOAD_BUCKET=${SITE_BUCKET}"
 
-echo "[deploy] building + deploying job ${JOB} from source (commit ${GIT_COMMIT:0:10}, code ${LOCAL_HASH:0:12})"
+IMAGE="${REGION}-docker.pkg.dev/${PROJECT}/${AR_REPO:-cloud-run-source-deploy}/${JOB}:${GIT_COMMIT:0:10}"
+echo "[build] ${IMAGE} (commit ${GIT_COMMIT:0:10}, repo code ${LOCAL_HASH:0:12})"
+# Two steps instead of `gcloud run jobs deploy --source`: that path builds as the Cloud Build
+# default SA, which the deploying identity may not be allowed to impersonate. Building as the
+# runtime SA (serviceAccount in the request) with CLOUD_LOGGING_ONLY sidesteps that.
+TMP_CFG="$(mktemp)"; trap 'rm -f "$TMP_CFG"' EXIT
+sed "s#^options:#serviceAccount: projects/${PROJECT}/serviceAccounts/${SA}\noptions:#" "${HERE}/cloudbuild.yaml" > "$TMP_CFG"
+gcloud builds submit "$HERE" --project="$PROJECT" --region="$REGION" --config="$TMP_CFG" --substitutions="_IMAGE=${IMAGE}" --quiet
+
+echo "[deploy] job ${JOB}"
 # --task-timeout/--max-retries/--parallelism are mandatory per project policy; 1 vCPU / 512 MiB is far below the ceiling.
-gcloud run jobs deploy "$JOB" --source "$HERE" \
+gcloud run jobs deploy "$JOB" --image="$IMAGE" \
   --project="$PROJECT" --region="$REGION" --service-account="$SA" \
   --cpu=1 --memory=512Mi --task-timeout=7200s --max-retries=1 --parallelism=1 --tasks=1 \
   --set-env-vars="$ENV_VARS" --quiet
@@ -35,8 +45,8 @@ gcloud scheduler jobs "$verb" http "$SCHED" --project="$PROJECT" --location="$RE
   --oauth-service-account-email="$SA" --attempt-deadline=1800s --quiet
 
 echo "[verify] image digest + runtime code hash"
-IMAGE="$(gcloud run jobs describe "$JOB" --project="$PROJECT" --region="$REGION" --format='value(spec.template.spec.template.spec.containers[0].image)')"
-echo "  image:        $IMAGE"
+echo "  image:        $(gcloud run jobs describe "$JOB" --project="$PROJECT" --region="$REGION" --format='value(spec.template.spec.template.spec.containers[0].image)')"
+echo "  digest:       $(gcloud artifacts docker images describe "$IMAGE" --project="$PROJECT" --format='value(image_summary.digest)')"
 echo "  repo code:    $LOCAL_HASH  (commit $GIT_COMMIT)"
 echo "  Now run the job once and compare the heartbeat row's code_sha256:"
 echo "  gcloud run jobs execute $JOB --project=$PROJECT --region=$REGION --wait"

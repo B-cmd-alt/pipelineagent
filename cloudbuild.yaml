@@ -1,0 +1,11 @@
+# Builds the loop image. Submitted by deploy.sh with substitutions. The build runs as the
+# SAME service account the job runs as (set by deploy.sh), with logs to Cloud Logging only,
+# so no Cloud Build default-SA impersonation is needed.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-t", "${_IMAGE}", "."]
+images: ["${_IMAGE}"]
+options:
+  logging: CLOUD_LOGGING_ONLY
+substitutions:
+  _IMAGE: ""
