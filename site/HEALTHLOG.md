@@ -1,6 +1,6 @@
 # PipelineAgent HEALTHLOG
 
-Generated 2026-11-08T17:48:25Z from the append-only `findings` and `dispositions` tables (oldest first). OPENED/CLOSED are detector transitions; DISPOSITION rows are automatic or human decisions.
+Generated 2026-11-08T17:53:31Z from the append-only `findings` and `dispositions` tables (oldest first). OPENED/CLOSED are detector transitions; DISPOSITION rows are automatic or human decisions.
 
 - 2026-11-08T04:02Z DISPOSITION `cd270015ddd986f0` UNKNOWN (auto) — awaiting triage
 - 2026-11-08T04:02Z DISPOSITION `19142d7fe1f0613f` UNKNOWN (auto) — awaiting triage

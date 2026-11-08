@@ -1,20 +1,20 @@
 {
- "generated_at": "2026-11-08T17:48:25.238885+00:00",
+ "generated_at": "2026-11-08T17:53:31.202323+00:00",
  "project": "PipelineAgent",
  "renderer": {
   "version": "0.1.0",
-  "code_sha256": "db129a70bb141c527d28159ae0d4b88b9f3b31274a1f926afc838d80c8492b55",
-  "git_commit": "415420fd4884679f20563d6929a2b5712b83fe47"
+  "code_sha256": "30bf412754573f34d46ed40824583f570c0189a3cf0bb689b0ab48267a428d12",
+  "git_commit": "dd6ce522264c8fba614a221c7d548e448a846f51"
  },
  "heartbeat_max_age_hours": 26.0,
  "errors": [],
  "heartbeat": {
   "state": "ALIVE",
   "age_hours": 0.0,
-  "last_ts": "2026-11-08T17:48:09.419230+00:00",
+  "last_ts": "2026-11-08T17:53:20.151931+00:00",
   "max_age_hours": 26.0,
-  "code_sha256": "db129a70bb141c527d28159ae0d4b88b9f3b31274a1f926afc838d80c8492b55",
-  "git_commit": "415420fd4884679f20563d6929a2b5712b83fe47"
+  "code_sha256": "30bf412754573f34d46ed40824583f570c0189a3cf0bb689b0ab48267a428d12",
+  "git_commit": "dd6ce522264c8fba614a221c7d548e448a846f51"
  },
  "grid": [
   {
@@ -34,40 +34,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:46:34.397499+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:20:00+00:00 (0.5h behind now)",
-     "observed": 0.47,
+     "detail": "newest event_ts 2026-11-08T17:20:00+00:00 (0.6h behind now)",
+     "observed": 0.56,
      "threshold": 4.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "OK",
-     "detail": "longest identical run 2 < 12 on temperature_c",
-     "observed": 2.0,
+     "detail": "longest identical run 3 < 12 on temperature_c",
+     "observed": 3.0,
      "threshold": 12.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:46:39.696499+00:00",
+    "finished_at": "2026-11-08T17:51:49.272224+00:00",
     "rows_written": 4,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 17,
+    "ok": 18,
     "no_change": 1,
     "failed": 0,
     "skipped": 0,
-    "rows": 68
+    "rows": 72
    },
    "timeline": [
     {
@@ -177,6 +177,12 @@
      "status": "ok",
      "rows": 4,
      "error": null
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
     }
    ]
   },
@@ -197,40 +203,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:46:34.397499+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "OK",
      "detail": "newest event_ts 2026-11-08T17:45:00+00:00 (0.1h behind now)",
-     "observed": 0.05,
+     "observed": 0.14,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "OK",
-     "detail": "longest identical run 1 < 12 on temperature_2m",
-     "observed": 1.0,
+     "detail": "longest identical run 2 < 12 on temperature_2m",
+     "observed": 2.0,
      "threshold": 12.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:46:37.832499+00:00",
+    "finished_at": "2026-11-08T17:51:42.078224+00:00",
     "rows_written": 2,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 18,
+    "ok": 19,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 36
+    "rows": 38
    },
    "timeline": [
     {
@@ -337,6 +343,12 @@
     },
     {
      "t": "2026-11-08T17:46:34.397499+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
      "status": "ok",
      "rows": 2,
      "error": null
@@ -360,40 +372,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:46:34.397499+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:46:15+00:00 (0.0h behind now)",
+     "detail": "newest event_ts 2026-11-08T17:51:15+00:00 (0.0h behind now)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
-     "detail": "insufficient history: feature_count(18<24)",
-     "observed": 18.0,
+     "detail": "insufficient history: feature_count(19<24)",
+     "observed": 19.0,
      "threshold": 24.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:46:36.928499+00:00",
+    "finished_at": "2026-11-08T17:51:43.555224+00:00",
     "rows_written": 1,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 18,
+    "ok": 19,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 18
+    "rows": 19
    },
    "timeline": [
     {
@@ -500,6 +512,12 @@
     },
     {
      "t": "2026-11-08T17:46:34.397499+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
      "status": "ok",
      "rows": 1,
      "error": null
@@ -526,27 +544,27 @@
      "detail": "no rows captured inside the lookback window",
      "observed": null,
      "threshold": 80.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "UNKNOWN",
      "detail": "no rows to read a head from",
      "observed": null,
      "threshold": 120.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
      "detail": "no rows to evaluate value",
      "observed": 0.0,
      "threshold": 5.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     }
    },
    "last_run": {
     "status": "failed",
     "reason": "source_error",
-    "finished_at": "2026-11-08T17:47:36.620499+00:00",
+    "finished_at": "2026-11-08T17:52:41.800224+00:00",
     "rows_written": 0,
     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)",
     "ago": "0m ago"
@@ -554,7 +572,7 @@
    "runs_24h": {
     "ok": 0,
     "no_change": 0,
-    "failed": 18,
+    "failed": 19,
     "skipped": 0,
     "rows": 0
    },
@@ -666,6 +684,12 @@
      "status": "failed",
      "rows": 0,
      "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
     }
    ]
   },
@@ -682,17 +706,17 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:46:34.397499+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "OK",
      "detail": "newest event_ts 2026-11-08T17:14:42.136000+00:00 (0.6h behind now)",
-     "observed": 0.56,
+     "observed": 0.64,
      "threshold": 240.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "N/A",
@@ -702,17 +726,17 @@
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:46:36.384499+00:00",
+    "finished_at": "2026-11-08T17:51:41.874224+00:00",
     "rows_written": 1,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 17,
+    "ok": 18,
     "no_change": 1,
     "failed": 0,
     "skipped": 0,
-    "rows": 17
+    "rows": 18
    },
    "timeline": [
     {
@@ -822,6 +846,12 @@
      "status": "ok",
      "rows": 1,
      "error": null
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
     }
    ]
   },
@@ -842,40 +872,40 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T17:46:34.397499+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T17:51:39.573224+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T17:46:58+00:00 (0.0h behind now)",
-     "observed": 0.02,
+     "detail": "newest event_ts 2026-11-08T17:53:07+00:00 (0.0h behind now)",
+     "observed": 0.0,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "OK",
      "detail": "longest identical run 1 < 6 on price_usd",
      "observed": 1.0,
      "threshold": 6.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T17:46:36.766499+00:00",
+    "finished_at": "2026-11-08T17:51:41.427224+00:00",
     "rows_written": 2,
     "error": null,
     "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 18,
+    "ok": 19,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 36
+    "rows": 38
    },
    "timeline": [
     {
@@ -985,6 +1015,12 @@
      "status": "ok",
      "rows": 2,
      "error": null
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
     }
    ]
   },
@@ -1005,30 +1041,30 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (13.8h ago)",
-     "observed": 13.79,
+     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (13.9h ago)",
+     "observed": 13.88,
      "threshold": 30.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (35.8h behind now)",
-     "observed": 35.8,
+     "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (35.9h behind now)",
+     "observed": 35.89,
      "threshold": 36.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     },
     "flat_value": {
      "state": "OK",
      "detail": "longest identical run 1 < 6 on ontario_demand",
      "observed": 1.0,
      "threshold": 6.0,
-     "detected_at": "2026-11-08T17:48:09.419230+00:00"
+     "detected_at": "2026-11-08T17:53:20.151931+00:00"
     }
    },
    "last_run": {
     "status": "skipped",
     "reason": "not_due",
-    "finished_at": "2026-11-08T17:46:34.397499+00:00",
+    "finished_at": "2026-11-08T17:51:39.573224+00:00",
     "rows_written": 0,
     "error": "daily feed refreshed 13.8h ago (< 20h)",
     "ago": "1m ago"
@@ -1037,7 +1073,7 @@
     "ok": 1,
     "no_change": 0,
     "failed": 0,
-    "skipped": 17,
+    "skipped": 18,
     "rows": 7441
    },
    "timeline": [
@@ -1148,6 +1184,12 @@
      "status": "skipped",
      "rows": 0,
      "error": "daily feed refreshed 13.8h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T17:51:39.573224+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 13.8h ago (< 20h)"
     }
    ]
   }
@@ -1169,7 +1211,7 @@
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago"
+   "open_for": "5m ago"
   },
   {
    "finding_id": "80e43604e3680013",
@@ -1186,7 +1228,7 @@
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago"
+   "open_for": "5m ago"
   },
   {
    "finding_id": "b7152e86005cca2f",
@@ -1203,7 +1245,7 @@
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago"
+   "open_for": "5m ago"
   }
  ],
  "open_findings_unavailable": false,
