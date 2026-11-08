@@ -210,3 +210,26 @@ def test_one_issue_per_feed_when_several_axes_escalate(fleet, wh, tmp_path):
     d = wh.latest_dispositions()
     assert d[f1["finding_id"]]["disposition"] == d[f2["finding_id"]]["disposition"] == "ESCALATED"
     assert d[f1["finding_id"]]["evidence_ref"] == d[f2["finding_id"]]["evidence_ref"]  # both point at the same issue
+
+
+def test_dry_run_escalation_does_not_count_as_an_open_issue(fleet, wh, tmp_path):
+    """Once the GitHub client is live, a feed escalated earlier in dry-run mode must get a real issue."""
+    from pipelineagent.schema import AGENT_STEPS, RUNS
+    from pipelineagent.agent.github import GitHub, PullRequest
+
+    f = _open_finding(wh, "fred_dgs10", "write_recency")
+    wh.append("agent_steps", [{"finding_id": f["finding_id"], "ts": NOW - timedelta(hours=2), "run_id": "r0", "attempt": 1, "step": "escalate",
+                               "outcome": "ok", "detail": "earlier, dry", "ref": "dry-run:///app/site/agent/issues/x.md"}], AGENT_STEPS)
+    wh.append("_runs", [run_row("failed", "source_error", "transport: ReadTimeout")], RUNS)
+
+    class LiveStub(GitHub):
+        def __init__(self):
+            self.base_branch, self.opened = "main", []
+
+        def open_issue(self, finding_id, title, body):
+            self.opened.append(title)
+            return "https://github.com/example/repo/issues/7"
+
+    gh = LiveStub()
+    Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r1", NOW).run([], [f], {(f["feed"], f["axis"]): f})
+    assert gh.opened and wh.latest_dispositions()[f["finding_id"]]["evidence_ref"] == "https://github.com/example/repo/issues/7"
