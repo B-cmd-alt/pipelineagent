@@ -1,0 +1,119 @@
+# PipelineAgent HEALTHLOG
+
+Generated 2026-11-08T17:48:25Z from the append-only `findings` and `dispositions` tables (oldest first). OPENED/CLOSED are detector transitions; DISPOSITION rows are automatic or human decisions.
+
+- 2026-11-08T04:02Z DISPOSITION `cd270015ddd986f0` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `19142d7fe1f0613f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `6c21373465091519` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `27ce026a77cd1733` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `92acc5d494f8c529` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `6e5d3a9a6de9ef0f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `29847e08a7ac575f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z OPENED `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)
+- 2026-11-08T04:02Z OPENED `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(1<12), oklahoma_city(1<12)
+- 2026-11-08T04:02Z OPENED `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:02Z OPENED `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(1<24)
+- 2026-11-08T04:02Z OPENED `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:02Z OPENED `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:02Z OPENED `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(1<6), bitcoin(1<6)
+- 2026-11-08T04:10Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(2<12), oklahoma_city(2<12)
+- 2026-11-08T04:10Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)
+- 2026-11-08T04:10Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:10Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(2<24)
+- 2026-11-08T04:10Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:10Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:10Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(2<6), bitcoin(2<6)
+- 2026-11-08T04:20Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:20Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: bitcoin(3<6), ethereum(3<6)
+- 2026-11-08T04:20Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(2<12), KDFW(2<12), KOKC(2<12), KORD(2<12)
+- 2026-11-08T04:20Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(3<24)
+- 2026-11-08T04:20Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:20Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:20Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(3<12), oklahoma_city(3<12)
+- 2026-11-08T04:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(4<12), chicago(4<12)
+- 2026-11-08T04:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(3<12), KOKC(3<12), KORD(3<12), KDFW(3<12)
+- 2026-11-08T04:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:25Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(4<6), bitcoin(4<6)
+- 2026-11-08T04:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(4<24)
+- 2026-11-08T05:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T05:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(4<12), KDEN(4<12), KOKC(4<12), KORD(4<12)
+- 2026-11-08T05:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(5<12), oklahoma_city(5<12)
+- 2026-11-08T05:25Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(5<6), bitcoin(5<6)
+- 2026-11-08T05:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(5<24)
+- 2026-11-08T05:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T05:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T06:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T06:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KORD(5<12), KOKC(5<12), KDFW(5<12), KDEN(5<12)
+- 2026-11-08T06:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T06:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(6<12), oklahoma_city(6<12)
+- 2026-11-08T06:25Z DISPOSITION `cd270015ddd986f0` BENIGN (auto) — self-healed without intervention
+- 2026-11-08T06:25Z CLOSED `cd270015ddd986f0` coingecko_prices/flat_value OK — back to OK: longest identical run 1 < 6 on price_usd
+- 2026-11-08T06:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(6<24)
+- 2026-11-08T06:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T07:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T07:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(6<12), KDFW(6<12), KOKC(6<12), KORD(6<12)
+- 2026-11-08T07:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T07:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T07:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(7<24)
+- 2026-11-08T07:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(7<12), oklahoma_city(7<12)
+- 2026-11-08T08:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(8<24)
+- 2026-11-08T08:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(8<12), chicago(8<12)
+- 2026-11-08T08:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T08:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KORD(7<12), KDFW(7<12), KDEN(7<12), KOKC(7<12)
+- 2026-11-08T08:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T08:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T09:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T09:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(9<24)
+- 2026-11-08T09:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T09:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(8<12), KORD(8<12), KDFW(8<12), KOKC(8<12)
+- 2026-11-08T09:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(9<12), chicago(9<12)
+- 2026-11-08T09:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T10:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(9<12), KORD(9<12), KDFW(9<12), KOKC(9<12)
+- 2026-11-08T10:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T10:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(10<12), oklahoma_city(10<12)
+- 2026-11-08T10:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(10<24)
+- 2026-11-08T10:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T10:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T11:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T11:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(10<12), KOKC(10<12), KDEN(10<12), KORD(10<12)
+- 2026-11-08T11:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(11<12), chicago(11<12)
+- 2026-11-08T11:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(11<24)
+- 2026-11-08T11:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T11:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T12:26Z CLOSED `6e5d3a9a6de9ef0f` open_meteo_current/flat_value OK — back to OK: longest identical run 2 < 12 on temperature_2m
+- 2026-11-08T12:26Z DISPOSITION `6e5d3a9a6de9ef0f` BENIGN (auto) — self-healed without intervention
+- 2026-11-08T12:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(11<12), KORD(11<12), KDFW(11<12), KOKC(11<12)
+- 2026-11-08T12:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(12<24)
+- 2026-11-08T12:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T12:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T12:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T13:26Z DISPOSITION `29847e08a7ac575f` BENIGN (auto) — self-healed without intervention
+- 2026-11-08T13:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T13:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T13:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(13<24)
+- 2026-11-08T13:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T13:26Z CLOSED `29847e08a7ac575f` nws_observations/flat_value OK — back to OK: longest identical run 3 < 12 on temperature_c
+- 2026-11-08T14:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T14:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(14<24)
+- 2026-11-08T14:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T14:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T15:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(15<24)
+- 2026-11-08T15:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T15:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T15:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T16:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(16<24)
+- 2026-11-08T16:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T16:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T16:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T17:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T17:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T17:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T17:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(17<24)
+- 2026-11-08T17:48Z OPENED `207080fdb07b08a2` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T17:48Z DISPOSITION `207080fdb07b08a2` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T17:48Z DISPOSITION `b7152e86005cca2f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T17:48Z OPENED `b7152e86005cca2f` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T17:48Z OPENED `80e43604e3680013` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T17:48Z DISPOSITION `80e43604e3680013` UNKNOWN (auto) — awaiting triage

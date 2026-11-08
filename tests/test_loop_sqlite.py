@@ -121,3 +121,19 @@ def test_on_unchanged_policy(fleet, wh, monkeypatch):
     by = {r["feed"]: r for r in rep.runs}
     assert by["usgs_earthquakes_hour"]["status"] == "ok" and by["usgs_earthquakes_hour"]["rows_written"] == 1
     assert by["fred_dgs10"]["status"] == "no_change" and by["fred_dgs10"]["reason"] == "same_content_sha256"
+
+
+def test_client_side_staleness_script_is_valid_js(tmp_path):
+    import shutil, subprocess
+    from pipelineagent.render_site import STALE_JS
+    if not shutil.which("node"):
+        import pytest
+        pytest.skip("node not available")
+    js = tmp_path / "stale.js"
+    js.write_text("var document={body:{dataset:{generatedAt:new Date(Date.now()-30*36e5).toISOString(),maxAgeHours:'26'}},"
+                  "getElementById:function(){return this._el}, _el:{className:'',textContent:''}};\n" + STALE_JS +
+                  "\nif(document._el.className!=='banner red')throw new Error('expected red banner, got '+document._el.className);"
+                  "console.log(document._el.textContent);")
+    out = subprocess.run(["node", str(js)], capture_output=True, text=True, timeout=30)
+    assert out.returncode == 0, out.stderr
+    assert "DEAD-MAN" in out.stdout

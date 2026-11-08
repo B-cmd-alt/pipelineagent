@@ -185,9 +185,9 @@ def _cell(c: dict) -> str:
 # Client-side dead-man's switch: the page cannot know the loop died, but the viewer's clock can.
 STALE_JS = """
 (function(){var g=Date.parse(document.body.dataset.generatedAt);var max=parseFloat(document.body.dataset.maxAgeHours);
-var h=(Date.now()-g)/36e5;var el=document.getElementById('page-stale');if(!el||isNaN(h))return;
-if(h>max){el.className='banner red';el.textContent='⚠ DEAD-MAN\'S SWITCH: this page was rendered '+h.toFixed(1)+'h ago, over the '+max+'h limit. The loop that renders it has stopped; every cell below is stale.';}
-else if(h>%s){el.className='banner amber';el.textContent='⚠ Page rendered '+h.toFixed(1)+'h ago; the loop is hourly, so it may be falling behind.';}})();
+var h=(Date.now()-g)/36e5;var el=document.getElementById("page-stale");if(!el||isNaN(h))return;
+if(h>max){el.className="banner red";el.textContent="\u26a0 DEAD-MAN SWITCH: this page was rendered "+h.toFixed(1)+"h ago, over the "+max+"h limit. The loop that renders it has stopped; every cell below is stale.";}
+else if(h>%s){el.className="banner amber";el.textContent="\u26a0 Page rendered "+h.toFixed(1)+"h ago; the loop is hourly, so it may be falling behind.";}})();
 """ % PAGE_STALE_AMBER_HOURS
 
 
