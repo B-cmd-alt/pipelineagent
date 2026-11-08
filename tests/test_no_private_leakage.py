@@ -8,7 +8,7 @@ FORBIDDEN = [
     r"project-[0-9a-f]{8}-", r"iam\.gserviceaccount\.com", r"AIstack/", r"cloudrun/production", r"telegram", r"TELEGRAM",
     r"api_key=", r"AKIA[0-9A-Z]{16}", r"-----BEGIN",
 ]
-SKIP_DIRS = {"__pycache__", ".pytest_cache", "site"}
+SKIP_DIRS = {".git", "__pycache__", ".pytest_cache", "site"}  # .git: a standalone checkout has the repo root here
 SKIP_FILES = {"fredgraph_tail.csv", "ieso_demand_tail.csv", "test_no_private_leakage.py"}
 
 
