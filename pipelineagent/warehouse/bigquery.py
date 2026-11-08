@@ -13,7 +13,7 @@ from typing import Any
 from ..schema import Column
 from .base import FeedSnapshot, LastRun
 
-_BQ_TYPE = {"STRING": "STRING", "FLOAT64": "FLOAT64", "INT64": "INT64", "TIMESTAMP": "TIMESTAMP", "DATE": "DATE", "BOOL": "BOOL", "JSON": "STRING"}
+_BQ_TYPE = {"STRING": "STRING", "FLOAT64": "FLOAT64", "INT64": "INT64", "TIMESTAMP": "TIMESTAMP", "DATE": "DATE"}
 
 
 def _ident(name: str) -> str:
@@ -32,6 +32,7 @@ class BigQueryWarehouse:
         self.dataset = dataset
         self.location = location
         self.max_bytes_billed = max_bytes_billed  # 1 GiB hard ceiling per query; tables are KB-MB sized
+        self._dataset_ready = False
 
     # --- helpers ---
     def _ref(self, table: str) -> str:
@@ -49,24 +50,24 @@ class BigQueryWarehouse:
         ]
 
     # --- DDL ---
-    def ensure_dataset(self, description: str = "") -> None:
+    def _ensure_dataset(self) -> None:
+        if self._dataset_ready:
+            return
         ds = self.bq.Dataset(f"{self.project}.{self.dataset}")
         ds.location = self.location
-        ds.description = description or None
+        ds.description = "PipelineAgent: public-feed fleet, detector results, findings/dispositions ledger, heartbeat. Append-only."
         self.client.create_dataset(ds, exists_ok=True)
-
-    def table_exists(self, table: str) -> bool:
-        from google.api_core.exceptions import NotFound
-
-        try:
-            self.client.get_table(f"{self.project}.{self.dataset}.{table}")
-            return True
-        except NotFound:
-            return False
+        self._dataset_ready = True
 
     def ensure_table(self, table, columns, partition_column=None, require_partition_filter=False, description=""):
-        if self.table_exists(table):
+        from google.api_core.exceptions import NotFound
+
+        self._ensure_dataset()
+        try:
+            self.client.get_table(f"{self.project}.{self.dataset}.{table}")
             return
+        except NotFound:
+            pass
         t = self.bq.Table(f"{self.project}.{self.dataset}.{table}", schema=self._schema(columns))
         if partition_column:
             t.time_partitioning = self.bq.TimePartitioning(type_=self.bq.TimePartitioningType.DAY, field=partition_column)
@@ -103,12 +104,12 @@ class BigQueryWarehouse:
         return len(rows)
 
     # --- detector reads ---
-    def feed_snapshot(self, table, lookback_hours, event_ts_column="event_ts", value_column=None, group_by=None, max_rows=0):
+    def feed_snapshot(self, table, lookback_hours, value_column=None, group_by=None, max_rows=0):
         grp = _ident(group_by) if group_by else "''"
         val = f"SAFE_CAST({_ident(value_column)} AS FLOAT64)" if value_column else "CAST(NULL AS FLOAT64)"
         sql = f"""
         WITH recent AS (
-          SELECT captured_at, {_ident(event_ts_column)} AS event_ts, CAST({grp} AS STRING) AS g, {val} AS v
+          SELECT captured_at, event_ts, CAST({grp} AS STRING) AS g, {val} AS v
           FROM {self._ref(table)}
           WHERE captured_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @lookback HOUR)
         )
@@ -127,21 +128,14 @@ class BigQueryWarehouse:
             snap.recent_values.append((v["g"] or "", v["v"], v["captured_at"]))
         return snap
 
-    def max_event_ts(self, table, lookback_hours):
-        rows = self._query(
-            f"SELECT MAX(event_ts) AS e FROM {self._ref(table)} WHERE captured_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @lookback HOUR)",
-            [self.bq.ScalarQueryParameter("lookback", "INT64", int(lookback_hours))],
-        )
-        return rows[0]["e"] if rows else None
-
     # --- ledger / runner reads ---
     def last_runs(self):
         sql = f"""
-        SELECT feed, finished_at, status, etag, content_sha256, source_modified FROM (
+        SELECT feed, finished_at, status, content_sha256 FROM (
           SELECT *, ROW_NUMBER() OVER (PARTITION BY feed ORDER BY finished_at DESC) AS rn
           FROM {self._ref('_runs')} WHERE status IN ('ok','no_change','failed')
         ) WHERE rn = 1"""
-        return {r["feed"]: LastRun(r["feed"], r["finished_at"], r["status"], r["etag"], r["content_sha256"], r["source_modified"]) for r in self._query(sql)}
+        return {r["feed"]: LastRun(r["feed"], r["finished_at"], r["status"], r["content_sha256"]) for r in self._query(sql)}
 
     def runs_since(self, since):
         return self._query(
@@ -152,12 +146,20 @@ class BigQueryWarehouse:
     def open_findings(self):
         sql = f"""
         SELECT * EXCEPT(rn) FROM (
-          SELECT *, ROW_NUMBER() OVER (PARTITION BY finding_id ORDER BY event_at DESC) AS rn FROM {self._ref('findings')}
-        ) WHERE rn = 1 AND event != 'CLOSED' ORDER BY event_at DESC"""
+          SELECT *, ROW_NUMBER() OVER (PARTITION BY finding_id ORDER BY event_at DESC) AS rn,
+                 MIN(event_at) OVER (PARTITION BY finding_id) AS opened_at
+          FROM {self._ref('findings')}
+        ) WHERE rn = 1 AND event = 'OPENED' ORDER BY event_at DESC"""
         return self._query(sql)
 
-    def recent_finding_events(self, limit):
-        return self._query(f"SELECT * FROM {self._ref('findings')} ORDER BY event_at DESC LIMIT {int(limit)}")
+    def ledger_events(self, limit):
+        sql = f"""
+        SELECT * FROM (
+          SELECT event_at AS ts, event AS kind, finding_id, feed, axis, state AS value, detail, 'detector' AS actor FROM {self._ref('findings')}
+          UNION ALL
+          SELECT decided_at, 'DISPOSITION', finding_id, NULL, NULL, disposition, note, decided_by FROM {self._ref('dispositions')}
+        ) ORDER BY ts DESC LIMIT {int(limit)}"""
+        return self._query(sql)[::-1]
 
     def latest_dispositions(self):
         sql = f"""

@@ -1,6 +1,7 @@
 """Provider-friendly HTTP: identifying User-Agent, per-host pacing, a hard
-per-run request budget, conditional GET, and detection of HTML error pages
-served with a 200 where JSON/CSV was expected.
+per-run request budget, and detection of HTML error pages served with a 200
+where JSON/CSV was expected. (No conditional GET: the daily gate + content-hash
+skip already make an unchanged payload cost one small GET a day.)
 
 Benign-404 is a *source* outcome, not a crash: callers get `NotFound` and
 record a `skipped` run.
@@ -41,10 +42,7 @@ class Response:
     status: int
     body: bytes
     content_type: str
-    etag: str | None
     last_modified: datetime | None
-    not_modified: bool
-    elapsed_s: float
 
     @property
     def sha256(self) -> str:
@@ -83,17 +81,11 @@ class Client:
         url: str,
         *,
         accept: str = "*/*",
-        etag: str | None = None,
-        last_modified: str | None = None,
         expect: str = "json",  # json | csv | any
         params: dict | None = None,
         retries: int = 1,
     ) -> Response:
         headers = {"Accept": accept}
-        if etag:
-            headers["If-None-Match"] = etag
-        if last_modified:
-            headers["If-Modified-Since"] = last_modified
         host = urlsplit(url).netloc
         attempt = 0
         while True:
@@ -101,7 +93,6 @@ class Client:
                 raise BudgetExhausted(f"request budget {self.budget} exhausted")
             self._pace(host)
             self.used += 1
-            t0 = time.monotonic()
             try:
                 r = self.session.get(url, headers=headers, params=params, timeout=(CONNECT_TIMEOUT, READ_TIMEOUT))
             except requests.RequestException as e:
@@ -110,7 +101,6 @@ class Client:
                     time.sleep(2.0 * attempt)
                     continue
                 raise SourceError(f"transport: {e.__class__.__name__}: {e}") from e
-            elapsed = time.monotonic() - t0
             if r.status_code >= 500 and attempt < retries:
                 attempt += 1
                 time.sleep(2.0 * attempt)
@@ -123,8 +113,6 @@ class Client:
                 lm = parsedate_to_datetime(r.headers["Last-Modified"]).astimezone(timezone.utc)
             except (TypeError, ValueError):
                 lm = None
-        if r.status_code == 304:
-            return Response(304, b"", ct, r.headers.get("ETag") or etag, lm, True, elapsed)
         if r.status_code == 404:
             raise NotFound(f"404 for {url}")
         if r.status_code == 429:
@@ -136,4 +124,4 @@ class Client:
             raise SourceError(f"html_error_page: expected {expect}, got HTML ({len(body)} bytes) from {host}")
         if expect == "json" and not body.lstrip()[:1] in (b"{", b"["):
             raise SourceError(f"not_json: body starts with {body[:20]!r}")
-        return Response(r.status_code, body, ct, r.headers.get("ETag"), lm, False, elapsed)
+        return Response(r.status_code, body, ct, lm)

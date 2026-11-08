@@ -19,7 +19,7 @@ fleet.yaml ──► 7 public feeds ──► warehouse (append-only, vintage-st
                                       │
                  detectors (read DATA, never exit codes) ──► OK / BREACH / UNKNOWN
                                       │
-                 ledger: findings (OPENED/STILL_OPEN/CLOSED) + dispositions
+                 ledger: findings (OPENED/CLOSED transitions) + dispositions
                                       │
                  heartbeat (dead-man's switch, carries runtime code hash)
                                       │
@@ -29,15 +29,19 @@ fleet.yaml ──► 7 public feeds ──► warehouse (append-only, vintage-st
 | Feed | Source | Cadence | Why it is in the fleet |
 |---|---|---|---|
 | `nws_observations` | api.weather.gov latest obs, 4 stations | hourly | sensors go null; station pages lag |
-| `open_meteo_current` | Open-Meteo forecast API | hourly | stable control feed |
+| `open_meteo_current` | Open-Meteo current conditions | hourly | stable control feed |
 | `usgs_earthquakes_hour` | USGS GeoJSON all_hour | hourly | fast-moving data clock |
 | `fred_dgs10` | FRED fredgraph CSV | daily | `.` for missing values; business-day gaps; connection resets |
 | `github_status` | Statuspage summary.json | hourly | legitimately flat for weeks (flat axis deliberately *not declared*) |
 | `coingecko_prices` | CoinGecko simple/price | hourly | HTTP 429 rate limits |
-| `ieso_ontario_demand` | IESO PUB_Demand.csv | daily | hour-ending local time: DST days have 23/25 hours |
+| `ieso_ontario_demand` | IESO PUB_Demand.csv | daily | hour-ending in fixed EST all year: the obvious DST conversion is wrong |
 
 Every feed table carries `captured_at` (vintage), `run_id`, `event_ts` (the data's own
-clock), `source_modified`, `content_sha256`. Rows are never updated or deleted.
+clock), `source_modified`, `content_sha256`. Rows are never updated or deleted. Hourly feeds
+are *state* feeds: every poll is written even when identical, so liveness shows in the data
+and a frozen upstream is visible. Daily feeds are growing series: identical content is a
+`no_change`. The raw upstream bytes are archived per `content_sha256` when a payload bucket
+is configured, so any vintage can be replayed later.
 
 ### Three detector axes, one manifest
 
@@ -53,18 +57,19 @@ never green. An axis that is not declared renders as "not declared", never green
 
 ### Ledger and dispositions
 
-A *finding* is one continuous not-OK stretch of a feed × axis. Each detector run emits
-exactly one event per open finding: `OPENED`, `STILL_OPEN` (one line, never a
-re-diagnosis), or `CLOSED`. Each finding has exactly one current disposition:
-`FIXED | BENIGN | ESCALATED | DEFERRED | UNKNOWN`. In v0 a new finding gets `UNKNOWN`
-("awaiting triage") and a finding that closes by itself gets `BENIGN`; humans override
-with `pipelineagent dispose`. `FIXED` is refused without an evidence reference (a gate
-verdict). Everything also lands as lines in [`ops/HEALTHLOG.md`](ops/HEALTHLOG.md).
+A *finding* is one continuous not-OK stretch of a feed × axis. The ledger records only
+transitions, `OPENED` and `CLOSED`; the hourly state lives in `detections`, and a known-open
+finding costs nothing per run and is never re-diagnosed. Each finding has exactly one current
+disposition: `FIXED | BENIGN | ESCALATED | DEFERRED | UNKNOWN`. In v0 a new finding gets
+`UNKNOWN` ("awaiting triage") and a finding that closes by itself gets `BENIGN`; humans
+override with `pipelineagent dispose`. `FIXED` is refused without an evidence reference (a
+gate verdict). A warm-up `UNKNOWN` (a feed younger than its flat-value window) is shown amber
+but opens no finding. `site/HEALTHLOG.md` is generated from the two tables on every render.
 
 ### Policies that are tests
 
-- `tests/test_policy.py`: SLAs cannot be loosened relative to `fleet.baseline.json`
-  without a `feed/axis` entry in `ops/SLA_CHANGES.md`. Widening an SLA to make a
+- `tests/test_policy.py`: SLAs cannot be loosened relative to the merge-base `fleet.yaml`
+  in git without a `feed/axis` entry in `ops/SLA_CHANGES.md`. Widening an SLA to make a
   finding disappear is the classic non-fix.
 - `tests/test_no_private_leakage.py`: the tree contains no project ids, service
   accounts, tokens, or references to any private codebase.
@@ -74,13 +79,12 @@ verdict). Everything also lands as lines in [`ops/HEALTHLOG.md`](ops/HEALTHLOG.m
 
 The loop writes a `heartbeat` row after detection + ledger complete. If the newest row
 is older than 26h the dashboard shows a red full-width banner and downgrades every stale
-cell to `UNKNOWN`. The row carries `code_sha256`, a hash of the running package, so the
-operator can prove the deployed code is the committed code:
-
-```bash
-python -m pipelineagent version          # repo hash
-# ... compare with heartbeat.code_sha256 (also shown on the dashboard)
-```
+cell to `UNKNOWN`. Because the page is rendered by the loop itself, it also carries a
+client-side check: the viewer's clock against `generated_at` (amber after 3h, red after
+26h), so a dead loop cannot leave a green page behind. The heartbeat row carries
+`code_sha256`, a hash of the running package; `deploy.sh` executes the job once after every
+deploy and fails with MISMATCH unless that hash equals `python -m pipelineagent version` at
+the deployed commit.
 
 ## Running it
 
@@ -94,9 +98,7 @@ python -m pipelineagent fetch --feed usgs_earthquakes_hour   # pre-flight: print
 python -m pipelineagent run                                  # fetch -> detect -> ledger -> heartbeat -> render
 open site/index.html
 
-# production: BigQuery warehouse + hourly Cloud Run Job (see deploy.sh)
-export PIPELINEAGENT_WAREHOUSE=bigquery://<project>/pipelineagent
-python -m pipelineagent init-warehouse
+# production: BigQuery warehouse + hourly Cloud Run Job (tables are created on first run)
 PROJECT=<project> REGION=us-central1 SA=<runtime-sa> SITE_BUCKET=<bucket> ./deploy.sh
 ```
 
@@ -105,10 +107,10 @@ records a human decision.
 
 ## Provider etiquette
 
-Identifying User-Agent, per-host pacing, a hard request budget per run, conditional GET
-(ETag / If-Modified-Since) and content-hash short-circuit before any write, daily feeds
-are not re-fetched inside 20h, a 404 is a benign `skipped` run, and an HTML error page
-served with HTTP 200 is detected and recorded as a `failed` run instead of being parsed.
+Identifying User-Agent, per-host pacing, a hard request budget per run, daily feeds are
+not re-fetched inside 20h and identical content is never re-written, a 404 is a benign
+`skipped` run, and an HTML error page served with HTTP 200 is detected and recorded as a
+`failed` run instead of being parsed.
 
 ## Cost
 

@@ -18,6 +18,7 @@ from typing import Any
 from . import feeds as feed_registry
 from .config import Fleet, FeedSpec
 from .detectors import Detection, detect_feed
+from .heartbeat import beat
 from .http import BudgetExhausted, Client, NotFound, RateLimited, SourceError
 from .ledger import LedgerDelta, apply as apply_ledger, reconcile
 from .schema import DETECTIONS, FEED_COMMON, RUNS, SYSTEM_PARTITION, SYSTEM_TABLES
@@ -93,20 +94,20 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
     started = now  # the loop's reference clock, so every row of one run shares a vintage and tests can freeze time
     row: dict[str, Any] = {"run_id": run_id, "feed": spec.id, "started_at": started, "status": "failed", "reason": None,
                            "rows_written": 0, "duration_s": 0.0, "http_status": None, "requests_used": 0, "source_modified": None,
-                           "content_sha256": None, "etag": None, "error": None, "code_sha256": code_sha256(str(fleet.path))}
+                           "content_sha256": None, "error": None, "code_sha256": code_sha256(str(fleet.path))}
     used0 = http.used
     due, why = _due(spec, last_runs, now, fleet.daily_feed_refetch_after_hours)
     try:
         if not due:
             row.update(status="skipped", reason="not_due", error=why)
         else:
-            ctx = FetchContext(http=http, params=spec.params, last_run=last_runs.get(spec.id), warehouse=wh, table=spec.table, now=now, on_unchanged=spec.on_unchanged)
+            ctx = FetchContext(http=http, params=spec.params, last_run=last_runs.get(spec.id), warehouse=wh, table=spec.table, now=now)
             res = feed.fetch(ctx)
-            row.update(http_status=res.http_status, source_modified=res.source_modified, content_sha256=res.content_sha256, etag=res.etag)
+            row.update(http_status=res.http_status, source_modified=res.source_modified, content_sha256=res.content_sha256)
             prev = last_runs.get(spec.id)
             same = bool(prev and prev.content_sha256 and prev.content_sha256 == res.content_sha256 and prev.status != "failed")
-            if res.not_modified or (same and spec.on_unchanged == "skip"):
-                row.update(status="no_change", reason="304" if res.not_modified else "same_content_sha256")
+            if same and spec.on_unchanged == "skip":
+                row.update(status="no_change", reason="same_content_sha256")
             elif not res.rows:
                 row.update(status="no_change", reason="no_new_rows", error=res.note or None)
             else:
@@ -128,8 +129,6 @@ def run_feed(spec: FeedSpec, fleet: Fleet, wh: Warehouse, http: Client, last_run
     except Exception as e:  # noqa: BLE001 — isolate the feed, record the class, move on
         log.exception("feed %s crashed", spec.id)
         row.update(status="failed", reason=f"exception:{e.__class__.__name__}", error=str(e)[:500])
-    if row["status"] == "failed":
-        row["etag"] = None  # the content never landed: next run must re-fetch unconditionally, not get a 304
     row["requests_used"] = http.used - used0
     row["duration_s"] = round(time.monotonic() - t0, 3)
     row["finished_at"] = now + timedelta(seconds=row["duration_s"])
@@ -174,6 +173,8 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
             log.exception("detections/ledger write failed; no heartbeat this run (findings are append-only, nothing is lost)")
         else:
             report.ledger = ledger
+            # the heartbeat means "the WHOLE loop completed", so it is written only after the ledger
+            report.heartbeat = beat(wh, report.run_id, at, str(fleet.path))
         for d in report.detections:
             log.info("detect %-22s %-13s %-7s %s", d.feed, d.axis, d.state, d.detail)
 

@@ -1,5 +1,4 @@
-"""Table schemas. Types are a tiny portable subset: STRING, FLOAT64, INT64,
-TIMESTAMP, DATE, BOOL, JSON (stored as STRING text in SQLite)."""
+"""Table schemas. Types are a tiny portable subset: STRING, FLOAT64, INT64, TIMESTAMP, DATE."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -35,7 +34,6 @@ RUNS = (
     Column("requests_used", "INT64"),
     Column("source_modified", "TIMESTAMP"),
     Column("content_sha256", "STRING"),
-    Column("etag", "STRING"),
     Column("error", "STRING"),
     Column("code_sha256", "STRING", True),
 )
@@ -53,7 +51,7 @@ DETECTIONS = (
 
 FINDINGS = (
     Column("finding_id", "STRING", True),
-    Column("event", "STRING", True, "OPENED | STILL_OPEN | CLOSED"),
+    Column("event", "STRING", True, "OPENED | CLOSED (transitions only; the hourly state lives in detections)"),
     Column("event_at", "TIMESTAMP", True),
     Column("run_id", "STRING", True),
     Column("feed", "STRING", True),
@@ -73,16 +71,13 @@ DISPOSITIONS = (
     Column("evidence_ref", "STRING", False, "verdict/evidence JSON reference once the repair agent exists"),
 )
 
+# One row per COMPLETED loop (fetch + detect + ledger). Counts are derivable from _runs and
+# detections by run_id, so they are not repeated here.
 HEARTBEAT = (
     Column("ts", "TIMESTAMP", True),
     Column("run_id", "STRING", True),
-    Column("code_sha256", "STRING", True),
+    Column("code_sha256", "STRING", True, "Runtime hash of the deployed package; compare with `python -m pipelineagent version`."),
     Column("git_commit", "STRING"),
-    Column("feeds_attempted", "INT64"),
-    Column("feeds_ok", "INT64"),
-    Column("breaches", "INT64"),
-    Column("unknowns", "INT64"),
-    Column("duration_s", "FLOAT64"),
 )
 
 SYSTEM_TABLES: dict[str, tuple[Column, ...]] = {

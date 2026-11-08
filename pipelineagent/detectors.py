@@ -23,6 +23,9 @@ class Detection:
     observed: float | None
     threshold: float | None
     detail: str
+    # True for an UNKNOWN that resolves by itself as history accrues (a feed younger than its
+    # flat-value window). Rendered amber like any UNKNOWN, but it does not open a finding.
+    transient: bool = False
 
     def as_row(self, run_id: str, at: datetime) -> dict:
         return {"run_id": run_id, "detected_at": at, "feed": self.feed, "axis": self.axis, "state": self.state,
@@ -108,7 +111,7 @@ def evaluate_snapshot(spec: FeedSpec, snap: FeedSnapshot, now: datetime) -> list
                 out.append(Detection(spec.id, "flat_value", "BREACH", float(n if flat else 0), n, "; ".join(parts)))
             elif short and not any(len(v) >= n for v in groups.values()):
                 out.append(Detection(spec.id, "flat_value", "UNKNOWN", float(max(len(v) for v in groups.values())), n,
-                                     f"insufficient history: {', '.join(short)}"))
+                                     f"insufficient history: {', '.join(short)}", transient=True))
             else:
                 out.append(Detection(spec.id, "flat_value", "OK", float(longest), n,
                                      f"longest identical run {longest} < {n} on {fv.column}" + (f"; thin groups: {', '.join(short)}" if short else "")))
@@ -122,8 +125,6 @@ def detect_feed(spec: FeedSpec, wh: Warehouse, now: datetime | None = None) -> l
         return []
     fv = spec.sla.flat_value
     try:
-        if not wh.table_exists(spec.table):
-            return [Detection(spec.id, a, "UNKNOWN", None, None, f"table {spec.table} does not exist") for a in declared]
         snap = wh.feed_snapshot(
             spec.table,
             lookback_hours(spec),

@@ -36,4 +36,4 @@ def fetch(ctx: FetchContext) -> FetchResult:
     return FetchResult([parse(json.loads(r.text()))], r.sha256, r.last_modified, r.status, raw=r.body)
 
 
-FEED = Feed("github_status", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("github_status", COLUMNS, fetch)

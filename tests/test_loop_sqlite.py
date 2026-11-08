@@ -6,7 +6,7 @@ from conftest import NOW
 
 from pipelineagent import feeds as reg
 from pipelineagent.feeds.base import Feed, FetchResult
-from pipelineagent.heartbeat import beat, status
+from pipelineagent.heartbeat import status
 from pipelineagent.render_site import collect, render_html
 from pipelineagent.runner import run
 
@@ -17,7 +17,7 @@ class StubHttp:
 
 def stub_all(monkeypatch, make_result):
     for fid, feed in list(reg.REGISTRY.items()):
-        monkeypatch.setitem(reg.REGISTRY, fid, Feed(fid, feed.columns, lambda ctx, fid=fid: make_result(fid, ctx), feed.description))
+        monkeypatch.setitem(reg.REGISTRY, fid, Feed(fid, feed.columns, lambda ctx, fid=fid: make_result(fid, ctx)))
 
 
 def healthy_result(fid, ctx):
@@ -42,9 +42,11 @@ def test_full_loop_then_green_job_dead_data(fleet, wh, monkeypatch):
     states = {(d.feed, d.axis): d.state for d in rep.detections}
     assert states[("usgs_earthquakes_hour", "write_recency")] == "OK"
     assert states[("usgs_earthquakes_hour", "head_lag")] == "OK"
-    # first run: flat-value has one row per group -> insufficient history -> UNKNOWN (never OK)
+    # first run: flat-value has one row per group -> insufficient history -> UNKNOWN (never OK)...
     assert states[("coingecko_prices", "flat_value")] == "UNKNOWN"
-    assert rep.ledger is not None and len(rep.ledger.opened) == rep.unknowns
+    # ...but warm-up UNKNOWNs are transient: amber on the dashboard, no finding opened
+    assert rep.ledger is not None and rep.ledger.opened == []
+    assert rep.heartbeat is not None and rep.heartbeat["run_id"] == rep.run_id  # heartbeat is written by the runner, after the ledger
 
     # Now the job keeps "succeeding" but writes NOTHING new for 7 hours (exit 0, dead data).
     later = NOW + timedelta(hours=7)
@@ -59,20 +61,26 @@ def test_full_loop_then_green_job_dead_data(fleet, wh, monkeypatch):
     assert s2[("fred_dgs10", "write_recency")] == "OK"
     opened = {(o["feed"], o["axis"]) for o in rep2.ledger.opened}
     assert ("usgs_earthquakes_hour", "write_recency") in opened
-    # known-open UNKNOWN flat findings got exactly one STILL_OPEN line each, not a new finding
-    assert len(rep2.ledger.still_open) >= 1 and all(r["event"] == "STILL_OPEN" for r in rep2.ledger.still_open)
 
-    hb = beat(wh, rep2.run_id, feeds_attempted=7, feeds_ok=7, breaches=rep2.breaches, unknowns=rep2.unknowns, duration_s=1.0, now=later)
-    data = collect(fleet, wh, later)
+    # a third run with the same breaches writes NO ledger rows (transitions only)
+    rep3 = run(fleet, wh, http=StubHttp(), now=later + timedelta(hours=1))
+    assert rep3.ledger.finding_rows == [] and rep3.ledger.dispositions == []
+
+    data = collect(fleet, wh, later + timedelta(hours=1))
     assert data["heartbeat"]["state"] == "ALIVE"
     assert data["summary"]["breach"] >= 2 and data["summary"]["not_declared"] == 1  # github_status flat undeclared
+    assert all(f["opened_at"] for f in data["open_findings"])
     page = render_html(data)
-    assert "DEAD-MAN" not in page and "not declared" in page and "BREACH" in page
+    assert "DEAD-MAN" not in page.split("<script>")[0] and "not declared" in page and "BREACH" in page
+    assert 'data-generated-at="' in page and "page-stale" in page  # client-side staleness check is wired
+    from pipelineagent.render_site import render_healthlog
+    log_md = render_healthlog(data)
+    assert "OPENED" in log_md and "DISPOSITION" in log_md
     # 30h later with no heartbeat: loud red banner, and stale detector cells are downgraded to UNKNOWN
     much_later = later + timedelta(hours=30)
     data2 = collect(fleet, wh, much_later)
     assert data2["heartbeat"]["state"] == "STALE"
-    assert "DEAD-MAN" in render_html(data2)
+    assert "DEAD-MAN" in render_html(data2).split("<script>")[0]
     assert all(c["state"] in ("UNKNOWN", "N/A") for g in data2["grid"] for c in g["cells"].values())
     assert status(None, 26)["state"] == "MISSING"
 
@@ -99,8 +107,8 @@ def test_daily_feed_is_not_refetched_within_window(fleet, wh, monkeypatch):
 
 
 def test_on_unchanged_policy(fleet, wh, monkeypatch):
-    """append (default): byte-identical content is still an observation and lands as a row;
-    skip: identical content is no_change. Both decided BEFORE any write."""
+    """hourly (append): byte-identical content is still an observation and lands as a row;
+    daily (skip): identical content is no_change. Decided BEFORE any write."""
     const = lambda fid, ctx: FetchResult([{"event_ts": ctx.now, "feature_count": 3}] if fid == "usgs_earthquakes_hour"
                                          else [{"series_id": "DGS10", "observation_date": ctx.now.date(), "event_ts": ctx.now, "value": 4.0}],
                                          "same-sha", None, 200)

@@ -44,10 +44,18 @@ gcloud scheduler jobs "$verb" http "$SCHED" --project="$PROJECT" --location="$RE
   --schedule="$CRON" --time-zone="Etc/UTC" --uri="$JOB_URI" --http-method=POST \
   --oauth-service-account-email="$SA" --attempt-deadline=1800s --quiet
 
-echo "[verify] image digest + runtime code hash"
+echo "[verify] committed != deployed until the RUNNING job says so: execute once, read back its heartbeat"
 echo "  image:        $(gcloud run jobs describe "$JOB" --project="$PROJECT" --region="$REGION" --format='value(spec.template.spec.template.spec.containers[0].image)')"
 echo "  digest:       $(gcloud artifacts docker images describe "$IMAGE" --project="$PROJECT" --format='value(image_summary.digest)')"
 echo "  repo code:    $LOCAL_HASH  (commit $GIT_COMMIT)"
-echo "  Now run the job once and compare the heartbeat row's code_sha256:"
-echo "  gcloud run jobs execute $JOB --project=$PROJECT --region=$REGION --wait"
-echo "  bq query 'SELECT ts, code_sha256, git_commit FROM ${DATASET}.heartbeat ORDER BY ts DESC LIMIT 1'"
+if [[ "${VERIFY:-1}" == "1" ]]; then
+  gcloud run jobs execute "$JOB" --project="$PROJECT" --region="$REGION" --wait --quiet >/dev/null
+  LIVE_HASH="$(bq --project_id="$PROJECT" --format=csv --quiet query --use_legacy_sql=false --max_rows=1 \
+    "SELECT code_sha256 FROM \`${PROJECT}.${DATASET}.heartbeat\` WHERE git_commit = '${GIT_COMMIT}' ORDER BY ts DESC LIMIT 1" | tail -n 1)"
+  echo "  live code:    ${LIVE_HASH:-<no heartbeat row for this commit>}"
+  if [[ "$LIVE_HASH" == "$LOCAL_HASH" ]]; then
+    echo "[verify] MATCH — the deployed job runs the committed code."
+  else
+    echo "[verify] MISMATCH — do not trust this deploy." >&2; exit 2
+  fi
+fi

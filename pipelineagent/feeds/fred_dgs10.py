@@ -44,13 +44,9 @@ def parse(text: str, series_id: str, keep_last_n: int) -> tuple[list[dict], list
 def fetch(ctx: FetchContext) -> FetchResult:
     sid = str(ctx.params.get("series_id", "DGS10"))
     n = int(ctx.params.get("keep_last_n", 30))
-    last = ctx.last_run
-    r = ctx.http.get("https://fred.stlouisfed.org/graph/fredgraph.csv", params={"id": sid}, accept="text/csv,*/*",
-                     expect="csv", etag=ctx.etag)
-    if r.not_modified:
-        return FetchResult([], last.content_sha256 if last else None, r.last_modified, 304, r.etag, True)
+    r = ctx.http.get("https://fred.stlouisfed.org/graph/fredgraph.csv", params={"id": sid}, accept="text/csv,*/*", expect="csv")
     rows, anomalies = parse(r.text(), sid, n)
-    return FetchResult(rows, r.sha256, r.last_modified, r.status, r.etag, anomalies=anomalies, raw=r.body)
+    return FetchResult(rows, r.sha256, r.last_modified, r.status, anomalies=anomalies, raw=r.body)
 
 
-FEED = Feed("fred_dgs10", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("fred_dgs10", COLUMNS, fetch)

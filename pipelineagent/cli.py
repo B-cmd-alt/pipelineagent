@@ -24,18 +24,6 @@ def cmd_version(args) -> int:
     return 0
 
 
-def cmd_init(args) -> int:
-    from .runner import ensure_warehouse
-
-    fleet = load_fleet(args.fleet)
-    wh = _wh(args)
-    if hasattr(wh, "ensure_dataset"):
-        wh.ensure_dataset("PipelineAgent: public-feed fleet, detector results, findings/dispositions ledger, heartbeat. Append-only.")
-    ensure_warehouse(fleet, wh)
-    print("warehouse ready")
-    return 0
-
-
 def cmd_fetch(args) -> int:
     """Pre-flight one feed: fetch and print rows WITHOUT writing anything."""
     from . import feeds as reg
@@ -56,20 +44,12 @@ def cmd_fetch(args) -> int:
 
 
 def cmd_run(args) -> int:
-    from .heartbeat import beat
     from .runner import run
 
     fleet = load_fleet(args.fleet)
     wh = _wh(args)
     feeds = args.feeds.split(",") if args.feeds else None
     report = run(fleet, wh, feeds=feeds, fetch=not args.no_fetch, detect=not args.no_detect)
-    if not args.no_detect and report.ledger is not None:
-        report.heartbeat = beat(wh, report.run_id, feeds_attempted=len(report.runs), feeds_ok=report.feeds_ok,
-                                breaches=report.breaches, unknowns=report.unknowns, duration_s=report.duration_s, fleet_path=args.fleet)
-        if report.ledger.healthlog_lines():
-            from .render_site import append_healthlog
-
-            append_healthlog(report.ledger.healthlog_lines(), args.site_dir, os.environ.get("PIPELINEAGENT_SITE_BUCKET"))
     if not args.no_render:
         from .render_site import render
 
@@ -95,12 +75,9 @@ def cmd_render(args) -> int:
 
 def cmd_dispose(args) -> int:
     from .ledger import dispose
-    from .render_site import append_healthlog
 
     who = f"human:{args.who}" if not args.who.startswith(("human:", "agent")) else args.who
     row = dispose(_wh(args), args.finding_id, args.disposition, who, args.note, datetime.now(timezone.utc), args.evidence_ref)
-    append_healthlog([f"- {row['decided_at'].strftime('%Y-%m-%d %H:%M')}Z DISPOSITION `{row['finding_id']}` → {row['disposition']} ({who}: {args.note})"],
-                     args.site_dir, os.environ.get("PIPELINEAGENT_SITE_BUCKET"))
     print(json.dumps(row, default=str, indent=2))
     return 0
 
@@ -113,11 +90,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--site-dir", default=os.environ.get("PIPELINEAGENT_SITE_DIR", "site"))
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("version").set_defaults(fn=cmd_version)
-    sub.add_parser("init-warehouse").set_defaults(fn=cmd_init)
     f = sub.add_parser("fetch", help="pre-flight one feed; prints rows, writes nothing")
     f.add_argument("--feed", required=True)
     f.set_defaults(fn=cmd_fetch)
-    r = sub.add_parser("run", help="fetch -> detect -> ledger -> heartbeat -> render")
+    r = sub.add_parser("run", help="fetch -> detect -> ledger -> heartbeat -> render (tables are created on first use)")
     r.add_argument("--feeds", help="comma-separated subset")
     r.add_argument("--no-fetch", action="store_true")
     r.add_argument("--no-detect", action="store_true")

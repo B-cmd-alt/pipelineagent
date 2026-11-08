@@ -24,12 +24,6 @@ class FetchContext:
     warehouse: Warehouse
     table: str
     now: datetime
-    on_unchanged: str = "append"
-
-    @property
-    def etag(self) -> str | None:
-        """Send If-None-Match only when an unchanged body would be discarded anyway."""
-        return self.last_run.etag if (self.last_run and self.on_unchanged == "skip") else None
 
 
 @dataclass
@@ -38,8 +32,6 @@ class FetchResult:
     content_sha256: str | None
     source_modified: datetime | None
     http_status: int | None
-    etag: str | None = None
-    not_modified: bool = False
     note: str = ""
     # Parsers can report soft anomalies (e.g. 'N/A' coerced to NULL) without failing.
     anomalies: list[str] = field(default_factory=list)
@@ -53,7 +45,6 @@ class Feed:
     id: str
     columns: tuple[Column, ...]  # feed-specific columns (common ones are added by the runner)
     fetch: Callable[[FetchContext], FetchResult]
-    description: str = ""
 
 
 def to_float(v: Any, anomalies: list[str], label: str) -> float | None:

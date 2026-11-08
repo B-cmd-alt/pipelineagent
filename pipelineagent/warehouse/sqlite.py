@@ -2,7 +2,6 @@
 Semantics mirror the BigQuery backend exactly (append-only, UTC)."""
 from __future__ import annotations
 
-import json
 import sqlite3
 from datetime import datetime, timedelta, timezone
 from typing import Any
@@ -10,7 +9,7 @@ from typing import Any
 from ..schema import Column
 from .base import FeedSnapshot, LastRun
 
-_TYPE = {"STRING": "TEXT", "FLOAT64": "REAL", "INT64": "INTEGER", "TIMESTAMP": "TEXT", "DATE": "TEXT", "BOOL": "INTEGER", "JSON": "TEXT"}
+_TYPE = {"STRING": "TEXT", "FLOAT64": "REAL", "INT64": "INTEGER", "TIMESTAMP": "TEXT", "DATE": "TEXT"}
 
 
 def _iso(dt: datetime | None) -> str | None:
@@ -45,10 +44,6 @@ class SQLiteWarehouse:
         self._columns[table] = columns
         self.conn.commit()
 
-    def table_exists(self, table: str) -> bool:
-        r = self.conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone()
-        return r is not None
-
     # --- writes ---
     def append(self, table, rows, columns):
         if not rows:
@@ -64,10 +59,6 @@ class SQLiteWarehouse:
                 return _iso(v) if isinstance(v, datetime) else str(v)
             if t == "DATE":
                 return v.isoformat() if hasattr(v, "isoformat") else str(v)
-            if t == "JSON":
-                return json.dumps(v) if not isinstance(v, str) else v
-            if t == "BOOL":
-                return int(bool(v))
             return v
 
         ph = ", ".join("?" for _ in names)
@@ -79,17 +70,17 @@ class SQLiteWarehouse:
         return len(rows)
 
     # --- detector reads ---
-    def feed_snapshot(self, table, lookback_hours, event_ts_column="event_ts", value_column=None, group_by=None, max_rows=0):
+    def feed_snapshot(self, table, lookback_hours, value_column=None, group_by=None, max_rows=0):
         since = _iso(self._now() - timedelta(hours=lookback_hours))
         row = self.conn.execute(
-            f'SELECT MAX(captured_at) AS c, MAX("{event_ts_column}") AS e FROM "{table}" WHERE captured_at >= ?', (since,)
+            f'SELECT MAX(captured_at) AS c, MAX(event_ts) AS e FROM "{table}" WHERE captured_at >= ?', (since,)
         ).fetchone()
         snap = FeedSnapshot(_parse(row["c"]), _parse(row["e"]))
         if value_column and max_rows:
             grp = f'"{group_by}"' if group_by else "''"
             cur = self.conn.execute(
                 f'SELECT {grp} AS g, "{value_column}" AS v, captured_at FROM "{table}" WHERE captured_at >= ? '
-                f'ORDER BY captured_at DESC, "{event_ts_column}" DESC LIMIT ?',
+                f'ORDER BY captured_at DESC, event_ts DESC LIMIT ?',
                 (since, max_rows),
             )
             for r in cur:
@@ -101,20 +92,15 @@ class SQLiteWarehouse:
                 snap.recent_values.append((str(r["g"] or ""), fv, _parse(r["captured_at"])))
         return snap
 
-    def max_event_ts(self, table, lookback_hours):
-        since = _iso(self._now() - timedelta(hours=lookback_hours))
-        r = self.conn.execute(f'SELECT MAX(event_ts) AS e FROM "{table}" WHERE captured_at >= ?', (since,)).fetchone()
-        return _parse(r["e"])
-
     # --- ledger / runner reads ---
     def last_runs(self):
         out: dict[str, LastRun] = {}
         cur = self.conn.execute(
-            "SELECT feed, finished_at, status, etag, content_sha256, source_modified FROM _runs r "
+            "SELECT feed, finished_at, status, content_sha256 FROM _runs r "
             "WHERE finished_at = (SELECT MAX(finished_at) FROM _runs WHERE feed = r.feed AND status IN ('ok','no_change','failed'))"
         )
         for r in cur:
-            out[r["feed"]] = LastRun(r["feed"], _parse(r["finished_at"]), r["status"], r["etag"], r["content_sha256"], _parse(r["source_modified"]))
+            out[r["feed"]] = LastRun(r["feed"], _parse(r["finished_at"]), r["status"], r["content_sha256"])
         return out
 
     def runs_since(self, since):
@@ -123,14 +109,20 @@ class SQLiteWarehouse:
 
     def open_findings(self):
         cur = self.conn.execute(
-            "SELECT * FROM findings f WHERE event_at = (SELECT MAX(event_at) FROM findings WHERE finding_id = f.finding_id) "
-            "AND event != 'CLOSED' ORDER BY event_at DESC"
+            "SELECT f.*, (SELECT MIN(event_at) FROM findings WHERE finding_id = f.finding_id) AS opened_at FROM findings f "
+            "WHERE event_at = (SELECT MAX(event_at) FROM findings WHERE finding_id = f.finding_id) "
+            "AND event = 'OPENED' ORDER BY event_at DESC"
         )
         return [self._row(r) for r in cur]
 
-    def recent_finding_events(self, limit):
-        cur = self.conn.execute("SELECT * FROM findings ORDER BY event_at DESC LIMIT ?", (limit,))
-        return [self._row(r) for r in cur]
+    def ledger_events(self, limit):
+        cur = self.conn.execute(
+            "SELECT * FROM ("
+            "  SELECT event_at AS ts, event AS kind, finding_id, feed, axis, state AS value, detail, 'detector' AS actor FROM findings"
+            "  UNION ALL"
+            "  SELECT decided_at, 'DISPOSITION', finding_id, NULL, NULL, disposition, note, decided_by FROM dispositions"
+            ") ORDER BY ts DESC LIMIT ?", (limit,))
+        return [self._row(r) for r in cur][::-1]
 
     def latest_dispositions(self):
         cur = self.conn.execute(

@@ -1,8 +1,12 @@
-"""Static dashboard. Reads the warehouse, writes site/index.html + site/data.json.
+"""Static dashboard. Reads the warehouse, writes site/index.html + data.json + HEALTHLOG.md.
 
 Decision-centric by design: the unit of display is a *finding with its
 disposition*, not a time series. No JS framework, no hosting cost; the page
 is a single self-contained HTML file suitable for GitHub Pages or a bucket.
+
+The page is rendered by the loop itself, so it cannot announce the loop's own
+death; a few lines of client-side JS compare `generated_at` with the viewer's
+clock and raise the dead-man banner when the page itself has gone stale.
 """
 from __future__ import annotations
 
@@ -23,6 +27,7 @@ log = logging.getLogger("pipelineagent.site")
 AXIS_LABEL = {"write_recency": "Write recency", "head_lag": "Head lag", "flat_value": "Flat value"}
 STATE_ICON = {"OK": "✓", "BREACH": "✕", "UNKNOWN": "?", "N/A": "–"}
 RUN_ICON = {"ok": "●", "no_change": "○", "failed": "✕", "skipped": "·"}
+PAGE_STALE_AMBER_HOURS = 3.0  # an hourly loop that has not re-rendered in 3h is already suspicious
 
 
 def _iso(v: Any) -> Any:
@@ -46,7 +51,8 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
     """Everything the page needs, as plain JSON-able data. Each read is isolated:
     a failing read becomes an explicit `unavailable` marker, never an empty-looking success."""
     now = now or datetime.now(timezone.utc)
-    data: dict[str, Any] = {"generated_at": now.isoformat(), "project": fleet.project, "renderer": describe(str(fleet.path)), "errors": []}
+    data: dict[str, Any] = {"generated_at": now.isoformat(), "project": fleet.project, "renderer": describe(str(fleet.path)),
+                            "heartbeat_max_age_hours": fleet.heartbeat_max_age_hours, "errors": []}
 
     def guarded(name, fn, default):
         try:
@@ -58,10 +64,6 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
 
     hb = guarded("heartbeat", wh.latest_heartbeat, None)
     data["heartbeat"] = heartbeat_status(hb, fleet.heartbeat_max_age_hours, now)
-    data["deploy_drift"] = None
-    if hb and hb.get("code_sha256"):
-        data["deploy_drift"] = {"runtime_code_sha256": hb["code_sha256"], "renderer_code_sha256": data["renderer"]["code_sha256"],
-                                "match": hb["code_sha256"] == data["renderer"]["code_sha256"]}
 
     dets = guarded("detections", wh.latest_detections, None)
     det_by = {(d["feed"], d["axis"]): d for d in (dets or [])}
@@ -84,8 +86,7 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
                 cells[axis] = {"state": "UNKNOWN", "detail": "no detector result recorded yet"}
             else:
                 age_h = (now - d["detected_at"]).total_seconds() / 3600 if d.get("detected_at") else None
-                state = d["state"]
-                detail = d["detail"]
+                state, detail = d["state"], d["detail"]
                 if age_h is not None and age_h > fleet.heartbeat_max_age_hours:
                     state, detail = "UNKNOWN", f"last detector result is {age_h:.0f}h old: {detail}"
                 cells[axis] = {"state": state, "detail": detail, "observed": d.get("observed"), "threshold": d.get("threshold"),
@@ -115,18 +116,12 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
         findings.append({**{k: _iso(v) for k, v in f.items()},
                          "disposition": d["disposition"] if d else "UNKNOWN",
                          "disposition_by": d["decided_by"] if d else "none",
-                         "disposition_note": d["note"] if d else "no disposition row (should not happen)"})
-    # opened_at for each open finding = first event; approximate from recent events
-    events = guarded("events", lambda: wh.recent_finding_events(200), []) or []
-    opened_at = {e["finding_id"]: e["event_at"] for e in events if e["event"] == "OPENED"}
-    for f in findings:
-        oa = opened_at.get(f["finding_id"])
-        f["opened_at"] = _iso(oa)
-        f["open_for"] = _hours_ago(oa, now) if oa else "unknown"
+                         "disposition_note": d["note"] if d else "no disposition row (should not happen)",
+                         "open_for": _hours_ago(f.get("opened_at"), now)})
     findings.sort(key=lambda f: f.get("opened_at") or "", reverse=True)
     data["open_findings"] = findings
     data["open_findings_unavailable"] = open_f is None
-    data["recent_events"] = [{k: _iso(v) for k, v in e.items()} for e in events[:40]]
+    data["ledger"] = [{k: _iso(v) for k, v in e.items()} for e in (guarded("ledger", lambda: wh.ledger_events(500), []) or [])]
     data["disposition_counts"] = {k: sum(1 for d in disp.values() if d["disposition"] == k) for k in ("FIXED", "BENIGN", "ESCALATED", "DEFERRED", "UNKNOWN")}
     data["summary"] = {
         "breach": sum(1 for g in grid for c in g["cells"].values() if c["state"] == "BREACH"),
@@ -166,12 +161,10 @@ tr:last-child td{border-bottom:0}.feed b{display:block}.feed small{color:var(--m
 .badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;border:1px solid var(--ring)}
 .badge.UNKNOWN{background:var(--unknown);color:var(--unknown-ink)}.badge.BENIGN{background:var(--ok);color:#fff}.badge.FIXED{background:var(--ok);color:#fff}
 .badge.ESCALATED{background:var(--breach);color:#fff}.badge.DEFERRED{border-color:var(--muted);color:var(--ink2)}
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.steps div{border:1px solid var(--grid);border-radius:6px;padding:6px 8px;font-size:12px}
-.steps div.done{border-color:var(--ok)}.steps div b{display:block;font-size:11px;color:var(--ink2);text-transform:uppercase}.steps div.todo{color:var(--muted);border-style:dashed}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:color-mix(in srgb,var(--ink) 6%,transparent);padding:1px 4px;border-radius:4px}
 .err{background:var(--breach);color:#fff;padding:8px 12px;border-radius:6px;margin:8px 0}footer{margin-top:40px;color:var(--muted);font-size:12px}
-ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:1px solid var(--grid);font-size:13px}
-@media (max-width:720px){.steps{grid-template-columns:repeat(2,1fr)}th:nth-child(5),td:nth-child(5){display:none}}
+#page-stale{display:none}#page-stale.amber{display:flex;background:color-mix(in srgb,var(--unknown) 30%,var(--surface));border:1px solid var(--unknown);color:var(--ink)}#page-stale.red{display:flex;background:var(--breach);color:#fff;font-size:17px}
+@media (max-width:720px){th:nth-child(5),td:nth-child(5){display:none}}
 """
 
 
@@ -189,18 +182,25 @@ def _cell(c: dict) -> str:
     return f'<span class="cell {cls}" title="{_e(c.get("detail"))}">{STATE_ICON[st]} {label}{obs}</span><span class="detail">{_e(c.get("detail"))}</span>'
 
 
+# Client-side dead-man's switch: the page cannot know the loop died, but the viewer's clock can.
+STALE_JS = """
+(function(){var g=Date.parse(document.body.dataset.generatedAt);var max=parseFloat(document.body.dataset.maxAgeHours);
+var h=(Date.now()-g)/36e5;var el=document.getElementById('page-stale');if(!el||isNaN(h))return;
+if(h>max){el.className='banner red';el.textContent='⚠ DEAD-MAN\'S SWITCH: this page was rendered '+h.toFixed(1)+'h ago, over the '+max+'h limit. The loop that renders it has stopped; every cell below is stale.';}
+else if(h>%s){el.className='banner amber';el.textContent='⚠ Page rendered '+h.toFixed(1)+'h ago; the loop is hourly, so it may be falling behind.';}})();
+""" % PAGE_STALE_AMBER_HOURS
+
+
 def render_html(data: dict[str, Any]) -> str:
     hb = data["heartbeat"]
     s = data["summary"]
     if hb["state"] == "ALIVE":
-        banner = f'<div class="banner alive">♥ Loop alive — last heartbeat {hb["age_hours"]}h ago (threshold {hb["max_age_hours"]:g}h). Runtime code <code>{_e((hb.get("code_sha256") or "")[:12])}</code>' + (f' @ <code>{_e(hb["git_commit"][:10])}</code>' if hb.get("git_commit") else "") + "</div>"
+        banner = f'<div class="banner alive">♥ Loop alive — last heartbeat {hb["age_hours"]}h ago at render time (threshold {hb["max_age_hours"]:g}h). Runtime code <code>{_e((hb.get("code_sha256") or "")[:12])}</code>' + (f' @ <code>{_e(hb["git_commit"][:10])}</code>' if hb.get("git_commit") else "") + "</div>"
     elif hb["state"] == "STALE":
         banner = f'<div class="banner stale">⚠ DEAD-MAN\'S SWITCH: last heartbeat {hb["age_hours"]}h ago, over the {hb["max_age_hours"]:g}h limit. The monitor itself is down; every cell below is stale.</div>'
     else:
         banner = '<div class="banner missing">⚠ DEAD-MAN\'S SWITCH: no heartbeat has ever been recorded (or the heartbeat table is unreadable). Nothing below can be trusted.</div>'
-    drift = data.get("deploy_drift")
-    if drift and not drift["match"]:
-        banner += f'<div class="banner drift">⚠ Deploy drift: the running loop reports code <code>{_e(drift["runtime_code_sha256"][:12])}</code> but this page was rendered by <code>{_e(drift["renderer_code_sha256"][:12])}</code>. Committed ≠ deployed until these match.</div>'
+    banner += '<div id="page-stale" class="banner"></div>'
     errs = "".join(f'<div class="err">Dashboard read failed — {_e(x)}</div>' for x in data["errors"])
 
     tiles = f"""<div class="tiles">
@@ -234,16 +234,9 @@ def render_html(data: dict[str, Any]) -> str:
     for f in data["open_findings"]:
         cards.append(f"""<div class="card {_e(f['state'])}">
  <h3>{STATE_ICON.get(f['state'], '?')} {_e(f['feed'])} / {_e(AXIS_LABEL.get(f['axis'], f['axis']))} — {_e(f['state'])} <span class="badge {_e(f['disposition'])}">{_e(f['disposition'])}</span></h3>
- <div class="meta">finding <code>{_e(f['finding_id'])}</code> · opened {_e(f.get('opened_at') or '?')} ({_e(f['open_for'])}) · last seen {_e(f['event'])} at {_e(f['event_at'])}</div>
- <div style="margin-top:6px">{_e(f['detail'])}</div>
- <div class="meta" style="margin-top:4px">disposition by <b>{_e(f['disposition_by'])}</b>: {_e(f['disposition_note'])}</div>
- <div class="steps">
-  <div class="done"><b>1 · Evidence</b>detector {_e(f['axis'])}: observed {_e(f.get('observed'))} vs threshold {_e(f.get('threshold'))}</div>
-  <div class="todo"><b>2 · Diagnosis</b>repair agent not built (v0)</div>
-  <div class="todo"><b>3 · Patch</b>—</div>
-  <div class="todo"><b>4 · Gate verdict</b>—</div>
-  <div class="done"><b>5 · Disposition</b>{_e(f['disposition'])}</div>
- </div>
+ <div class="meta">finding <code>{_e(f['finding_id'])}</code> · opened {_e((f.get('opened_at') or '?')[:16])}Z ({_e(f['open_for'])})</div>
+ <div style="margin-top:6px"><b>Evidence:</b> {_e(f['detail'])} <span class="sub">(observed {_e(f.get('observed'))} vs threshold {_e(f.get('threshold'))})</span></div>
+ <div class="meta" style="margin-top:4px"><b>Disposition</b> by {_e(f['disposition_by'])}: {_e(f['disposition_note'])} · diagnosis / patch / gate verdict: not built yet (v0)</div>
 </div>""")
     if data["open_findings_unavailable"]:
         findings_html = '<div class="err">Open findings could not be read — treat as UNKNOWN, not as "no findings".</div>'
@@ -254,22 +247,32 @@ def render_html(data: dict[str, Any]) -> str:
 
     dc = data["disposition_counts"]
     disp_html = " · ".join(f'<span class="badge {k}">{k}</span> {v}' for k, v in dc.items())
-    log_items = "".join(
-        f'<li><code>{_e(e["event_at"][:16])}Z</code> <b>{_e(e["event"])}</b> {_e(e["feed"])}/{_e(e["axis"])} {_e(e["state"])} <code>{_e(e["finding_id"])}</code> <span class="sub">{_e((e.get("detail") or "")[:140])}</span></li>'
-        for e in data["recent_events"])
 
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PipelineAgent Fleet</title><style>{CSS}</style></head><body><main>
+<title>PipelineAgent Fleet</title><style>{CSS}</style></head>
+<body data-generated-at="{_e(data['generated_at'])}" data-max-age-hours="{data['heartbeat_max_age_hours']:g}"><main>
 <h1>PipelineAgent — fleet health</h1>
-<div class="sub">Generated {_e(data['generated_at'][:19])}Z · {len(data['grid'])} feeds · detectors read data, not exit codes · renderer code <code>{_e(data['renderer']['code_sha256'][:12])}</code></div>
+<div class="sub">Generated {_e(data['generated_at'][:19])}Z · {len(data['grid'])} feeds · detectors read data, not exit codes · code <code>{_e(data['renderer']['code_sha256'][:12])}</code></div>
 {banner}{errs}{tiles}
 <h2>Fleet health grid</h2>{grid_html}
 <h2>Open findings ({len(data['open_findings'])})</h2>
 <p class="sub">Each finding is one continuous not-OK stretch of a feed × axis. It carries exactly one current disposition: {disp_html} (all-time, latest row per finding).</p>
 {findings_html}
-<h2>Recent ledger events</h2><ul class="log">{log_items or '<li class="sub">none</li>'}</ul>
-<footer>PipelineAgent v0 · static page, regenerated after every detector run · <a href="data.json">data.json</a> · HEALTHLOG at <a href="HEALTHLOG.md">ops/HEALTHLOG.md</a></footer>
-</main></body></html>"""
+<footer>PipelineAgent v0 · static page, regenerated after every detector run · <a href="data.json">data.json</a> · <a href="HEALTHLOG.md">HEALTHLOG.md</a> (every ledger event, generated from the tables)</footer>
+</main><script>{STALE_JS}</script></body></html>"""
+
+
+def render_healthlog(data: dict[str, Any]) -> str:
+    lines = ["# PipelineAgent HEALTHLOG", "",
+             f"Generated {data['generated_at'][:19]}Z from the append-only `findings` and `dispositions` tables (oldest first). "
+             "OPENED/CLOSED are detector transitions; DISPOSITION rows are automatic or human decisions.", ""]
+    for e in data["ledger"]:
+        who = f" ({e['actor']})" if e.get("actor") and e["actor"] != "detector" else ""
+        where = f" {e['feed']}/{e['axis']}" if e.get("feed") else ""
+        lines.append(f"- {(e['ts'] or '')[:16]}Z {e['kind']} `{e['finding_id']}`{where} {e.get('value') or ''}{who} — {e.get('detail') or ''}")
+    if not data["ledger"]:
+        lines.append("- (no ledger events yet)")
+    return "\n".join(lines) + "\n"
 
 
 def render(fleet: Fleet, wh: Warehouse, site_dir: Path, bucket: str | None = None, now: datetime | None = None) -> Path:
@@ -277,38 +280,10 @@ def render(fleet: Fleet, wh: Warehouse, site_dir: Path, bucket: str | None = Non
     site_dir.mkdir(parents=True, exist_ok=True)
     (site_dir / "data.json").write_text(json.dumps(data, indent=1, default=str), encoding="utf-8")
     (site_dir / "index.html").write_text(render_html(data), encoding="utf-8")
+    (site_dir / "HEALTHLOG.md").write_text(render_healthlog(data), encoding="utf-8")
     if bucket:
-        _upload(bucket, {"index.html": site_dir / "index.html", "data.json": site_dir / "data.json"})
+        _upload(bucket, {"index.html": site_dir / "index.html", "data.json": site_dir / "data.json", "HEALTHLOG.md": site_dir / "HEALTHLOG.md"})
     return site_dir / "index.html"
-
-
-def healthlog_path(site_dir: str | Path) -> Path:
-    return Path(site_dir).resolve().parent / "ops" / "HEALTHLOG.md"
-
-
-HEALTHLOG_HEADER = "# PipelineAgent HEALTHLOG\n\nAppend-only. One line per ledger event (finding OPENED / CLOSED, disposition changes). Newest at the bottom. Generated by the loop; humans append via `pipelineagent dispose`.\n\n"
-
-
-def append_healthlog(lines: list[str], site_dir: str | Path, bucket: str | None = None) -> None:
-    if not lines:
-        return
-    text = "\n".join(lines) + "\n"
-    p = healthlog_path(site_dir)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    if bucket:
-        # the bucket copy is the durable one (container filesystems are ephemeral): read, append, write back
-        try:
-            from google.cloud import storage
-
-            blob = storage.Client().bucket(bucket).blob("HEALTHLOG.md")
-            existing = blob.download_as_text() if blob.exists() else HEALTHLOG_HEADER
-            blob.upload_from_string(existing + text, content_type="text/markdown; charset=utf-8")
-        except Exception:  # noqa: BLE001
-            log.exception("HEALTHLOG upload failed (local copy still written)")
-    if not p.exists():
-        p.write_text(HEALTHLOG_HEADER, encoding="utf-8")
-    with p.open("a", encoding="utf-8") as fh:
-        fh.write(text)
 
 
 def _upload(bucket: str, files: dict[str, Path]) -> None:
@@ -316,11 +291,11 @@ def _upload(bucket: str, files: dict[str, Path]) -> None:
         from google.cloud import storage
 
         b = storage.Client().bucket(bucket)
+        types = {".html": "text/html; charset=utf-8", ".json": "application/json", ".md": "text/markdown; charset=utf-8"}
         for name, path in files.items():
-            ct = "text/html; charset=utf-8" if name.endswith(".html") else "application/json"
             blob = b.blob(name)
             blob.cache_control = "no-cache, max-age=60"
-            blob.upload_from_filename(str(path), content_type=ct)
+            blob.upload_from_filename(str(path), content_type=types.get(path.suffix, "application/octet-stream"))
         log.info("site uploaded to gs://%s/", bucket)
     except Exception:  # noqa: BLE001
         log.exception("site upload failed (local copy still written)")

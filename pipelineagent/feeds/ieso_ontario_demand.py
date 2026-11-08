@@ -67,16 +67,12 @@ def parse(text: str, after: datetime | None) -> tuple[list[dict], list[str]]:
 
 
 def fetch(ctx: FetchContext) -> FetchResult:
-    last = ctx.last_run
-    r = ctx.http.get("https://reports-public.ieso.ca/public/Demand/PUB_Demand.csv", accept="text/csv,*/*", expect="csv",
-                     etag=ctx.etag)
-    if r.not_modified:
-        return FetchResult([], last.content_sha256 if last else None, r.last_modified, 304, r.etag, True)
+    r = ctx.http.get("https://reports-public.ieso.ca/public/Demand/PUB_Demand.csv", accept="text/csv,*/*", expect="csv")
     # incremental-before-write: what do we already hold? (the data, not the job log)
-    after = ctx.warehouse.max_event_ts(ctx.table, lookback_hours=24 * 45) if ctx.warehouse.table_exists(ctx.table) else None
+    after = ctx.warehouse.feed_snapshot(ctx.table, lookback_hours=24 * 45).last_event_ts
     rows, anomalies = parse(r.text(), after)
-    return FetchResult(rows, r.sha256, r.last_modified, r.status, r.etag, anomalies=anomalies,
+    return FetchResult(rows, r.sha256, r.last_modified, r.status, anomalies=anomalies,
                        note=f"incremental after {after.isoformat() if after else 'none'}", raw=r.body)
 
 
-FEED = Feed("ieso_ontario_demand", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("ieso_ontario_demand", COLUMNS, fetch)

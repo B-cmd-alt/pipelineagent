@@ -16,14 +16,14 @@ dead-man's switch, and a static dashboard. No agent yet.
 
 | Component | What exists |
 |---|---|
-| `fleet.yaml` | Per feed: `id`, `cadence` (`hourly`/`daily`), `table`, `event_ts_column`, and SLAs for three axes: `write_recency_max_hours`, `head_lag_max_hours`, `flat_value: {column, max_consecutive}`. |
-| Fleet | 7 public feeds: NWS latest observations, Open-Meteo current + hourly forecast, USGS earthquakes `all_hour` GeoJSON, FRED `DGS10` CSV, GitHub Status `summary.json`, CoinGecko `simple/price`, IESO Ontario hourly demand CSV. |
+| `fleet.yaml` | Per feed: `id`, `cadence` (`hourly` = state feed, every poll written; `daily` = growing series, identical content skipped), `table`, and SLAs for three axes: `write_recency_max_hours`, `head_lag_max_hours`, `flat_value: {column, group_by, max_consecutive}`. |
+| Fleet | 7 public feeds: NWS latest observations, Open-Meteo current conditions, USGS earthquakes `all_hour` GeoJSON, FRED `DGS10` CSV, GitHub Status `summary.json`, CoinGecko `simple/price`, IESO Ontario hourly demand CSV. |
 | Fetchers | Append-only rows with `captured_at`, `event_ts`, `source_modified`, `content_sha256`; one `_runs` row per run (`status` ok/no_change/failed/skipped, `rows_written`, `duration_s`, `http_status`, `error`, `code_sha256`). Generic identifying User-Agent, conditional GET and content-hash skip before any write, pacing, benign 404 exits 0, HTML-error-page detection. |
 | Detectors | Read data tables, never job status. Result is `OK`, `BREACH`, or `UNKNOWN`. `UNKNOWN` means "could not look" and never renders green. An undeclared axis renders grey ("not declared"). |
-| Ledger | Append-only `findings` (`OPENED`/`STILL_OPEN`/`CLOSED`) and `dispositions` (`FIXED`/`BENIGN`/`ESCALATED`/`DEFERRED`/`UNKNOWN`, latest row per finding wins), plus append-only `ops/HEALTHLOG.md`. Auto-rules: new finding gets `UNKNOWN`; a finding that closes with no intervention gets `BENIGN`. |
+| Ledger | Append-only `findings` (transitions only: `OPENED`/`CLOSED`; the hourly state is in `detections`) and `dispositions` (`FIXED`/`BENIGN`/`ESCALATED`/`DEFERRED`/`UNKNOWN`, latest row per finding wins). `HEALTHLOG.md` is generated from the two tables on every render. Auto-rules: new finding gets `UNKNOWN`; a finding that closes with no intervention gets `BENIGN`; a warm-up `UNKNOWN` (insufficient history) is shown but opens no finding. |
 | Dead-man's switch | One `heartbeat` row per loop run with the runtime `code_sha256`. Dashboard shows a red banner if the last heartbeat is older than 26h. |
 | Dashboard | `render_site.py` writes `site/index.html` + `data.json`: feed x axis health grid, last-24h runs, open findings with disposition, heartbeat and deploy-drift status. Static, no login, zero hosting cost. |
-| Scheduling | One Cloud Run Job on an hourly Cloud Scheduler trigger. Deploy verification compares the runtime self-hash with the repo tree hash. |
+| Scheduling | One Cloud Run Job on an hourly Cloud Scheduler trigger. `deploy.sh` executes the job once after deploying and fails unless the heartbeat's runtime code hash equals the repo hash at the deployed commit. The dashboard also checks its own age client-side, so a dead loop cannot leave a green page behind. |
 | Warehouse | One interface, two backends: BigQuery (production) and SQLite (tests, offline demo). |
 | ProofGate seam | `schemas/verdict.schema.json`: `run_manifest`, `patch_sha256`, `verdict`, `reason_codes`, `evidence`. |
 
@@ -125,9 +125,10 @@ Two properties hold across the diagram:
 Each scheduled run, after detectors and ledger update:
 
 1. Load open findings, newest first.
-2. For each finding already seen in a previous run: write one `STILL_OPEN`
-   ledger line and move on. It is never re-diagnosed unless its evidence
-   changes (new `content_sha256` set, new error class, or new axis).
+2. For each finding already seen in a previous run: move on. Nothing is
+   written (the ledger records transitions only; this hour's state is in
+   `detections`). It is never re-diagnosed unless its evidence changes (new
+   `content_sha256` set, new error class, or new axis).
 3. For new findings: deep-diagnose at most **2 per run** (the depth budget).
    Remaining new findings get `DEFERRED` with reason `DEPTH_BUDGET`.
 4. Emit a heartbeat that also records `findings_seen`, `diagnosed`,
@@ -176,8 +177,8 @@ Each PR carries `verdict.json` conforming to `schemas/verdict.schema.json`:
 |---|---|
 | `run_manifest` | finding id, feed id, replayed payload hashes, sandbox image hash, base commit, detector versions |
 | `patch_sha256` | hash of the unified diff |
-| `verdict` | the agent's own claim: `repro_and_fixed`, `repro_not_fixed`, `not_reproducible` |
-| `reason_codes` | machine-readable codes, empty on a clean claim |
+| `verdict` | filled by the GATE, never the agent: `PASS`, `FAIL`, `NEEDS_HUMAN` (the agent's own claim lives in `evidence.diagnosis` and `evidence.after`) |
+| `reason_codes` | machine-readable codes the gate attaches, e.g. `REPLAY_PASSED`, `SLA_WIDENED`; empty only on a clean `PASS` |
 | `evidence` | replay outputs before/after, detector results before/after, test summary |
 
 The agent writes `FIXED` to the ledger only after the gate accepts and the
@@ -283,7 +284,7 @@ A system that goes blind cannot score well by staying quiet.
 | Fixing tests instead of code | Agent edits an assertion until green | `TEST_WEAKENED`; replay step 4 runs the base-commit test suite, not the PR's |
 | False FIXED | Ledger says fixed, data still broken | `FIXED_WITHOUT_REPLAY`; FIXED additionally requires the next live detector pass |
 | Replay sandbox escape | Malicious payload exploits a parser to reach the network or host | Sandbox with no network, read-only filesystem except a scratch dir, CPU/memory/time limits, unprivileged user, fresh container per replay |
-| Ledger tampering | A component rewrites history to hide a finding | Ledger is append-only by API; dispositions are new rows; HEALTHLOG is append-only and its hash is recorded in the heartbeat |
+| Ledger tampering | A component rewrites history to hide a finding | Ledger is append-only by API; dispositions are new rows; HEALTHLOG is a generated view of the tables, never an edited file |
 
 ---
 
@@ -326,7 +327,7 @@ PipelineAgent does not promise:
 
 ### Week 3: agent and gate
 
-- Agent loop with depth budget, `STILL_OPEN` handling, correlated grouping.
+- Agent loop with depth budget, known-open skip, correlated grouping.
 - ProofGate as a standalone checker over `verdict.json` plus the PR diff,
   implementing every reason code in Section 3.5.
 - Harness classes 4, 5, 6.

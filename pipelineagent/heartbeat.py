@@ -1,6 +1,7 @@
-"""Dead-man's switch. One row per completed loop run. The dashboard turns red
-when the newest row is older than `heartbeat_max_age_hours`. The row carries the
-runtime code hash so deploy drift is visible on the same screen."""
+"""Dead-man's switch. One row per COMPLETED loop run (fetch + detect + ledger), written
+by the runner as its last step. The dashboard turns red when the newest row is older than
+`heartbeat_max_age_hours`. The row carries the runtime code hash so a deploy can be
+verified against the repo (`python -m pipelineagent version`)."""
 from __future__ import annotations
 
 import os
@@ -11,19 +12,8 @@ from .version import code_sha256
 from .warehouse.base import Warehouse
 
 
-def beat(wh: Warehouse, run_id: str, *, feeds_attempted: int, feeds_ok: int, breaches: int, unknowns: int, duration_s: float,
-         now: datetime | None = None, fleet_path: str | None = None) -> dict:
-    row = {
-        "ts": now or datetime.now(timezone.utc),
-        "run_id": run_id,
-        "code_sha256": code_sha256(fleet_path),
-        "git_commit": os.environ.get("GIT_COMMIT") or None,
-        "feeds_attempted": feeds_attempted,
-        "feeds_ok": feeds_ok,
-        "breaches": breaches,
-        "unknowns": unknowns,
-        "duration_s": round(duration_s, 2),
-    }
+def beat(wh: Warehouse, run_id: str, now: datetime, fleet_path: str | None = None) -> dict:
+    row = {"ts": now, "run_id": run_id, "code_sha256": code_sha256(fleet_path), "git_commit": os.environ.get("GIT_COMMIT") or None}
     wh.append("heartbeat", [row], HEARTBEAT)
     return row
 

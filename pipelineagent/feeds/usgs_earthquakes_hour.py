@@ -36,4 +36,4 @@ def fetch(ctx: FetchContext) -> FetchResult:
     return FetchResult([parse(json.loads(r.text()))], r.sha256, r.last_modified, r.status, raw=r.body)
 
 
-FEED = Feed("usgs_earthquakes_hour", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("usgs_earthquakes_hour", COLUMNS, fetch)

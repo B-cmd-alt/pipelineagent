@@ -40,4 +40,4 @@ def fetch(ctx: FetchContext) -> FetchResult:
     return FetchResult(rows, r.sha256, r.last_modified, r.status, anomalies=anomalies, raw=r.body)
 
 
-FEED = Feed("coingecko_prices", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("coingecko_prices", COLUMNS, fetch)

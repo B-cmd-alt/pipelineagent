@@ -51,7 +51,9 @@ def fetch(ctx: FetchContext) -> FetchResult:
         })
     if not rows:
         raise SourceError("all stations failed: " + "; ".join(anomalies))
-    return FetchResult(rows, digest.hexdigest(), lm, status, anomalies=anomalies, raw=b"\n".join(raw))
+    # archive as a JSON array of the per-station bodies so a replay can split them again
+    archive = json.dumps([b.decode("utf-8", errors="replace") for b in raw]).encode()
+    return FetchResult(rows, digest.hexdigest(), lm, status, anomalies=anomalies, raw=archive)
 
 
-FEED = Feed("nws_observations", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("nws_observations", COLUMNS, fetch)

@@ -51,4 +51,4 @@ def fetch(ctx: FetchContext) -> FetchResult:
     return FetchResult(rows, r.sha256, r.last_modified, r.status, anomalies=anomalies, raw=r.body)
 
 
-FEED = Feed("open_meteo_current", COLUMNS, fetch, __doc__ or "")
+FEED = Feed("open_meteo_current", COLUMNS, fetch)

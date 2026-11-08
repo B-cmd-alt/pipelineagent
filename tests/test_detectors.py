@@ -50,24 +50,14 @@ def test_all_null_window_is_a_breach(fleet):
     assert d["flat_value"].state == "BREACH" and "all-NULL" in d["flat_value"].detail
 
 
-def test_missing_table_and_read_failure_are_unknown_never_ok(fleet):
+def test_read_failure_is_unknown_never_ok(fleet):
     class Broken:
-        def table_exists(self, t):
-            return True
-
         def feed_snapshot(self, *a, **k):
             raise RuntimeError("403 billing disabled")
 
     dets = detect_feed(fleet.feed("fred_dgs10"), Broken(), NOW)
-    assert dets and all(d.state == "UNKNOWN" for d in dets)
+    assert dets and all(d.state == "UNKNOWN" and not d.transient for d in dets)
     assert all("403" in d.detail for d in dets)
-
-    class Missing(Broken):
-        def table_exists(self, t):
-            return False
-
-    dets = detect_feed(fleet.feed("fred_dgs10"), Missing(), NOW)
-    assert all(d.state == "UNKNOWN" and "does not exist" in d.detail for d in dets)
 
 
 def test_lookback_bounds_every_read(fleet):
