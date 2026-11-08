@@ -16,7 +16,6 @@ dependencies = [
 
 [project.optional-dependencies]
 bigquery = ["google-cloud-bigquery>=3.25", "google-cloud-storage>=2.16"]
-agent = ["anthropic>=2.4"]
 dev = ["pytest>=8"]
 
 [project.scripts]

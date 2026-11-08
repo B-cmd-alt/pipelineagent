@@ -1,3 +1,5 @@
 __pycache__/
 .pytest_cache/
 *.db
+# the repo root ignores *.csv; these fixtures are test inputs and must ship with the tree
+!tests/fixtures/*.csv

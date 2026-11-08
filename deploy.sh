@@ -34,7 +34,7 @@ gcloud builds submit "$HERE" --project="$PROJECT" --region="$REGION" --config="$
 echo "[deploy] job ${JOB}"
 # --task-timeout/--max-retries/--parallelism are mandatory per project policy; 1 vCPU / 512 MiB is far below the ceiling.
 # --update-env-vars, never --set-env-vars: the latter wipes every variable and secret mounted on
-# the job by hand (GITHUB_TOKEN, ANTHROPIC_API_KEY, ...; see ops/GO_LIVE.md). deploy.sh owns only
+# the job by hand (GITHUB_TOKEN, OPENROUTER_API_KEY, ...; see ops/GO_LIVE.md). deploy.sh owns only
 # the variables it lists; everything else on the job is left exactly as it was.
 if gcloud run jobs describe "$JOB" --project="$PROJECT" --region="$REGION" >/dev/null 2>&1; then
   gcloud run jobs update "$JOB" --image="$IMAGE" \

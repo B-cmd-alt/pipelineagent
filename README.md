@@ -93,7 +93,7 @@ deploy, and the next live detector runs decide: cleared → `FIXED`; still open 
 revert + redeploy; three failed attempts → `ESCALATED` with exactly one GitHub issue. Every
 step is a row in `agent_steps`, rendered as the chain on the finding card.
 
-Without `GITHUB_TOKEN` + `GITHUB_REPO` and `ANTHROPIC_API_KEY` the agent runs **dry**: it
+Without `GITHUB_TOKEN` + `GITHUB_REPO` and `OPENROUTER_API_KEY` the agent runs **dry**: it
 triages and replays for real, writes the PR it would open under `site/agent/`, and opens
 nothing. The hourly job is deployed in that mode until the owner mounts the two secrets.
 

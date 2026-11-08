@@ -315,7 +315,8 @@ with a bucket lifecycle rule and never published; the gate is a script.
   `stale_source`, deferred one run, then escalated with a single (dry-run)
   issue shared by its three axes — the expected result. Dashboard cards show
   the chain. Remaining to go live: `GITHUB_TOKEN`/`GITHUB_REPO` and
-  `ANTHROPIC_API_KEY` mounted into the job.
+  `OPENROUTER_API_KEY` mounted into the job (the patch
+  model is called through OpenRouter; default `deepseek/deepseek-v4-pro`).
 - **Week 3 — harness for classes 1, 2, 3, 7** with ground truth; the
   3-attempts-then-escalate path exercised by a deliberately unfixable
   injection; 24-hour summary line on the dashboard.

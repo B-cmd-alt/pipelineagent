@@ -9,7 +9,7 @@ PASS, redeploy and verify. Nothing in the code changes.
 | Secret | Where to get it | Minimum scope |
 |---|---|---|
 | GitHub fine-grained personal access token | GitHub → Settings → Developer settings → Fine-grained tokens | Repository access: only the target repo. Permissions: **Contents: read/write**, **Pull requests: read/write**, **Issues: read/write**, **Commit statuses: read/write**, Metadata: read. Expiry: 90 days or less; rotate. |
-| Anthropic API key | console.anthropic.com → API keys | a key scoped to a dedicated workspace with a monthly spend limit (the agent makes at most 2 model calls per hour, only when a patch is attempted) |
+| OpenRouter API key | openrouter.ai → Settings → API Keys | a dedicated key with a credit limit (the agent makes at most 2 model calls per hour, only when a patch is attempted; a call costs cents) |
 
 ## 2. Put them in the cloud secret store and let the job's runtime service account read them
 
@@ -26,7 +26,7 @@ job. `deploy.sh` also uses `--update-env-vars`, so later deploys keep what you s
 
 ```bash
 gcloud run jobs update pipelineagent-run --project=<PROJECT> --region=<REGION> \
-  --set-secrets=GITHUB_TOKEN=<github-secret-name>:latest,ANTHROPIC_API_KEY=<anthropic-secret-name>:latest \
+  --set-secrets=GITHUB_TOKEN=<github-secret-name>:latest,OPENROUTER_API_KEY=<openrouter-secret-name>:latest \
   --update-env-vars=GITHUB_REPO=<owner>/<repo>,GITHUB_BASE_BRANCH=main,GITHUB_SUBDIR=<subdir-or-empty>,\
 PIPELINEAGENT_AUTO_MERGE=<0|1>,CLOUD_BUILD_PROJECT=<PROJECT>,CLOUD_BUILD_REGION=<REGION>,\
 CLOUD_BUILD_SA=<runtime-sa-email>,CLOUD_RUN_JOB=pipelineagent-run
@@ -40,8 +40,8 @@ Variables the agent reads:
 | `GITHUB_BASE_BRANCH` | branch PRs target (default `main`) |
 | `GITHUB_SUBDIR` | path prefix of this project inside the repo (`pipelineagent` in a monorepo; empty in a standalone repo) |
 | `PIPELINEAGENT_AUTO_MERGE` | `1` = merge on gate PASS (fully automatic); `0` = open the PR with the gate status and stop |
-| `ANTHROPIC_API_KEY` | without it the patch step is a dry run (triage/replay still real) |
-| `PIPELINEAGENT_MODEL` | optional; default `claude-opus-5-5` |
+| `OPENROUTER_API_KEY` | without it the patch step is a dry run (triage/replay still real) |
+| `PIPELINEAGENT_MODEL` | optional OpenRouter model id; default `deepseek/deepseek-v4-pro`. A comma-separated list makes the rest fallbacks (e.g. `deepseek/deepseek-v4-pro,z-ai/glm-5.3`). Only providers that honour strict JSON-schema output are used. |
 | `CLOUD_BUILD_PROJECT`, `CLOUD_BUILD_REGION`, `CLOUD_BUILD_SA`, `CLOUD_RUN_JOB` | enable the post-merge build + deploy trigger; the build runs as `CLOUD_BUILD_SA`, which needs permission to push images and update the job |
 | `PIPELINEAGENT_AGENT` | `0` turns the agent off entirely (default on) |
 

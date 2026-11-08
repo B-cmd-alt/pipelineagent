@@ -44,7 +44,7 @@ def cmd_fetch(args) -> int:
 
 
 def _agent_ctx(fleet, args):
-    """Agent on by default (PIPELINEAGENT_AGENT=0 disables). Without GITHUB_TOKEN/ANTHROPIC_API_KEY it
+    """Agent on by default (PIPELINEAGENT_AGENT=0 disables). Without GITHUB_TOKEN/OPENROUTER_API_KEY it
     runs dry: triages, replays, writes PR drafts under <site>/agent/, opens nothing."""
     if os.environ.get("PIPELINEAGENT_AGENT", "1") != "1":
         return None
