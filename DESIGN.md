@@ -120,6 +120,24 @@ Two properties hold across the diagram:
 
 ## 3. The agent side (not built)
 
+### 3.0 Triggers and the notification outlet
+
+The agent has two ways in, and they are the same code path:
+
+- **Event:** a detector run OPENS a finding. The loop that opened it invokes
+  the agent in the same process, so "a pipeline broke" reaches the agent within
+  the hour it broke, with no extra scheduler or queue.
+- **Inspection:** every hourly run is also the periodic patrol. Open findings
+  that were DEFERRED (depth budget, missing payload, waiting on a human) are
+  re-queued here; nothing else about a known-open finding is touched.
+
+Because nobody is watching the dashboard in real time, every OPENED finding
+and every agent decision is also pushed out, not just rendered: the outlet is
+a GitHub issue per finding (created on OPENED, updated with diagnosis and PR
+link, closed on CLOSED or FIXED). The issue is the notification, the audit
+trail, and the place a human types the approval. Chat/webhook outlets are
+optional sinks of the same event, never a second source of truth.
+
 ### 3.1 Loop shape
 
 Each scheduled run, after detectors and ledger update:
@@ -152,6 +170,15 @@ Inputs, all read-only:
 Output: a structured hypothesis (`failure_class`, `evidence_refs`,
 `confidence`, `proposed_action`). `proposed_action` is one of `patch`,
 `escalate`, `benign`, `defer`.
+
+**Seamfulness over confidence.** The agent is required to say what it does
+not know rather than fill the gap: a missing payload, an upstream it cannot
+reach from the sandbox, an error class outside the seven it knows, or a
+replay that does not reproduce the breach each produce `escalate` with the
+gap named, never a best-guess `patch`. The dashboard renders that gap as the
+diagnosis, in the same amber as an UNKNOWN cell. (Apple's computer-use-agent
+UX study found users trusted an agent more when it flagged missing knowledge
+before acting than when it guessed; see Section 9.)
 
 ### 3.3 Replay
 
@@ -203,6 +230,24 @@ the rules, but enforcement lives in the gate, not in the prompt.
 
 Changes to SLAs, detectors, or tests are legitimate sometimes. They go through
 a human-authored PR, never an agent one.
+
+### 3.6 Approval tiers: confirmation scales with impact, not with activity
+
+The owner is not watching the loop run. An "interrupt" button is therefore
+worthless; what matters is which actions wait for a human and which do not.
+Three tiers, decided by what the action can break, never by how confident the
+agent is:
+
+| Tier | Actions | Who decides | How |
+|---|---|---|---|
+| **Autonomous** | read findings, fetch payloads, replay in the sandbox, run tests, open or update a draft PR and its issue, write `DEFERRED`/`BENIGN`/`ESCALATED` dispositions | the agent | immediately; every step is in the PR/issue so it can be reviewed later |
+| **Human approval** | merge a repair PR, redeploy, write `FIXED`, change anything outside the failing fetcher | a named human | one comment on the PR or issue (`approve`), after the gate says `PASS`; the agent never merges |
+| **Rejected outright** | widen an SLA, disable or skip a detector, weaken a test, touch policy files, add a secret | nobody | ProofGate reason codes in Section 3.5; the PR is closed with the code, not queued for approval |
+
+Two consequences. First, a passing gate verdict is **necessary but not
+sufficient** for FIXED: the human approval is the second signature, and both
+are recorded on the finding. Second, the tiers are fixed in the gate's
+config, not in the agent's prompt, so the agent cannot talk its way up a tier.
 
 ---
 
@@ -314,36 +359,52 @@ PipelineAgent does not promise:
 
 ## 8. Open questions and sequencing
 
-### Week 2: payload store, replay, harness skeleton
+The order follows the owner's statement of purpose: *small scope; an agent is
+notified when a pipeline breaks and also patrols on a schedule; it repairs the
+pipeline and opens a PR; an agentic UI shows the work.* Infrastructure already
+shipped in v0 (payload archive, transitions-only ledger, heartbeat, static
+dashboard with a client-side dead-man check) is not repeated below.
 
-- Raw payload store keyed by `content_sha256`, with retention policy.
-  Open question: retain all, or last N per feed plus every payload referenced
-  by an open finding?
-- Replay runner (sandbox + SQLite) with the four pass conditions.
-- Harness with classes 1, 2, 3, 7 and the ground-truth table.
-- Status-only and watchdog-only baselines scored.
-- Open question: is a load-integrity axis (class 6) a fourth declared axis, or
-  a fetcher-side invariant reported through `_runs`?
+### Week 2: the agent, end to end on one failure class
 
-### Week 3: agent and gate
+- Notification outlet: one GitHub issue per OPENED finding, updated by the
+  agent, closed on CLOSED/FIXED (Section 3.0).
+- Agent v1: depth budget 2, known-open skip, structured diagnosis with
+  `escalate` as the default when anything is missing (Section 3.2).
+- Replay runner: sandbox + SQLite, the four pass conditions (Section 3.3),
+  driven from the archived payloads.
+- Draft PR with `verdict.json` where `verdict` is left empty for the gate.
+- Target: the live FRED incident and a synthetic schema-rename (class 2) are
+  diagnosed, replayed and turned into PRs with evidence. FRED is expected to
+  end as `ESCALATED` (upstream refuses the connection; no patch applies), which
+  is a correct outcome, not a failure of the agent.
+- Open question: does the agent run inside the hourly job (simplest, shares
+  the heartbeat) or as a second Cloud Run job triggered by the first? Leaning
+  inside, with its own token and time budget, until it needs more than ~2 min.
 
-- Agent loop with depth budget, known-open skip, correlated grouping.
+### Week 3: ProofGate and the harness
+
 - ProofGate as a standalone checker over `verdict.json` plus the PR diff,
-  implementing every reason code in Section 3.5.
-- Harness classes 4, 5, 6.
-- Open question: should the gate re-run the replay itself rather than trust
-  the agent's evidence? (Leaning yes: the gate re-executes, the agent's
-  evidence is only a claim.)
-- Open question: what model and token cap per deep diagnosis keeps a full
-  benchmark run under a fixed dollar budget?
+  implementing every reason code in Section 3.5 and the approval tiers in
+  Section 3.6. The gate re-runs the replay itself; the agent's evidence is a
+  claim.
+- Fault-injection harness: classes 1, 2, 3, 7 first (they map to existing
+  axes), then 4, 5; class 6 (duplicate/partial load) needs a fetcher-side
+  invariant reported through `_runs`, which is the one open design question.
+- Dashboard: each finding card gains the remaining steps of its chain
+  (diagnosis → patch → gate verdict → approval → disposition), collapsed by
+  default (progressive disclosure), plus a 24-hour summary line at the top
+  ("opened / closed / waiting on a human") for the owner who comes back once a
+  day. Human actions (approve, dispose) still happen on GitHub, not on the
+  page: the page stays static and credential-free.
 
-### Week 4: benchmark, dashboard, write-up
+### Week 4: benchmark and write-up
 
-- Full benchmark run: all 7 classes, multiple seeds, all three baselines.
-- Dashboard additions: agent PRs with gate verdicts and reason codes, blind
-  time per feed, benchmark results page.
-- Public write-up with the honest misses (class 6 under watchdog-only, the
-  non-guarantees above).
+- Full benchmark: all 7 classes, several seeds, status-only and watchdog-only
+  baselines, MTTD/MTTR including the approval wait (reported separately as
+  "human latency" so the agent's own latency is not hidden by it).
+- Dashboard: benchmark results page, blind time per feed.
+- Public write-up with the honest misses and the non-guarantees above.
 - Open question: publish recorded payloads for reproducibility, given the
   terms of each upstream source?
 
@@ -352,3 +413,22 @@ PipelineAgent does not promise:
 - Learned or adaptive SLAs (risk: becomes a silent SLA-widening path).
 - Multi-repo or multi-fleet operation.
 - Gate integration with an external release system.
+
+---
+
+## 9. References borrowed from
+
+- Apple ML Research, *Mapping the Design Space of User Experience for Computer
+  Use Agents* (2026): taxonomy of explainability / user control / mental
+  models; Wizard-of-Oz finding that interruption alone is insufficient for an
+  absent user, that approval should scale with stakes, and that users prefer
+  an agent that flags missing knowledge ("seamfulness") over one that guesses.
+  Used for Sections 3.0, 3.2 and 3.6.
+- *AgentGUI: An Interface for Observing and Steering Long-Running AI Agents*
+  (2026): "observability is a precondition for trusting delegated work";
+  splitting a trace into reasoning / generation / tool calls made operators
+  38% faster and more accurate; the "manager audit" pattern (an independent
+  judge that gathers evidence and rules per criterion) is the shape ProofGate
+  takes. Used for Sections 3.4 and 3.5.
+- *AgentOps: Enabling Observability of LLM Agents* (2024): the observability
+  vocabulary (traces, artefacts, decisions) the ledger and dashboard follow.
