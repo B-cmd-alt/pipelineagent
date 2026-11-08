@@ -9,7 +9,7 @@ PASS, redeploy and verify. Nothing in the code changes.
 | Secret | Where to get it | Minimum scope |
 |---|---|---|
 | GitHub fine-grained personal access token | GitHub → Settings → Developer settings → Fine-grained tokens | Repository access: only the target repo. Permissions: **Contents: read/write**, **Pull requests: read/write**, **Issues: read/write**, **Commit statuses: read/write**, Metadata: read. Expiry: 90 days or less; rotate. |
-| OpenRouter API key | openrouter.ai → Settings → API Keys | a dedicated key with a credit limit (the agent makes at most 2 model calls per hour, only when a patch is attempted; a call costs cents) |
+| OpenRouter API key | openrouter.ai → Settings → API Keys | a dedicated key with a credit limit (calls happen only when a patch is attempted: one call per attempt, two if the first answer is malformed; with the default model a call costs well under a cent) |
 
 ## 2. Put them in the cloud secret store and let the job's runtime service account read them
 

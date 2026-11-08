@@ -101,3 +101,28 @@ def test_fenced_json_and_bad_test_filename_are_normalised(calls):
 def test_unusable_responses_yield_none(calls, resp):
     calls.queue.append(resp)
     assert _propose() is None
+
+
+def test_path_instead_of_source_gets_one_corrective_retry(calls):
+    bad = {**GOOD, "module_source": "pipelineagent/feeds/demo_feed.py"}  # valid Python, but not the module
+    calls.queue += [_ok(json.dumps(bad)), _ok(json.dumps(GOOD))]
+    assert _propose() == patch.PatchProposal(**GOOD)
+    assert len(calls.seen) == 2
+    retry = calls.seen[1]["json"]["messages"]
+    assert [m["role"] for m in retry] == ["system", "user", "assistant", "user"]
+    assert "COLUMNS" in retry[-1]["content"] and "COMPLETE" in retry[-1]["content"]
+
+
+def test_still_malformed_after_retry_goes_to_the_gate(calls):
+    bad = {**GOOD, "module_source": "def parse(:\n"}
+    calls.queue += [_ok(json.dumps(bad)), _ok(json.dumps(bad))]
+    p = _propose()
+    assert p is not None and p.module_source == bad["module_source"]  # the gate rejects it and counts the attempt
+    assert len(calls.seen) == 2
+
+
+def test_problems_flags_missing_public_names_and_syntax():
+    orig = "COLUMNS = ()\ndef parse(t):\n    return t\ndef fetch(c):\n    return c\nFEED = object()\n"
+    assert patch.problems({"module_source": orig, "test_source": "x = 1\n"}, orig) == []
+    issues = patch.problems({"module_source": "pipelineagent/feeds/x.py", "test_source": "def t(:\n"}, orig)
+    assert any("does not define" in i for i in issues) and any("test_source" in i for i in issues)
