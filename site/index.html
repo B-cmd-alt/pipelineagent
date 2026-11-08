@@ -34,8 +34,8 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
 @media (max-width:720px){.steps{grid-template-columns:repeat(2,1fr)}th:nth-child(5),td:nth-child(5){display:none}}
 </style></head><body><main>
 <h1>PipelineAgent — fleet health</h1>
-<div class="sub">Generated 2026-11-08T04:02:53Z · 7 feeds · detectors read data, not exit codes · renderer code <code>e9b32fb98530</code></div>
-<div class="banner alive">♥ Loop alive — last heartbeat 0.0h ago (threshold 26h). Runtime code <code>e9b32fb98530</code></div><div class="tiles">
+<div class="sub">Generated 2026-11-08T04:20:20Z · 7 feeds · detectors read data, not exit codes · renderer code <code>ffdb53c4a8d3</code></div>
+<div class="banner alive">♥ Loop alive — last heartbeat 0.0h ago (threshold 26h). Runtime code <code>ffdb53c4a8d3</code> @ <code>bf2b5b731c</code></div><div class="tiles">
  <div class="tile"><b style="color:var(--breach)">1</b><span>✕ BREACH cells</span></div>
  <div class="tile"><b style="color:#b8800a">6</b><span>? UNKNOWN cells (we could not look)</span></div>
  <div class="tile"><b style="color:var(--ok)">13</b><span>✓ OK cells</span></div>
@@ -45,46 +45,46 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
 <h2>Fleet health grid</h2><table><thead><tr><th>Feed</th><th>Write recency<br><small>last captured_at vs now</small></th><th>Head lag<br><small>newest event_ts vs now</small></th><th>Flat value<br><small>N identical in a row</small></th><th>Last run</th><th>Last 24h runs</th></tr></thead>
 <tbody><tr>
  <td class="feed"><b>nws_observations</b><small>hourly · NOAA/NWS latest surface observations for four airport stations (api.weather.gov).</small></td>
- <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T02:53:00+00:00 (1.2h behind now)">✓ OK <small>1.16 / 4</small></span><span class="detail">newest event_ts 2026-11-08T02:53:00+00:00 (1.2h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: KDFW(1&lt;12), KDEN(1&lt;12), KOKC(1&lt;12), KORD(1&lt;12)">? UNKNOWN <small>1 / 12</small></span><span class="detail">insufficient history: KDFW(1&lt;12), KDEN(1&lt;12), KOKC(1&lt;12), KORD(1&lt;12)</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">2m ago, 4 rows</span></td>
- <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=4 "></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 0 skipped · 4 rows</span></td>
+ <td><span class="cell OK" title="last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T02:53:00+00:00 (1.5h behind now)">✓ OK <small>1.45 / 4</small></span><span class="detail">newest event_ts 2026-11-08T02:53:00+00:00 (1.5h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: KDEN(2&lt;12), KDFW(2&lt;12), KOKC(2&lt;12), KORD(2&lt;12)">? UNKNOWN <small>2 / 12</small></span><span class="detail">insufficient history: KDEN(2&lt;12), KDFW(2&lt;12), KOKC(2&lt;12), KORD(2&lt;12)</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">1m ago, 4 rows</span></td>
+ <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=4 "></i><i class="no_change" title="2026-11-08T04:08:27.209855+00:00 no_change rows=0 "></i><i class="ok" title="2026-11-08T04:18:23.358867+00:00 ok rows=4 "></i></div><span class="detail">2 ok · 1 unchanged · 0 failed · 0 skipped · 8 rows</span></td>
 </tr><tr>
  <td class="feed"><b>open_meteo_current</b><small>hourly · Open-Meteo current conditions for two points (no key).</small></td>
- <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T04:00:00+00:00 (0.0h behind now)">✓ OK <small>0.04 / 3</small></span><span class="detail">newest event_ts 2026-11-08T04:00:00+00:00 (0.0h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: chicago(1&lt;12), oklahoma_city(1&lt;12)">? UNKNOWN <small>1 / 12</small></span><span class="detail">insufficient history: chicago(1&lt;12), oklahoma_city(1&lt;12)</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">2m ago, 2 rows</span></td>
- <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=2 "></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 0 skipped · 2 rows</span></td>
+ <td><span class="cell OK" title="last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T04:15:00+00:00 (0.1h behind now)">✓ OK <small>0.08 / 3</small></span><span class="detail">newest event_ts 2026-11-08T04:15:00+00:00 (0.1h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: chicago(3&lt;12), oklahoma_city(3&lt;12)">? UNKNOWN <small>3 / 12</small></span><span class="detail">insufficient history: chicago(3&lt;12), oklahoma_city(3&lt;12)</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">1m ago, 2 rows</span></td>
+ <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=2 "></i><i class="ok" title="2026-11-08T04:08:27.209855+00:00 ok rows=2 "></i><i class="ok" title="2026-11-08T04:18:23.358867+00:00 ok rows=2 "></i></div><span class="detail">3 ok · 0 unchanged · 0 failed · 0 skipped · 6 rows</span></td>
 </tr><tr>
  <td class="feed"><b>usgs_earthquakes_hour</b><small>hourly · USGS &#x27;all earthquakes, past hour&#x27; GeoJSON summary feed.</small></td>
- <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T04:00:10+00:00 (0.0h behind now)">✓ OK <small>0.04 / 3</small></span><span class="detail">newest event_ts 2026-11-08T04:00:10+00:00 (0.0h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: feature_count(1&lt;24)">? UNKNOWN <small>1 / 24</small></span><span class="detail">insufficient history: feature_count(1&lt;24)</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">2m ago, 1 rows</span></td>
- <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=1 "></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 0 skipped · 1 rows</span></td>
+ <td><span class="cell OK" title="last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T04:18:10+00:00 (0.0h behind now)">✓ OK <small>0.03 / 3</small></span><span class="detail">newest event_ts 2026-11-08T04:18:10+00:00 (0.0h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: feature_count(3&lt;24)">? UNKNOWN <small>3 / 24</small></span><span class="detail">insufficient history: feature_count(3&lt;24)</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">1m ago, 1 rows</span></td>
+ <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=1 "></i><i class="ok" title="2026-11-08T04:08:27.209855+00:00 ok rows=1 "></i><i class="ok" title="2026-11-08T04:18:23.358867+00:00 ok rows=1 "></i></div><span class="detail">3 ok · 0 unchanged · 0 failed · 0 skipped · 3 rows</span></td>
 </tr><tr>
  <td class="feed"><b>fred_dgs10</b><small>daily · FRED 10-year Treasury constant-maturity yield (DGS10) via the public fredgraph CSV; &#x27;.&#x27; marks a missing value.</small></td>
  <td><span class="cell BREACH" title="no rows captured inside the lookback window">✕ BREACH</span><span class="detail">no rows captured inside the lookback window</span></td><td><span class="cell UNKNOWN" title="no rows to read a head from">? UNKNOWN</span><span class="detail">no rows to read a head from</span></td><td><span class="cell UNKNOWN" title="no rows to evaluate value">? UNKNOWN <small>0 / 5</small></span><span class="detail">no rows to evaluate value</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">✕ failed</span><span class="detail">1m ago, 0 rows — transport: ReadTimeout: HTTPSConnectionPool(host=&#x27;fred.stlouisfed.org&#x27;, port=443): Read timed out. (read timeout=30)</span></td>
- <td><div class="tl"><i class="failed" title="2026-11-08T04:00:37.134241+00:00 failed rows=0 transport: ReadTimeout: HTTPSConnectionPool(host=&#x27;fred.stlouisfed.org&#x27;, port=443"></i></div><span class="detail">0 ok · 0 unchanged · 1 failed · 0 skipped · 0 rows</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">✕ failed</span><span class="detail">0m ago, 0 rows — transport: ReadTimeout: HTTPSConnectionPool(host=&#x27;fred.stlouisfed.org&#x27;, port=443): Read timed out. (read timeout=30)</span></td>
+ <td><div class="tl"><i class="failed" title="2026-11-08T04:00:37.134241+00:00 failed rows=0 transport: ReadTimeout: HTTPSConnectionPool(host=&#x27;fred.stlouisfed.org&#x27;, port=443"></i><i class="failed" title="2026-11-08T04:08:27.209855+00:00 failed rows=0 transport: ReadTimeout: HTTPSConnectionPool(host=&#x27;fred.stlouisfed.org&#x27;, port=443"></i><i class="failed" title="2026-11-08T04:18:23.358867+00:00 failed rows=0 transport: ReadTimeout: HTTPSConnectionPool(host=&#x27;fred.stlouisfed.org&#x27;, port=443"></i></div><span class="detail">0 ok · 0 unchanged · 3 failed · 0 skipped · 0 rows</span></td>
 </tr><tr>
  <td class="feed"><b>github_status</b><small>hourly · GitHub public status page summary (Statuspage API).</small></td>
- <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T03:44:28.392000+00:00 (0.3h behind now)">✓ OK <small>0.3 / 240</small></span><span class="detail">newest event_ts 2026-11-08T03:44:28.392000+00:00 (0.3h behind now)</span></td><td><span class="cell NA" title="not declared in fleet.yaml">– not declared</span><span class="detail">not declared in fleet.yaml</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">2m ago, 1 rows</span></td>
- <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=1 "></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 0 skipped · 1 rows</span></td>
+ <td><span class="cell OK" title="last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T03:44:28.392000+00:00 (0.6h behind now)">✓ OK <small>0.59 / 240</small></span><span class="detail">newest event_ts 2026-11-08T03:44:28.392000+00:00 (0.6h behind now)</span></td><td><span class="cell NA" title="not declared in fleet.yaml">– not declared</span><span class="detail">not declared in fleet.yaml</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">1m ago, 1 rows</span></td>
+ <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=1 "></i><i class="no_change" title="2026-11-08T04:08:27.209855+00:00 no_change rows=0 "></i><i class="ok" title="2026-11-08T04:18:23.358867+00:00 ok rows=1 "></i></div><span class="detail">2 ok · 1 unchanged · 0 failed · 0 skipped · 2 rows</span></td>
 </tr><tr>
  <td class="feed"><b>coingecko_prices</b><small>hourly · CoinGecko simple price endpoint for BTC and ETH (free tier, aggressively rate limited).</small></td>
- <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T04:01:20+00:00 (0.0h behind now)">✓ OK <small>0.02 / 3</small></span><span class="detail">newest event_ts 2026-11-08T04:01:20+00:00 (0.0h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: ethereum(1&lt;6), bitcoin(1&lt;6)">? UNKNOWN <small>1 / 6</small></span><span class="detail">insufficient history: ethereum(1&lt;6), bitcoin(1&lt;6)</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">2m ago, 2 rows</span></td>
- <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=2 "></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 0 skipped · 2 rows</span></td>
+ <td><span class="cell OK" title="last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)">✓ OK <small>0.03 / 3</small></span><span class="detail">last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-08T04:19:50+00:00 (0.0h behind now)">✓ OK <small>0 / 3</small></span><span class="detail">newest event_ts 2026-11-08T04:19:50+00:00 (0.0h behind now)</span></td><td><span class="cell UNKNOWN" title="insufficient history: bitcoin(3&lt;6), ethereum(3&lt;6)">? UNKNOWN <small>3 / 6</small></span><span class="detail">insufficient history: bitcoin(3&lt;6), ethereum(3&lt;6)</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">1m ago, 2 rows</span></td>
+ <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=2 "></i><i class="ok" title="2026-11-08T04:08:27.209855+00:00 ok rows=2 "></i><i class="ok" title="2026-11-08T04:18:23.358867+00:00 ok rows=2 "></i></div><span class="detail">3 ok · 0 unchanged · 0 failed · 0 skipped · 6 rows</span></td>
 </tr><tr>
- <td class="feed"><b>ieso_ontario_demand</b><small>daily · IESO hourly Ontario demand (PUB_Demand.csv); hour-ending local time, so DST transitions are a live hazard.</small></td>
- <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)">✓ OK <small>0.03 / 30</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-07T06:00:00+00:00 (22.0h behind now)">✓ OK <small>22.04 / 36</small></span><span class="detail">newest event_ts 2026-11-07T06:00:00+00:00 (22.0h behind now)</span></td><td><span class="cell OK" title="longest identical run 1 &lt; 6 on ontario_demand">✓ OK <small>1 / 6</small></span><span class="detail">longest identical run 1 &lt; 6 on ontario_demand</span></td>
- <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">● ok</span><span class="detail">2m ago, 7441 rows — 2026-03-08: DST day is 23h long but file has 24 hour-ending labels; 2026-11-01: DST day is 25h long but file has 24 hour</span></td>
- <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=7441 2026-03-08: DST day is 23h long but file has 24 hour-ending labels; 2026-11-01: "></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 0 skipped · 7441 rows</span></td>
+ <td class="feed"><b>ieso_ontario_demand</b><small>daily · IESO hourly Ontario demand (PUB_Demand.csv); hour-ending in fixed Eastern Standard Time all year (no DST), a classic timezone trap.</small></td>
+ <td><span class="cell OK" title="last captured_at 2026-11-08T04:00:37.134241+00:00 (0.3h ago)">✓ OK <small>0.32 / 30</small></span><span class="detail">last captured_at 2026-11-08T04:00:37.134241+00:00 (0.3h ago)</span></td><td><span class="cell OK" title="newest event_ts 2026-11-07T06:00:00+00:00 (22.3h behind now)">✓ OK <small>22.33 / 36</small></span><span class="detail">newest event_ts 2026-11-07T06:00:00+00:00 (22.3h behind now)</span></td><td><span class="cell OK" title="longest identical run 1 &lt; 6 on ontario_demand">✓ OK <small>1 / 6</small></span><span class="detail">longest identical run 1 &lt; 6 on ontario_demand</span></td>
+ <td><span class="cell" style="background:transparent;border:1px solid var(--ring);color:var(--ink)">· skipped</span><span class="detail">1m ago, 0 rows — daily feed refreshed 0.3h ago (&lt; 20h)</span></td>
+ <td><div class="tl"><i class="ok" title="2026-11-08T04:00:37.134241+00:00 ok rows=7441 2026-03-08: DST day is 23h long but file has 24 hour-ending labels; 2026-11-01: "></i><i class="skipped" title="2026-11-08T04:08:27.209855+00:00 skipped rows=0 daily feed refreshed 0.1h ago (&lt; 20h)"></i><i class="skipped" title="2026-11-08T04:18:23.358867+00:00 skipped rows=0 daily feed refreshed 0.3h ago (&lt; 20h)"></i></div><span class="detail">1 ok · 0 unchanged · 0 failed · 2 skipped · 7441 rows</span></td>
 </tr></tbody></table>
 <p class="sub">Cells are computed from the <em>data tables</em>, never from job exit codes. ✓ OK · ✕ BREACH · ? UNKNOWN = the detector could not look (table missing, read failed, not enough history) and is never shown as healthy · – not declared in fleet.yaml. Hover a cell for the detector's reasoning.</p>
 <h2>Open findings (7)</h2>
 <p class="sub">Each finding is one continuous not-OK stretch of a feed × axis. It carries exactly one current disposition: <span class="badge FIXED">FIXED</span> 0 · <span class="badge BENIGN">BENIGN</span> 0 · <span class="badge ESCALATED">ESCALATED</span> 0 · <span class="badge DEFERRED">DEFERRED</span> 0 · <span class="badge UNKNOWN">UNKNOWN</span> 7 (all-time, latest row per finding).</p>
 <div class="card UNKNOWN">
  <h3>? fred_dgs10 / Flat value — UNKNOWN <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>19142d7fe1f0613f</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
+ <div class="meta">finding <code>19142d7fe1f0613f</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
  <div style="margin-top:6px">no rows to evaluate value</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
@@ -96,11 +96,11 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
  </div>
 </div><div class="card BREACH">
  <h3>✕ fred_dgs10 / Write recency — BREACH <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>27ce026a77cd1733</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
+ <div class="meta">finding <code>27ce026a77cd1733</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
  <div style="margin-top:6px">no rows captured inside the lookback window</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
-  <div class="done"><b>1 · Evidence</b>detector write_recency: observed  vs threshold 30.0</div>
+  <div class="done"><b>1 · Evidence</b>detector write_recency: observed  vs threshold 80.0</div>
   <div class="todo"><b>2 · Diagnosis</b>repair agent not built (v0)</div>
   <div class="todo"><b>3 · Patch</b>—</div>
   <div class="todo"><b>4 · Gate verdict</b>—</div>
@@ -108,11 +108,11 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
  </div>
 </div><div class="card UNKNOWN">
  <h3>? nws_observations / Flat value — UNKNOWN <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>29847e08a7ac575f</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
- <div style="margin-top:6px">insufficient history: KDFW(1&lt;12), KDEN(1&lt;12), KOKC(1&lt;12), KORD(1&lt;12)</div>
+ <div class="meta">finding <code>29847e08a7ac575f</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
+ <div style="margin-top:6px">insufficient history: KDEN(2&lt;12), KDFW(2&lt;12), KOKC(2&lt;12), KORD(2&lt;12)</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
-  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 1.0 vs threshold 12.0</div>
+  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 2.0 vs threshold 12.0</div>
   <div class="todo"><b>2 · Diagnosis</b>repair agent not built (v0)</div>
   <div class="todo"><b>3 · Patch</b>—</div>
   <div class="todo"><b>4 · Gate verdict</b>—</div>
@@ -120,7 +120,7 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
  </div>
 </div><div class="card UNKNOWN">
  <h3>? fred_dgs10 / Head lag — UNKNOWN <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>6c21373465091519</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
+ <div class="meta">finding <code>6c21373465091519</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
  <div style="margin-top:6px">no rows to read a head from</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
@@ -132,11 +132,11 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
  </div>
 </div><div class="card UNKNOWN">
  <h3>? open_meteo_current / Flat value — UNKNOWN <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>6e5d3a9a6de9ef0f</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
- <div style="margin-top:6px">insufficient history: chicago(1&lt;12), oklahoma_city(1&lt;12)</div>
+ <div class="meta">finding <code>6e5d3a9a6de9ef0f</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
+ <div style="margin-top:6px">insufficient history: chicago(3&lt;12), oklahoma_city(3&lt;12)</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
-  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 1.0 vs threshold 12.0</div>
+  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 3.0 vs threshold 12.0</div>
   <div class="todo"><b>2 · Diagnosis</b>repair agent not built (v0)</div>
   <div class="todo"><b>3 · Patch</b>—</div>
   <div class="todo"><b>4 · Gate verdict</b>—</div>
@@ -144,11 +144,11 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
  </div>
 </div><div class="card UNKNOWN">
  <h3>? usgs_earthquakes_hour / Flat value — UNKNOWN <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>92acc5d494f8c529</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
- <div style="margin-top:6px">insufficient history: feature_count(1&lt;24)</div>
+ <div class="meta">finding <code>92acc5d494f8c529</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
+ <div style="margin-top:6px">insufficient history: feature_count(3&lt;24)</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
-  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 1.0 vs threshold 24.0</div>
+  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 3.0 vs threshold 24.0</div>
   <div class="todo"><b>2 · Diagnosis</b>repair agent not built (v0)</div>
   <div class="todo"><b>3 · Patch</b>—</div>
   <div class="todo"><b>4 · Gate verdict</b>—</div>
@@ -156,17 +156,17 @@ ul.log{list-style:none;padding:0;margin:0}ul.log li{padding:6px 0;border-bottom:
  </div>
 </div><div class="card UNKNOWN">
  <h3>? coingecko_prices / Flat value — UNKNOWN <span class="badge UNKNOWN">UNKNOWN</span></h3>
- <div class="meta">finding <code>cd270015ddd986f0</code> · opened 2026-11-08T04:02:30.137619+00:00 (0m ago) · last seen OPENED at 2026-11-08T04:02:30.137619+00:00</div>
- <div style="margin-top:6px">insufficient history: ethereum(1&lt;6), bitcoin(1&lt;6)</div>
+ <div class="meta">finding <code>cd270015ddd986f0</code> · opened 2026-11-08T04:02:30.137619+00:00 (17m ago) · last seen STILL_OPEN at 2026-11-08T04:20:03.644150+00:00</div>
+ <div style="margin-top:6px">insufficient history: bitcoin(3&lt;6), ethereum(3&lt;6)</div>
  <div class="meta" style="margin-top:4px">disposition by <b>auto</b>: awaiting triage</div>
  <div class="steps">
-  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 1.0 vs threshold 6.0</div>
+  <div class="done"><b>1 · Evidence</b>detector flat_value: observed 3.0 vs threshold 6.0</div>
   <div class="todo"><b>2 · Diagnosis</b>repair agent not built (v0)</div>
   <div class="todo"><b>3 · Patch</b>—</div>
   <div class="todo"><b>4 · Gate verdict</b>—</div>
   <div class="done"><b>5 · Disposition</b>UNKNOWN</div>
  </div>
 </div>
-<h2>Recent ledger events</h2><ul class="log"><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> fred_dgs10/write_recency BREACH <code>27ce026a77cd1733</code> <span class="sub">no rows captured inside the lookback window</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> fred_dgs10/head_lag UNKNOWN <code>6c21373465091519</code> <span class="sub">no rows to read a head from</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> fred_dgs10/flat_value UNKNOWN <code>19142d7fe1f0613f</code> <span class="sub">no rows to evaluate value</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> nws_observations/flat_value UNKNOWN <code>29847e08a7ac575f</code> <span class="sub">insufficient history: KDFW(1&lt;12), KDEN(1&lt;12), KOKC(1&lt;12), KORD(1&lt;12)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> open_meteo_current/flat_value UNKNOWN <code>6e5d3a9a6de9ef0f</code> <span class="sub">insufficient history: chicago(1&lt;12), oklahoma_city(1&lt;12)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> usgs_earthquakes_hour/flat_value UNKNOWN <code>92acc5d494f8c529</code> <span class="sub">insufficient history: feature_count(1&lt;24)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> coingecko_prices/flat_value UNKNOWN <code>cd270015ddd986f0</code> <span class="sub">insufficient history: ethereum(1&lt;6), bitcoin(1&lt;6)</span></li></ul>
+<h2>Recent ledger events</h2><ul class="log"><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> fred_dgs10/write_recency BREACH <code>27ce026a77cd1733</code> <span class="sub">no rows captured inside the lookback window</span></li><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> fred_dgs10/head_lag UNKNOWN <code>6c21373465091519</code> <span class="sub">no rows to read a head from</span></li><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> fred_dgs10/flat_value UNKNOWN <code>19142d7fe1f0613f</code> <span class="sub">no rows to evaluate value</span></li><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> nws_observations/flat_value UNKNOWN <code>29847e08a7ac575f</code> <span class="sub">insufficient history: KDEN(2&lt;12), KDFW(2&lt;12), KOKC(2&lt;12), KORD(2&lt;12)</span></li><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> open_meteo_current/flat_value UNKNOWN <code>6e5d3a9a6de9ef0f</code> <span class="sub">insufficient history: chicago(3&lt;12), oklahoma_city(3&lt;12)</span></li><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> usgs_earthquakes_hour/flat_value UNKNOWN <code>92acc5d494f8c529</code> <span class="sub">insufficient history: feature_count(3&lt;24)</span></li><li><code>2026-11-08T04:20Z</code> <b>STILL_OPEN</b> coingecko_prices/flat_value UNKNOWN <code>cd270015ddd986f0</code> <span class="sub">insufficient history: bitcoin(3&lt;6), ethereum(3&lt;6)</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> fred_dgs10/write_recency BREACH <code>27ce026a77cd1733</code> <span class="sub">no rows captured inside the lookback window</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> fred_dgs10/head_lag UNKNOWN <code>6c21373465091519</code> <span class="sub">no rows to read a head from</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> fred_dgs10/flat_value UNKNOWN <code>19142d7fe1f0613f</code> <span class="sub">no rows to evaluate value</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> nws_observations/flat_value UNKNOWN <code>29847e08a7ac575f</code> <span class="sub">insufficient history: KDFW(1&lt;12), KDEN(1&lt;12), KOKC(1&lt;12), KORD(1&lt;12)</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> open_meteo_current/flat_value UNKNOWN <code>6e5d3a9a6de9ef0f</code> <span class="sub">insufficient history: chicago(2&lt;12), oklahoma_city(2&lt;12)</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> usgs_earthquakes_hour/flat_value UNKNOWN <code>92acc5d494f8c529</code> <span class="sub">insufficient history: feature_count(2&lt;24)</span></li><li><code>2026-11-08T04:10Z</code> <b>STILL_OPEN</b> coingecko_prices/flat_value UNKNOWN <code>cd270015ddd986f0</code> <span class="sub">insufficient history: ethereum(2&lt;6), bitcoin(2&lt;6)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> fred_dgs10/write_recency BREACH <code>27ce026a77cd1733</code> <span class="sub">no rows captured inside the lookback window</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> fred_dgs10/head_lag UNKNOWN <code>6c21373465091519</code> <span class="sub">no rows to read a head from</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> fred_dgs10/flat_value UNKNOWN <code>19142d7fe1f0613f</code> <span class="sub">no rows to evaluate value</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> nws_observations/flat_value UNKNOWN <code>29847e08a7ac575f</code> <span class="sub">insufficient history: KDFW(1&lt;12), KDEN(1&lt;12), KOKC(1&lt;12), KORD(1&lt;12)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> open_meteo_current/flat_value UNKNOWN <code>6e5d3a9a6de9ef0f</code> <span class="sub">insufficient history: chicago(1&lt;12), oklahoma_city(1&lt;12)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> usgs_earthquakes_hour/flat_value UNKNOWN <code>92acc5d494f8c529</code> <span class="sub">insufficient history: feature_count(1&lt;24)</span></li><li><code>2026-11-08T04:02Z</code> <b>OPENED</b> coingecko_prices/flat_value UNKNOWN <code>cd270015ddd986f0</code> <span class="sub">insufficient history: ethereum(1&lt;6), bitcoin(1&lt;6)</span></li></ul>
 <footer>PipelineAgent v0 · static page, regenerated after every detector run · <a href="data.json">data.json</a> · HEALTHLOG at <a href="HEALTHLOG.md">ops/HEALTHLOG.md</a></footer>
 </main></body></html>

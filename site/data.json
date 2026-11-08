@@ -1,23 +1,23 @@
 {
- "generated_at": "2026-11-08T04:02:53.182666+00:00",
+ "generated_at": "2026-11-08T04:20:20.036380+00:00",
  "project": "PipelineAgent",
  "renderer": {
   "version": "0.1.0",
-  "code_sha256": "e9b32fb98530404952cdd84f49534d5baf857927e2b48b6b11ad30f7880d28d6",
-  "git_commit": ""
+  "code_sha256": "ffdb53c4a8d3f5592993b3299b18731bc2ce2ea547d6c2b1463d5d36dfcd37be",
+  "git_commit": "bf2b5b731ce30096b379bcb4393540fde2ebfd09"
  },
  "errors": [],
  "heartbeat": {
   "state": "ALIVE",
   "age_hours": 0.0,
-  "last_ts": "2026-11-08T04:02:50.211280+00:00",
+  "last_ts": "2026-11-08T04:20:17.138418+00:00",
   "max_age_hours": 26.0,
-  "code_sha256": "e9b32fb98530404952cdd84f49534d5baf857927e2b48b6b11ad30f7880d28d6",
-  "git_commit": null
+  "code_sha256": "ffdb53c4a8d3f5592993b3299b18731bc2ce2ea547d6c2b1463d5d36dfcd37be",
+  "git_commit": "bf2b5b731ce30096b379bcb4393540fde2ebfd09"
  },
  "deploy_drift": {
-  "runtime_code_sha256": "e9b32fb98530404952cdd84f49534d5baf857927e2b48b6b11ad30f7880d28d6",
-  "renderer_code_sha256": "e9b32fb98530404952cdd84f49534d5baf857927e2b48b6b11ad30f7880d28d6",
+  "runtime_code_sha256": "ffdb53c4a8d3f5592993b3299b18731bc2ce2ea547d6c2b1463d5d36dfcd37be",
+  "renderer_code_sha256": "ffdb53c4a8d3f5592993b3299b18731bc2ce2ea547d6c2b1463d5d36dfcd37be",
   "match": true
  },
  "grid": [
@@ -38,44 +38,56 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T02:53:00+00:00 (1.2h behind now)",
-     "observed": 1.16,
+     "detail": "newest event_ts 2026-11-08T02:53:00+00:00 (1.5h behind now)",
+     "observed": 1.45,
      "threshold": 4.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
-     "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)",
-     "observed": 1.0,
+     "detail": "insufficient history: KDEN(2<12), KDFW(2<12), KOKC(2<12), KORD(2<12)",
+     "observed": 2.0,
      "threshold": 12.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T04:00:43.553241+00:00",
+    "finished_at": "2026-11-08T04:18:28.962867+00:00",
     "rows_written": 4,
     "error": null,
-    "ago": "2m ago"
+    "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 1,
-    "no_change": 0,
+    "ok": 2,
+    "no_change": 1,
     "failed": 0,
     "skipped": 0,
-    "rows": 4
+    "rows": 8
    },
    "timeline": [
     {
      "t": "2026-11-08T04:00:37.134241+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "no_change",
+     "rows": 0,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
      "status": "ok",
      "rows": 4,
      "error": null
@@ -99,44 +111,56 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T04:00:00+00:00 (0.0h behind now)",
-     "observed": 0.04,
+     "detail": "newest event_ts 2026-11-08T04:15:00+00:00 (0.1h behind now)",
+     "observed": 0.08,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
-     "detail": "insufficient history: chicago(1<12), oklahoma_city(1<12)",
-     "observed": 1.0,
+     "detail": "insufficient history: chicago(3<12), oklahoma_city(3<12)",
+     "observed": 3.0,
      "threshold": 12.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T04:00:40.802241+00:00",
+    "finished_at": "2026-11-08T04:18:25.741867+00:00",
     "rows_written": 2,
     "error": null,
-    "ago": "2m ago"
+    "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 1,
+    "ok": 3,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 2
+    "rows": 6
    },
    "timeline": [
     {
      "t": "2026-11-08T04:00:37.134241+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
      "status": "ok",
      "rows": 2,
      "error": null
@@ -160,44 +184,56 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T04:00:10+00:00 (0.0h behind now)",
-     "observed": 0.04,
+     "detail": "newest event_ts 2026-11-08T04:18:10+00:00 (0.0h behind now)",
+     "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
-     "detail": "insufficient history: feature_count(1<24)",
-     "observed": 1.0,
+     "detail": "insufficient history: feature_count(3<24)",
+     "observed": 3.0,
      "threshold": 24.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T04:00:40.327241+00:00",
+    "finished_at": "2026-11-08T04:18:25.366867+00:00",
     "rows_written": 1,
     "error": null,
-    "ago": "2m ago"
+    "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 1,
+    "ok": 3,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 1
+    "rows": 3
    },
    "timeline": [
     {
      "t": "2026-11-08T04:00:37.134241+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
      "status": "ok",
      "rows": 1,
      "error": null
@@ -210,7 +246,7 @@
    "cadence": "daily",
    "table": "fred_dgs10",
    "sla": {
-    "write_recency_max_hours": 30.0,
+    "write_recency_max_hours": 80.0,
     "head_lag_max_hours": 120.0,
     "flat_value": {
      "column": "value",
@@ -223,42 +259,54 @@
      "state": "BREACH",
      "detail": "no rows captured inside the lookback window",
      "observed": null,
-     "threshold": 30.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "threshold": 80.0,
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "UNKNOWN",
      "detail": "no rows to read a head from",
      "observed": null,
      "threshold": 120.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
      "detail": "no rows to evaluate value",
      "observed": 0.0,
      "threshold": 5.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     }
    },
    "last_run": {
     "status": "failed",
     "reason": "source_error",
-    "finished_at": "2026-11-08T04:01:39.673241+00:00",
+    "finished_at": "2026-11-08T04:19:25.666867+00:00",
     "rows_written": 0,
     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)",
-    "ago": "1m ago"
+    "ago": "0m ago"
    },
    "runs_24h": {
     "ok": 0,
     "no_change": 0,
-    "failed": 1,
+    "failed": 3,
     "skipped": 0,
     "rows": 0
    },
    "timeline": [
     {
      "t": "2026-11-08T04:00:37.134241+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
      "status": "failed",
      "rows": 0,
      "error": "transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)"
@@ -278,17 +326,17 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T03:44:28.392000+00:00 (0.3h behind now)",
-     "observed": 0.3,
+     "detail": "newest event_ts 2026-11-08T03:44:28.392000+00:00 (0.6h behind now)",
+     "observed": 0.59,
      "threshold": 240.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "N/A",
@@ -298,21 +346,33 @@
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T04:00:39.540241+00:00",
+    "finished_at": "2026-11-08T04:18:25.353867+00:00",
     "rows_written": 1,
     "error": null,
-    "ago": "2m ago"
+    "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 1,
-    "no_change": 0,
+    "ok": 2,
+    "no_change": 1,
     "failed": 0,
     "skipped": 0,
-    "rows": 1
+    "rows": 2
    },
    "timeline": [
     {
      "t": "2026-11-08T04:00:37.134241+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "no_change",
+     "rows": 0,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
      "status": "ok",
      "rows": 1,
      "error": null
@@ -336,44 +396,56 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)",
+     "detail": "last captured_at 2026-11-08T04:18:23.358867+00:00 (0.0h ago)",
      "observed": 0.03,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-08T04:01:20+00:00 (0.0h behind now)",
-     "observed": 0.02,
+     "detail": "newest event_ts 2026-11-08T04:19:50+00:00 (0.0h behind now)",
+     "observed": 0.0,
      "threshold": 3.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "UNKNOWN",
-     "detail": "insufficient history: ethereum(1<6), bitcoin(1<6)",
-     "observed": 1.0,
+     "detail": "insufficient history: bitcoin(3<6), ethereum(3<6)",
+     "observed": 3.0,
      "threshold": 6.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     }
    },
    "last_run": {
     "status": "ok",
     "reason": null,
-    "finished_at": "2026-11-08T04:00:40.599241+00:00",
+    "finished_at": "2026-11-08T04:18:27.324867+00:00",
     "rows_written": 2,
     "error": null,
-    "ago": "2m ago"
+    "ago": "1m ago"
    },
    "runs_24h": {
-    "ok": 1,
+    "ok": 3,
     "no_change": 0,
     "failed": 0,
     "skipped": 0,
-    "rows": 2
+    "rows": 6
    },
    "timeline": [
     {
      "t": "2026-11-08T04:00:37.134241+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
      "status": "ok",
      "rows": 2,
      "error": null
@@ -382,7 +454,7 @@
   },
   {
    "feed": "ieso_ontario_demand",
-   "description": "IESO hourly Ontario demand (PUB_Demand.csv); hour-ending local time, so DST transitions are a live hazard.",
+   "description": "IESO hourly Ontario demand (PUB_Demand.csv); hour-ending in fixed Eastern Standard Time all year (no DST), a classic timezone trap.",
    "cadence": "daily",
    "table": "ieso_ontario_demand",
    "sla": {
@@ -397,39 +469,39 @@
    "cells": {
     "write_recency": {
      "state": "OK",
-     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.0h ago)",
-     "observed": 0.03,
+     "detail": "last captured_at 2026-11-08T04:00:37.134241+00:00 (0.3h ago)",
+     "observed": 0.32,
      "threshold": 30.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "head_lag": {
      "state": "OK",
-     "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (22.0h behind now)",
-     "observed": 22.04,
+     "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (22.3h behind now)",
+     "observed": 22.33,
      "threshold": 36.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     },
     "flat_value": {
      "state": "OK",
      "detail": "longest identical run 1 < 6 on ontario_demand",
      "observed": 1.0,
      "threshold": 6.0,
-     "detected_at": "2026-11-08T04:02:30.137619+00:00"
+     "detected_at": "2026-11-08T04:20:03.644150+00:00"
     }
    },
    "last_run": {
-    "status": "ok",
-    "reason": null,
-    "finished_at": "2026-11-08T04:00:44.374241+00:00",
-    "rows_written": 7441,
-    "error": "2026-03-08: DST day is 23h long but file has 24 hour-ending labels; 2026-11-01: DST day is 25h long but file has 24 hour-ending labels",
-    "ago": "2m ago"
+    "status": "skipped",
+    "reason": "not_due",
+    "finished_at": "2026-11-08T04:18:23.358867+00:00",
+    "rows_written": 0,
+    "error": "daily feed refreshed 0.3h ago (< 20h)",
+    "ago": "1m ago"
    },
    "runs_24h": {
     "ok": 1,
     "no_change": 0,
     "failed": 0,
-    "skipped": 0,
+    "skipped": 2,
     "rows": 7441
    },
    "timeline": [
@@ -438,6 +510,18 @@
      "status": "ok",
      "rows": 7441,
      "error": "2026-03-08: DST day is 23h long but file has 24 hour-ending labels; 2026-11-01: DST day is 25h long but file has 24 hour-ending labels"
+    },
+    {
+     "t": "2026-11-08T04:08:27.209855+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 0.1h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-08T04:18:23.358867+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 0.3h ago (< 20h)"
     }
    ]
   }
@@ -446,9 +530,9 @@
  "open_findings": [
   {
    "finding_id": "19142d7fe1f0613f",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "fred_dgs10",
    "axis": "flat_value",
    "state": "UNKNOWN",
@@ -458,48 +542,48 @@
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   },
   {
    "finding_id": "27ce026a77cd1733",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "fred_dgs10",
    "axis": "write_recency",
    "state": "BREACH",
    "observed": null,
-   "threshold": 30.0,
+   "threshold": 80.0,
    "detail": "no rows captured inside the lookback window",
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   },
   {
    "finding_id": "29847e08a7ac575f",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "nws_observations",
    "axis": "flat_value",
    "state": "UNKNOWN",
-   "observed": 1.0,
+   "observed": 2.0,
    "threshold": 12.0,
-   "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)",
+   "detail": "insufficient history: KDEN(2<12), KDFW(2<12), KOKC(2<12), KORD(2<12)",
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   },
   {
    "finding_id": "6c21373465091519",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "fred_dgs10",
    "axis": "head_lag",
    "state": "UNKNOWN",
@@ -509,63 +593,231 @@
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   },
   {
    "finding_id": "6e5d3a9a6de9ef0f",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "open_meteo_current",
    "axis": "flat_value",
    "state": "UNKNOWN",
-   "observed": 1.0,
+   "observed": 3.0,
    "threshold": 12.0,
-   "detail": "insufficient history: chicago(1<12), oklahoma_city(1<12)",
+   "detail": "insufficient history: chicago(3<12), oklahoma_city(3<12)",
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   },
   {
    "finding_id": "92acc5d494f8c529",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "usgs_earthquakes_hour",
    "axis": "flat_value",
    "state": "UNKNOWN",
-   "observed": 1.0,
+   "observed": 3.0,
    "threshold": 24.0,
-   "detail": "insufficient history: feature_count(1<24)",
+   "detail": "insufficient history: feature_count(3<24)",
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   },
   {
    "finding_id": "cd270015ddd986f0",
-   "event": "OPENED",
-   "event_at": "2026-11-08T04:02:30.137619+00:00",
-   "run_id": "a9f86a74a518",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
    "feed": "coingecko_prices",
    "axis": "flat_value",
    "state": "UNKNOWN",
-   "observed": 1.0,
+   "observed": 3.0,
    "threshold": 6.0,
-   "detail": "insufficient history: ethereum(1<6), bitcoin(1<6)",
+   "detail": "insufficient history: bitcoin(3<6), ethereum(3<6)",
    "disposition": "UNKNOWN",
    "disposition_by": "auto",
    "disposition_note": "awaiting triage",
-   "open_for": "0m ago",
-   "opened_at": "2026-11-08T04:02:30.137619+00:00"
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "open_for": "17m ago"
   }
  ],
  "open_findings_unavailable": false,
  "recent_events": [
+  {
+   "finding_id": "27ce026a77cd1733",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "state": "BREACH",
+   "observed": null,
+   "threshold": 80.0,
+   "detail": "no rows captured inside the lookback window"
+  },
+  {
+   "finding_id": "6c21373465091519",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "state": "UNKNOWN",
+   "observed": null,
+   "threshold": 120.0,
+   "detail": "no rows to read a head from"
+  },
+  {
+   "finding_id": "19142d7fe1f0613f",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 0.0,
+   "threshold": 5.0,
+   "detail": "no rows to evaluate value"
+  },
+  {
+   "finding_id": "29847e08a7ac575f",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 2.0,
+   "threshold": 12.0,
+   "detail": "insufficient history: KDEN(2<12), KDFW(2<12), KOKC(2<12), KORD(2<12)"
+  },
+  {
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 3.0,
+   "threshold": 12.0,
+   "detail": "insufficient history: chicago(3<12), oklahoma_city(3<12)"
+  },
+  {
+   "finding_id": "92acc5d494f8c529",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 3.0,
+   "threshold": 24.0,
+   "detail": "insufficient history: feature_count(3<24)"
+  },
+  {
+   "finding_id": "cd270015ddd986f0",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:20:03.644150+00:00",
+   "run_id": "1d3aa9b8b03e",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 3.0,
+   "threshold": 6.0,
+   "detail": "insufficient history: bitcoin(3<6), ethereum(3<6)"
+  },
+  {
+   "finding_id": "27ce026a77cd1733",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "state": "BREACH",
+   "observed": null,
+   "threshold": 30.0,
+   "detail": "no rows captured inside the lookback window"
+  },
+  {
+   "finding_id": "6c21373465091519",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "state": "UNKNOWN",
+   "observed": null,
+   "threshold": 120.0,
+   "detail": "no rows to read a head from"
+  },
+  {
+   "finding_id": "19142d7fe1f0613f",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 0.0,
+   "threshold": 5.0,
+   "detail": "no rows to evaluate value"
+  },
+  {
+   "finding_id": "29847e08a7ac575f",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 1.0,
+   "threshold": 12.0,
+   "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)"
+  },
+  {
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 2.0,
+   "threshold": 12.0,
+   "detail": "insufficient history: chicago(2<12), oklahoma_city(2<12)"
+  },
+  {
+   "finding_id": "92acc5d494f8c529",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 2.0,
+   "threshold": 24.0,
+   "detail": "insufficient history: feature_count(2<24)"
+  },
+  {
+   "finding_id": "cd270015ddd986f0",
+   "event": "STILL_OPEN",
+   "event_at": "2026-11-08T04:10:02.383758+00:00",
+   "run_id": "39937bb3269f",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "state": "UNKNOWN",
+   "observed": 2.0,
+   "threshold": 6.0,
+   "detail": "insufficient history: ethereum(2<6), bitcoin(2<6)"
+  },
   {
    "finding_id": "27ce026a77cd1733",
    "event": "OPENED",
