@@ -152,7 +152,7 @@ class Agent:
                 return self.disposition(fid, "DEFERRED", "patch step needs a model key (dry run)")
             apply_proposal(proposal, head, module_rel)
             self.step(fid, attempt, "patch", "ok", proposal.explanation[:500])
-            verdict = gate_check(base, head, feed_id, [payload], healthy, fleet_rel="fleet.yaml")
+            verdict = gate_check(base, head, feed_id, [payload], healthy, fleet_rel="fleet.yaml", finding_id=fid)
             codes = ",".join(verdict["reason_codes"])
             if verdict["verdict"] != "PASS":
                 self.step(fid, attempt, "gate", "failed", f"{codes}: {verdict['evidence'].get('diagnosis','')[:400]}")
@@ -186,10 +186,24 @@ class Agent:
             self.disposition(fid, "UNKNOWN", f"attempt {attempt} merged as {sha[:10]}; awaiting verification by the next {VERIFY_RUNS} detector runs", pr.url)
 
     # ---- verification of earlier merges ------------------------------------------------
+    def _deploy_landed(self, merged_sha: str, running_sha: str) -> bool:
+        """The running job carries the merge when it IS that commit or any later one on main
+        (an unrelated merge+deploy in between must not stall verification forever)."""
+        if running_sha.startswith(merged_sha[:10]) or merged_sha.startswith(running_sha[:10]):
+            return True
+        try:
+            return self.ctx.github.contains(merged_sha, running_sha)
+        except GitHubError:
+            return False
+
     def verify_pending(self, open_now: dict[tuple[str, str], dict]) -> None:
         disps = self.wh.latest_dispositions()
         for fid, d in disps.items():
-            if d["decided_by"] != "agent" or "awaiting verification" not in (d["note"] or ""):
+            awaiting = d["decided_by"] == "agent" and "awaiting verification" in (d["note"] or "")
+            # a finding the auto-close rule stamped "self-healed" although a repair had been merged and
+            # never verified belongs to the agent: reclaim it so the record says FIXED with its evidence
+            self_healed = d["decided_by"] == "auto" and d["disposition"] == "BENIGN"
+            if not (awaiting or self_healed):
                 continue
             steps = self.steps_for(fid)
             merges = [s for s in steps if s["step"] == "merge" and s["outcome"] == "ok"]
@@ -197,10 +211,14 @@ class Agent:
                 continue
             last = merges[-1]
             attempt = last["attempt"]
+            if self_healed and any(s["step"] == "verify" and s["attempt"] == attempt and s["outcome"] in ("ok", "failed") for s in steps):
+                continue
+            if self_healed:
+                d = dict(d, evidence_ref=next((s["ref"] for s in steps if s["step"] == "pr" and s["attempt"] == attempt and s["outcome"] == "ok"), None))
             deployed_sha = last["ref"]
             runs_since = sum(1 for s in steps if s["step"] == "verify" and s["attempt"] == attempt)
             still_open = any(f["finding_id"] == fid for f in open_now.values())
-            if self.ctx.current_commit and deployed_sha and not self.ctx.current_commit.startswith(deployed_sha[:10]) and not deployed_sha.startswith(self.ctx.current_commit[:10]):
+            if self.ctx.current_commit and deployed_sha and not self._deploy_landed(deployed_sha, self.ctx.current_commit):
                 self.step(fid, attempt, "verify", "skipped", f"running commit {self.ctx.current_commit[:10]} is not the merged {deployed_sha[:10]} yet (deploy pending)")
                 if runs_since + 1 > VERIFY_RUNS + 2:
                     self.step(fid, attempt, "verify", "failed", "deploy never landed", deployed_sha)

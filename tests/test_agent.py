@@ -269,3 +269,54 @@ def test_human_requeue_resets_the_attempt_budget(fleet, wh, tmp_path):
     steps = wh.agent_steps([f["finding_id"]])
     assert [s["attempt"] for s in steps if s["step"] == "patch"][-1] == 1
     assert wh.latest_dispositions()[f["finding_id"]]["disposition"] == "DEFERRED"
+
+
+def test_verification_survives_an_unrelated_deploy_in_between(fleet, wh, tmp_path):
+    """The merge lands, then someone else merges+deploys: the running commit is a DESCENDANT of the
+    repair, not the repair itself. Verification must proceed (FIXED when the finding has cleared),
+    not stall on 'deploy pending' until it escalates."""
+    f = _open_finding(wh, "fred_dgs10", "write_recency")
+    fid = f["finding_id"]
+    from pipelineagent.agent.github import GitHub
+
+    class Stub(GitHub):
+        def __init__(self, ahead):
+            self.base_branch, self.ahead = "main", ahead
+
+        def contains(self, ancestor, sha):
+            return self.ahead
+
+    def agent(ahead):
+        ctx = _ctx(fleet, tmp_path, lambda **k: None, {}, gh=Stub(ahead))
+        ctx.current_commit = "b" * 40
+        a = Agent(wh, ctx, "r1", NOW)
+        a.step(fid, 1, "merge", "ok", "squash-merged into main", "a" * 40)
+        a.disposition(fid, "UNKNOWN", "attempt 1 merged; awaiting verification", "https://github.com/example/repo/pull/1")
+        return a
+
+    agent(False).verify_pending({})   # the running commit is unrelated -> still pending
+    assert [s["outcome"] for s in wh.agent_steps([fid]) if s["step"] == "verify"] == ["skipped"]
+    agent(True).verify_pending({})    # descendant of the merge, finding cleared -> FIXED
+    assert wh.latest_dispositions()[fid]["disposition"] == "FIXED"
+
+
+def test_agent_reclaims_a_repair_the_auto_close_stamped_self_healed(fleet, wh, tmp_path):
+    """Live 2026-11-09: the repair merged, the next run landed rows, the ledger's auto rule wrote
+    BENIGN 'self-healed' over the agent's 'awaiting verification' and FIXED was never recorded.
+    The agent must reclaim such a finding: a merge step with no verify step is its own work."""
+    f = _open_finding(wh, "fred_dgs10", "write_recency")
+    fid = f["finding_id"]
+    from pipelineagent.ledger import dispose
+    ctx = _ctx(fleet, tmp_path, lambda **k: None, {})
+    ctx.current_commit = "a" * 40
+    a = Agent(wh, ctx, "r1", NOW)
+    a.step(fid, 1, "pr", "ok", "agent: repair", "https://github.com/example/repo/pull/10")
+    a.step(fid, 1, "merge", "ok", "squash-merged into main", "a" * 40)
+    a.disposition(fid, "UNKNOWN", "attempt 1 merged; awaiting verification", "https://github.com/example/repo/pull/10")
+    dispose(wh, fid, "BENIGN", "auto", "self-healed without intervention", NOW + timedelta(minutes=1))
+    later = Agent(wh, ctx, "r2", NOW + timedelta(hours=1))  # the next run
+    later.verify_pending({})
+    d = wh.latest_dispositions()[fid]
+    assert d["disposition"] == "FIXED" and d["evidence_ref"] == "https://github.com/example/repo/pull/10"
+    later.verify_pending({})  # idempotent: a verified attempt is not reclaimed twice
+    assert sum(1 for s in wh.agent_steps([fid]) if s["step"] == "verify") == 1

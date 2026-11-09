@@ -47,6 +47,10 @@ class GitHub:
     def base_sha(self) -> str:
         return self._req("GET", f"/git/ref/heads/{self.base_branch}")["object"]["sha"]
 
+    def contains(self, ancestor: str, sha: str) -> bool:
+        """True when `sha` is `ancestor` or a descendant of it (GitHub compare: identical/ahead)."""
+        return self._req("GET", f"/compare/{ancestor}...{sha}").get("status") in ("identical", "ahead")
+
     def open_pr(self, branch: str, files: dict[str, str], title: str, body: str, verdict: dict) -> PullRequest:
         base = self.base_sha()
         try:
@@ -141,6 +145,9 @@ class DryRunGitHub(GitHub):
 
     def base_sha(self) -> str:
         return "0" * 40
+
+    def contains(self, ancestor, sha):
+        return True
 
     def open_pr(self, branch, files, title, body, verdict):
         d = self.out_dir / "agent" / branch.replace("/", "_")
