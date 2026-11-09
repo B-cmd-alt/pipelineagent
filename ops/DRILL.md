@@ -53,6 +53,17 @@ closes its own issue. On an hourly append-every-poll feed the same injection sur
 `head_lag` instead (rows land, the data's own clock stands still) — also an escalation, labelled
 `stale_source` by triage.
 
+## Record — class 3 drill on github_status, 2026-11-09
+
+Armed 03:11Z (`stale_source`: every fetch times out). Timeline (UTC): first injected failure
+03:24 → `write_recency` OPENED 06:25 (MTTD 3h01m; the 3h SLA is the floor) → agent triage
+`stale_source → defer` 06:25 ("waiting one run before escalating") → 07:25 `escalate`: exactly one
+issue (#19), disposition ESCALATED, **no PR, no model call** → disarmed 07:38, next run landed a row,
+finding CLOSED 07:40 → the agent closed #19 itself in the same run (`issue_closed`, PR #14 behaviour).
+Benchmark verdict CORRECT (expected ESCALATED), MTTR 60 min. The ESCALATED disposition stays as the
+record of what the agent decided; the issue list is back to what still needs a person. Zero defects
+found this time — the loop behaved exactly as DESIGN §4 row 3 says.
+
 ## Reading the result
 
 ```sql
