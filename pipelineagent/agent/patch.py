@@ -35,6 +35,7 @@ Rules you must follow; a separate gate rejects the patch otherwise:
 - Change ONLY the given module. Keep its public names (COLUMNS, FEED, fetch, parse) and signatures.
 - Do not change SLAs, detectors, the warehouse, tests that already exist, or any other file.
 - The fix must make the module parse the provided failing payload AND still parse earlier healthy payloads identically.
+- "Fixed" means rows LAND for the failing payload: never keep the feed failing or raising on it "to preserve alerting"; record the drift as an anomaly string instead.
 - Prefer tolerant column/field mapping (accept old and new names) over dropping data. Record anything unexpected in `anomalies`, never silently.
 - Add one new pytest test file whose fixture is the failing payload (inline as a string) and asserts the module now parses it.
 - No network access, no new dependencies, no secrets. Keep the diff minimal and explain it in two sentences.

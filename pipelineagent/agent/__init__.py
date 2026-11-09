@@ -62,6 +62,15 @@ class Agent:
     def steps_for(self, fid: str) -> list[dict]:
         return self.wh.agent_steps([fid])
 
+    def _last_human_requeue(self, fid: str):
+        """Timestamp of the latest human DEFERRED disposition on this finding, if any."""
+        ts = None
+        for e in self.wh.ledger_events(1000):
+            if e.get("kind") == "DISPOSITION" and e.get("finding_id") == fid and e.get("value") == "DEFERRED" and str(e.get("actor") or "").startswith("human:"):
+                if ts is None or e["ts"] > ts:
+                    ts = e["ts"]
+        return ts
+
     # ---- entry -------------------------------------------------------------------------
     AXIS_PRIORITY = {"write_recency": 0, "head_lag": 1, "flat_value": 2}
 
@@ -104,7 +113,11 @@ class Agent:
     def handle(self, f: dict) -> None:
         fid, feed_id = f["finding_id"], f["feed"]
         spec = self.ctx.fleet.feed(feed_id)
-        prior = self.steps_for(fid)
+        prior_all = self.steps_for(fid)
+        # A human re-queue (`dispose ... DEFERRED` by a human) resets the attempt budget and discards
+        # stale gate feedback: it means "the conditions changed, try again from scratch".
+        reset_at = self._last_human_requeue(fid)
+        prior = [s for s in prior_all if reset_at is None or s["ts"] > reset_at]
         attempt = 1 + sum(1 for s in prior if s["step"] == "patch" and s["outcome"] in ("ok", "failed"))
         if attempt > MAX_ATTEMPTS:
             return self.escalate(fid, attempt, f, "max attempts reached", prior)
