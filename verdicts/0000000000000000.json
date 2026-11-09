@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "finding_id": "0000000000000000",
+  "run_manifest": {
+    "agent_run_id": "gate",
+    "base_commit": "",
+    "code_sha256_before": "43616e4148bcf3d3fc420593f31d3dae63ff7778e8190745a2c3791e598c5c9c",
+    "code_sha256_after": "bc74d451a3f75a4c04cd4a306847f4690047f891302c7d8e2060cde48c597df1",
+    "replay_inputs": [
+      "671d60523c570a7296314dc05e8f077bb0933c4abb79c135952bc2b6241737fc",
+      "049cd70030adcee5a2decd7c72d23d5102ccbb6834f30236935cdc2bd7e841a9",
+      "f0e640d5837c3ed1c5ed0010144cab3f1fffff168e32de4f8864c088b7166669",
+      "8211f05e1e717e5495371af2441c0eafaa323dc3228f3b343c6b557591fa5ea5",
+      "92e11c3ab722b25ebafad7bffa4bc2fa83e348506700339fd922d63b77e97cb2",
+      "f3587e2727aa1de4eb1043737c596db84970ba1166fc2c27f13e366d75326af7"
+    ],
+    "started_at": "2026-11-09T02:18:26.703673+00:00",
+    "finished_at": "2026-11-09T02:18:26.703687+00:00"
+  },
+  "patch_sha256": "238576ecdb36413c61a25aa373b557b85458252f266857fca0bb82177569682f",
+  "verdict": "PASS",
+  "reason_codes": [
+    "REPLAY_PASSED",
+    "TESTS_PASSED"
+  ],
+  "evidence": {
+    "failure_class": "schema_drift",
+    "diagnosis": "failing payload 0: base ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price'] -> patched 2 rows",
+    "before": {
+      "failing[0]": {
+        "fetch_ok": false,
+        "rows": 0,
+        "error": "ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']"
+      },
+      "healthy[0]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[1]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[2]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[3]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[4]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      }
+    },
+    "after": {
+      "failing[0]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[0]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[1]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[2]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[3]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      },
+      "healthy[4]": {
+        "fetch_ok": true,
+        "rows": 2,
+        "error": null
+      }
+    },
+    "lint": {
+      "modified": [
+        "pipelineagent/feeds/coingecko_prices.py"
+      ],
+      "added": [
+        "tests/test_coingecko_prices_usd_price_drift.py"
+      ],
+      "deleted": []
+    }
+  }
+}
