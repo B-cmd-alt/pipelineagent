@@ -22,6 +22,7 @@ from .warehouse.base import Warehouse
 EXPECTED = {"schema_drift": "FIXED"}  # every other class: nothing to patch -> ESCALATED
 TERMINAL = ("FIXED", "ESCALATED")
 GAP = timedelta(hours=3)  # a hole longer than this between injected runs ends the episode
+PENDING_WINDOW = timedelta(hours=48)  # from the FIRST injected run: longer than any SLA in the fleet, then it is a miss
 
 
 @dataclass
@@ -81,19 +82,21 @@ def run(wh: Warehouse, now: datetime | None = None) -> dict[str, Any]:
     disps = [e for e in events if e.get("kind") == "DISPOSITION"]
     claimed: set[str] = set()
     for ep in eps:
-        # findings this episode produced: opened on the feed after the first injected run, before the end + a day
-        mine = sorted((o for o in opened if o["feed"] == ep.feed and ep.start <= o["ts"] <= ep.end + timedelta(hours=36)), key=lambda o: o["ts"])
+        # findings this episode produced: opened on the feed after the first injected run, before the end + a day;
+        # a finding belongs to exactly one episode (the earliest that can claim it)
+        mine = sorted((o for o in opened if o["feed"] == ep.feed and o["finding_id"] not in claimed
+                       and ep.start <= o["ts"] <= ep.end + timedelta(hours=36)), key=lambda o: o["ts"])
         ep.finding_ids = [o["finding_id"] for o in mine]
         claimed.update(ep.finding_ids)
         if not mine:
-            ep.pending = now is not None and now - ep.end < timedelta(hours=36)
+            ep.pending = now is not None and now - ep.start < PENDING_WINDOW
             continue
         ep.detected_at = mine[0]["ts"]
-        # the outcome is the LATEST terminal disposition (latest row wins, as in the ledger): a human
-        # re-queue after an escalation re-opens the episode, and MTTR runs to the final answer
-        term = sorted((d for d in disps if d["finding_id"] in ep.finding_ids and d["value"] in TERMINAL and d["ts"] >= ep.detected_at), key=lambda d: d["ts"])
-        if term:
-            ep.resolved_at, ep.outcome = term[-1]["ts"], term[-1]["value"]
+        # the LATEST disposition decides (latest row wins, as in the ledger): terminal -> the outcome,
+        # MTTR runs to it; a later non-terminal row (a human re-queue) means the episode is open again
+        rows = sorted((d for d in disps if d["finding_id"] in ep.finding_ids and d["ts"] >= ep.detected_at), key=lambda d: d["ts"])
+        if rows and rows[-1]["value"] in TERMINAL:
+            ep.resolved_at, ep.outcome = rows[-1]["ts"], rows[-1]["value"]
         ep.human_requeues = sum(1 for d in disps if d["finding_id"] in ep.finding_ids and d["value"] == "DEFERRED" and str(d.get("actor") or "").startswith("human:"))
         steps = wh.agent_steps(ep.finding_ids)
         ep.gate_rejections = sum(1 for s in steps if s["step"] == "gate" and s["outcome"] == "failed")
@@ -125,7 +128,10 @@ def run(wh: Warehouse, now: datetime | None = None) -> dict[str, Any]:
 
 def _median(xs: list[float | None]) -> float | None:
     v = sorted(x for x in xs if x is not None)
-    return None if not v else v[len(v) // 2]
+    if not v:
+        return None
+    mid = len(v) // 2
+    return v[mid] if len(v) % 2 else (v[mid - 1] + v[mid]) / 2
 
 
 def markdown(result: dict[str, Any]) -> str:

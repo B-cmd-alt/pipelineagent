@@ -194,7 +194,7 @@ class Agent:
             return True
         try:
             return self.ctx.github.contains(merged_sha, running_sha)
-        except GitHubError:
+        except Exception:  # noqa: BLE001 — GitHubError or a transport failure: unknown is "not yet", never a crash
             return False
 
     def close_recovered_issues(self, open_now: dict[tuple[str, str], dict]) -> None:
@@ -203,15 +203,30 @@ class Agent:
         needs a person. One issue may serve a feed's sibling findings; it is closed once."""
         still_open = {f["finding_id"] for f in open_now.values()}
         disps = self.wh.latest_dispositions()
+        # one batched read for every finding that has ever been escalated (only those can own an issue)
+        candidates = [fid for fid, d in disps.items() if d["disposition"] == "ESCALATED" or "/issues/" in str(d.get("evidence_ref") or "")
+                      or fid in still_open]
+        by_fid: dict[str, list[dict]] = {}
+        for s in self.wh.agent_steps(candidates) if candidates else []:
+            by_fid.setdefault(s["finding_id"], []).append(s)
+
+        def issue_of(steps: list[dict]) -> str | None:
+            return next((str(s["ref"]) for s in reversed(steps) if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref")
+                         and "/issues/" in str(s["ref"]) and not str(s["ref"]).startswith("dry-run://")), None)
+
+        # an issue is shared by a feed's sibling findings: while any of them is still open it stays open
+        held_open = {issue_of(by_fid.get(fid, [])) for fid in still_open} - {None}
         done_urls: set[str] = set()
-        for fid, d in disps.items():
+        for fid in candidates:
+            d = disps.get(fid) or {}
             if fid in still_open:
                 continue
-            steps = self.steps_for(fid)
-            issue = next((str(s["ref"]) for s in reversed(steps) if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref")
-                          and "/issues/" in str(s["ref"]) and not str(s["ref"]).startswith("dry-run://")), None)
-            if not issue or issue in done_urls or any(s["step"] == "issue_closed" and s.get("ref") == issue for s in steps):
+            steps = by_fid.get(fid, [])
+            issue = issue_of(steps)
+            if not issue or issue in done_urls or issue in held_open:
                 continue
+            if any(s["step"] == "issue_closed" and s.get("ref") == issue and s["outcome"] == "ok" for s in steps):
+                continue  # a FAILED close attempt is retried next run
             done_urls.add(issue)
             comment = (f"Finding `{fid}` is no longer open on the live detectors. Current disposition: **{d['disposition']}** — "
                        f"{d.get('note') or ''}" + (f" (evidence: {d['evidence_ref']})" if d.get("evidence_ref") else "") +

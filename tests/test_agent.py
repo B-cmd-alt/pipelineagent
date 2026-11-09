@@ -346,3 +346,36 @@ def test_needs_human_issue_is_closed_once_when_the_finding_is_no_longer_open(fle
     later.close_recovered_issues({})                        # idempotent
     assert len(gh.closed) == 1 and "ESCALATED" in gh.closed[0][1]
     assert [s["outcome"] for s in wh.agent_steps([fid]) if s["step"] == "issue_closed"] == ["ok"]
+
+
+def test_shared_issue_stays_open_while_a_sibling_finding_is_open_and_a_failed_close_is_retried(fleet, wh, tmp_path):
+    f1 = _open_finding(wh, "fred_dgs10", "write_recency")
+    f2 = _open_finding(wh, "fred_dgs10", "head_lag")
+    from pipelineagent.agent.github import GitHub, GitHubError
+
+    class Stub(GitHub):
+        def __init__(self):
+            self.base_branch, self.closed, self.fail = "main", [], True
+
+        def close_issue(self, url, comment):
+            if self.fail:
+                raise GitHubError("502")
+            self.closed.append(url)
+            return True
+
+    gh = Stub()
+    url = "https://github.com/example/repo/issues/3"
+    a = Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r1", NOW)
+    for f in (f1, f2):
+        a.step(f["finding_id"], 1, "escalate", "ok", "upstream", url)
+        a.disposition(f["finding_id"], "ESCALATED", "upstream", url)
+    # f1 recovered, f2 (same feed, same issue) still open -> the issue is held open
+    a.close_recovered_issues({(f2["feed"], f2["axis"]): f2})
+    assert gh.closed == [] and not any(s["step"] == "issue_closed" for s in wh.agent_steps([f1["finding_id"]]))
+    # both recovered, GitHub fails once -> recorded failed, retried next run
+    later = Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r2", NOW + timedelta(hours=1))
+    later.close_recovered_issues({})
+    assert gh.closed == [] and [s["outcome"] for s in wh.agent_steps([f1["finding_id"], f2["finding_id"]]) if s["step"] == "issue_closed"] == ["failed"]
+    gh.fail = False
+    Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r3", NOW + timedelta(hours=2)).close_recovered_issues({})
+    assert gh.closed == [url]
