@@ -37,6 +37,18 @@ SLA, triage `stale_source → defer` once, then `escalate`: one GitHub issue, di
 `ESCALATED`, **no PR**. Disarm; the finding closes as the source "recovers"; the ESCALATED
 disposition stays as the record (a human may dispose it BENIGN with a note).
 
+## Class 1 (green job, dead data) on a daily feed
+
+`PIPELINEAGENT_INJECT=ieso_ontario_demand=frozen_payload` makes every fetch return the last archived
+healthy bytes with HTTP 200. The job exits 0 every hour; the feed records `no_change` (same
+content hash), so no rows land. Expected: `write_recency` OPENED after the 30h SLA (daily feeds
+carry long SLAs by design, so this drill takes more than a day), triage
+`green_job_dead_data → escalate` (nothing in the repo can make a frozen publisher move), one issue,
+`ESCALATED`, **no PR**. Disarm; the next run lands the real file, the finding closes and the agent
+closes its own issue. On an hourly append-every-poll feed the same injection surfaces as
+`head_lag` instead (rows land, the data's own clock stands still) — also an escalation, labelled
+`stale_source` by triage.
+
 ## Reading the result
 
 ```sql

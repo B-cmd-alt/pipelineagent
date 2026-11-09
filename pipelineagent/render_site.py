@@ -132,6 +132,17 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
     data["open_findings_unavailable"] = open_f is None
     data["ledger"] = [{k: _iso(v) for k, v in e.items()} for e in (guarded("ledger", lambda: wh.ledger_events(500), []) or [])]
     data["disposition_counts"] = {k: sum(1 for d in disp.values() if d["disposition"] == k) for k in ("FIXED", "BENIGN", "ESCALATED", "DEFERRED", "UNKNOWN")}
+    day_ago = (now - timedelta(hours=24)).isoformat()
+    led24 = [e for e in data["ledger"] if (e.get("ts") or "") >= day_ago]
+    data["last_24h"] = {
+        "runs_failed": sum(g["runs_24h"]["failed"] for g in grid),
+        "rows": sum(g["runs_24h"]["rows"] for g in grid),
+        "opened": sum(1 for e in led24 if e.get("kind") == "OPENED"),
+        "closed": sum(1 for e in led24 if e.get("kind") == "CLOSED"),
+        "fixed": sum(1 for e in led24 if e.get("kind") == "DISPOSITION" and e.get("value") == "FIXED"),
+        "escalated": sum(1 for e in led24 if e.get("kind") == "DISPOSITION" and e.get("value") == "ESCALATED"),
+        "benign": sum(1 for e in led24 if e.get("kind") == "DISPOSITION" and e.get("value") == "BENIGN"),
+    }
     data["summary"] = {
         "breach": sum(1 for g in grid for c in g["cells"].values() if c["state"] == "BREACH"),
         "unknown": sum(1 for g in grid for c in g["cells"].values() if c["state"] == "UNKNOWN"),
@@ -285,6 +296,7 @@ def render_html(data: dict[str, Any]) -> str:
     else:
         findings_html = "".join(cards)
 
+    d24 = data.get("last_24h") or {k: 0 for k in ("runs_failed", "rows", "opened", "closed", "fixed", "escalated", "benign")}
     dc = data["disposition_counts"]
     disp_html = " · ".join(f'<span class="badge {k}">{k}</span> {v}' for k, v in dc.items())
 
@@ -294,6 +306,7 @@ def render_html(data: dict[str, Any]) -> str:
 <h1>PipelineAgent — fleet health</h1>
 <div class="sub">Generated {_e(data['generated_at'][:19])}Z · {len(data['grid'])} feeds · detectors read data, not exit codes · code <code>{_e(data['renderer']['code_sha256'][:12])}</code></div>
 {banner}{errs}{tiles}
+<p class="sub day">Last 24h: {d24["runs_failed"]} failed runs · {d24["rows"]} rows landed · findings {d24["opened"]} opened / {d24["closed"]} closed · dispositions {d24["fixed"]} FIXED · {d24["escalated"]} ESCALATED · {d24["benign"]} BENIGN · {s["unknown"]} UNKNOWN cells right now (blind, never green)</p>
 <h2>Fleet health grid</h2>{grid_html}
 <h2>Open findings ({len(data['open_findings'])})</h2>
 <p class="sub">Each finding is one continuous not-OK stretch of a feed × axis. It carries exactly one current disposition: {disp_html} (all-time, latest row per finding).</p>
