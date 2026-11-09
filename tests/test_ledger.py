@@ -65,3 +65,16 @@ def test_removed_detector_does_not_silently_close_findings(wh):
     d2 = reconcile([], wh.open_findings(), wh.latest_dispositions(), "r2", NOW + timedelta(hours=1))
     assert d2.finding_rows == [] and d2.dispositions == []
     assert len(wh.open_findings()) == 1
+
+
+def test_agent_awaiting_verification_is_not_auto_closed_as_self_healed(wh):
+    """The repair loop's own UNKNOWN ('merged, awaiting verification') must survive the CLOSE;
+    only the untriaged auto UNKNOWN self-heals. Otherwise every agent repair is credited to luck."""
+    d1 = reconcile([det("f", "write_recency", "BREACH")], [], {}, "r1", NOW)
+    apply(d1, wh)
+    fid = d1.opened[0]["finding_id"]
+    dispose(wh, fid, "UNKNOWN", "agent", "attempt 1 merged as abc; awaiting verification", NOW + timedelta(minutes=5), "https://example/pull/1")
+    d2 = reconcile([det("f", "write_recency", "OK")], wh.open_findings(), wh.latest_dispositions(), "r2", NOW + timedelta(hours=1))
+    apply(d2, wh)
+    assert d2.closed and d2.dispositions == []
+    assert wh.latest_dispositions()[fid]["decided_by"] == "agent"

@@ -9,7 +9,7 @@ costs nothing per run and is never re-diagnosed.
 Every finding has exactly one *current* disposition (latest row wins):
 FIXED | BENIGN | ESCALATED | DEFERRED | UNKNOWN. v0 auto-rules:
   OPENED             -> UNKNOWN  ("awaiting triage")
-  CLOSED w/ UNKNOWN  -> BENIGN   ("self-healed without intervention")
+  CLOSED w/ auto UNKNOWN -> BENIGN ("self-healed without intervention"; an agent/human row is never overridden)
 A human (or, later, the repair agent with a gate verdict) overrides via
 `pipelineagent dispose`. A transient UNKNOWN (a feed still accruing the
 history its flat-value window needs) is shown on the dashboard but opens no
@@ -54,7 +54,9 @@ def reconcile(detections: list[Detection], open_findings: list[dict], current_di
                                      "feed": d.feed, "axis": d.axis, "state": d.state, "observed": d.observed, "threshold": d.threshold,
                                      "detail": f"back to {d.state}: {d.detail}"})
                 cur = current_dispositions.get(existing["finding_id"])
-                if cur is None or cur["disposition"] == "UNKNOWN":
+                # only an untriaged finding self-heals; an agent's "awaiting verification" UNKNOWN is the
+                # repair loop's own state and the agent decides FIXED (with evidence) or not
+                if cur is None or (cur["disposition"] == "UNKNOWN" and cur["decided_by"] == "auto"):
                     delta.dispositions.append({"finding_id": existing["finding_id"], "disposition": "BENIGN", "decided_at": now,
                                                "decided_by": "auto", "note": "self-healed without intervention", "evidence_ref": None})
         elif not existing:

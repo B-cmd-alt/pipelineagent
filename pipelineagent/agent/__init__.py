@@ -199,7 +199,11 @@ class Agent:
     def verify_pending(self, open_now: dict[tuple[str, str], dict]) -> None:
         disps = self.wh.latest_dispositions()
         for fid, d in disps.items():
-            if d["decided_by"] != "agent" or "awaiting verification" not in (d["note"] or ""):
+            awaiting = d["decided_by"] == "agent" and "awaiting verification" in (d["note"] or "")
+            # a finding the auto-close rule stamped "self-healed" although a repair had been merged and
+            # never verified belongs to the agent: reclaim it so the record says FIXED with its evidence
+            self_healed = d["decided_by"] == "auto" and d["disposition"] == "BENIGN"
+            if not (awaiting or self_healed):
                 continue
             steps = self.steps_for(fid)
             merges = [s for s in steps if s["step"] == "merge" and s["outcome"] == "ok"]
@@ -207,6 +211,10 @@ class Agent:
                 continue
             last = merges[-1]
             attempt = last["attempt"]
+            if self_healed and any(s["step"] == "verify" and s["attempt"] == attempt and s["outcome"] in ("ok", "failed") for s in steps):
+                continue
+            if self_healed:
+                d = dict(d, evidence_ref=next((s["ref"] for s in steps if s["step"] == "pr" and s["attempt"] == attempt and s["outcome"] == "ok"), None))
             deployed_sha = last["ref"]
             runs_since = sum(1 for s in steps if s["step"] == "verify" and s["attempt"] == attempt)
             still_open = any(f["finding_id"] == fid for f in open_now.values())
