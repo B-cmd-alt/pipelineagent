@@ -189,6 +189,13 @@ class BigQueryWarehouse:
             [self.bq.ArrayQueryParameter("ids", "STRING", list(finding_ids))],
         )
 
+    def injections(self):
+        try:
+            self.client.get_table(f"{self.project}.{self.dataset}.harness_injections")
+        except Exception:  # noqa: BLE001 — no table means no drills yet
+            return []
+        return self._query(f"SELECT * FROM {self._ref('harness_injections')} ORDER BY ts", [])
+
     def runs_for_feed(self, feed, limit):
         return self._query(
             f"SELECT * FROM {self._ref('_runs')} WHERE feed = @feed AND started_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 14 DAY) "

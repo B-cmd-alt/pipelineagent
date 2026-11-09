@@ -99,6 +99,14 @@ def cmd_dispose(args) -> int:
     return 0
 
 
+def cmd_benchmark(args) -> int:
+    from . import benchmark
+
+    result = benchmark.run(_wh(args))
+    print(benchmark.markdown(result))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=os.environ.get("LOG_LEVEL", "INFO"), format="%(asctime)s %(levelname)s %(message)s", stream=sys.stdout)
     p = argparse.ArgumentParser(prog="pipelineagent")
@@ -117,6 +125,7 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--no-render", action="store_true")
     r.set_defaults(fn=cmd_run)
     sub.add_parser("render").set_defaults(fn=cmd_render)
+    sub.add_parser("benchmark", help="harness ground truth vs the ledger: MTTD, MTTR, outcome per injected episode (markdown)").set_defaults(fn=cmd_benchmark)
     d = sub.add_parser("dispose", help="record a human disposition for a finding")
     d.add_argument("finding_id")
     d.add_argument("disposition", choices=["FIXED", "BENIGN", "ESCALATED", "DEFERRED", "UNKNOWN"])
