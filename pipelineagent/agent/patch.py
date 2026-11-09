@@ -38,6 +38,7 @@ Rules you must follow; a separate gate rejects the patch otherwise:
 - "Fixed" means rows LAND for the failing payload: never keep the feed failing or raising on it "to preserve alerting"; record the drift as an anomaly string instead.
 - Prefer tolerant column/field mapping (accept old and new names) over dropping data. Record anything unexpected in `anomalies`, never silently.
 - Add one new pytest test file whose fixture is the failing payload (inline as a string) and asserts the module now parses it.
+- In that test assert only row count, values copied verbatim from the payload, and anomaly presence. Never convert an epoch to a datetime or compute a derived number in your head; if you compare a datetime, build the expected value in the test with the same call the module uses (e.g. datetime.fromtimestamp(<epoch from the payload>, tz=timezone.utc)).
 - No network access, no new dependencies, no secrets. Keep the diff minimal and explain it in two sentences.
 Output: one JSON object. `module_source` is the COMPLETE new text of the module file, every line from the
 docstring to the last line (never a path, a diff, or an excerpt). `test_source` is the COMPLETE text of the new
