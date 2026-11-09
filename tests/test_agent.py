@@ -320,3 +320,29 @@ def test_agent_reclaims_a_repair_the_auto_close_stamped_self_healed(fleet, wh, t
     assert d["disposition"] == "FIXED" and d["evidence_ref"] == "https://github.com/example/repo/pull/10"
     later.verify_pending({})  # idempotent: a verified attempt is not reclaimed twice
     assert sum(1 for s in wh.agent_steps([fid]) if s["step"] == "verify") == 1
+
+
+def test_needs_human_issue_is_closed_once_when_the_finding_is_no_longer_open(fleet, wh, tmp_path):
+    f = _open_finding(wh, "fred_dgs10", "write_recency")
+    fid = f["finding_id"]
+    from pipelineagent.agent.github import GitHub
+
+    class Stub(GitHub):
+        def __init__(self):
+            self.base_branch, self.closed = "main", []
+
+        def close_issue(self, url, comment):
+            self.closed.append((url, comment))
+            return True
+
+    gh = Stub()
+    a = Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r1", NOW)
+    a.step(fid, 1, "escalate", "ok", "upstream keeps failing", "https://github.com/example/repo/issues/3")
+    a.disposition(fid, "ESCALATED", "upstream keeps failing", "https://github.com/example/repo/issues/3")
+    a.close_recovered_issues({(f["feed"], f["axis"]): f})   # still open -> untouched
+    assert gh.closed == []
+    later = Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r2", NOW + timedelta(hours=1))
+    later.close_recovered_issues({})                        # recovered -> closed with one comment
+    later.close_recovered_issues({})                        # idempotent
+    assert len(gh.closed) == 1 and "ESCALATED" in gh.closed[0][1]
+    assert [s["outcome"] for s in wh.agent_steps([fid]) if s["step"] == "issue_closed"] == ["ok"]

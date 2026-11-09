@@ -111,6 +111,15 @@ class GitHub:
         r = self._req("POST", "/issues", json={"title": title, "body": body, "labels": ["pipelineagent", "needs-human"]})
         return r["html_url"]
 
+    def close_issue(self, url: str, comment: str) -> bool:
+        """Close the issue behind `url` with one comment; False when it was already closed (no second comment)."""
+        number = url.rstrip("/").rsplit("/", 1)[-1]
+        if self._req("GET", f"/issues/{number}").get("state") == "closed":
+            return False
+        self._req("POST", f"/issues/{number}/comments", json={"body": comment})
+        self._req("PATCH", f"/issues/{number}", json={"state": "closed", "state_reason": "completed"})
+        return True
+
     def publish_pages(self, files: dict[str, bytes], branch: str = "gh-pages") -> str:
         """Replace the `branch` tree with `files` (one commit, no parents needed: the branch is a
         publication, not history). GitHub Pages serves it once the owner points Pages at it."""
@@ -173,6 +182,9 @@ class DryRunGitHub(GitHub):
 
     def publish_pages(self, files, branch="gh-pages"):
         return ""  # dry run: the local site/ directory is the publication
+
+    def close_issue(self, url, comment):
+        return False  # dry run: the local issue file is the record
 
     def open_issue(self, finding_id, title, body):
         d = self.out_dir / "agent" / "issues"

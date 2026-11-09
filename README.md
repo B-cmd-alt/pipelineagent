@@ -96,7 +96,9 @@ cleanly with the new one; the last 5 healthy payloads must produce identical row
 `TEST_WEAKENED`, `SCOPE_EXCEEDED`, `POLICY_FILE_TOUCHED`, `SECRET_IN_DIFF`) plus the replay
 re-run and the test suite. On `PASS` the agent opens the PR, merges it, triggers the build and
 deploy, and the next live detector runs decide: cleared → `FIXED`; still open after 2 runs →
-revert + redeploy; three failed attempts → `ESCALATED` with exactly one GitHub issue. Every
+revert + redeploy; three failed attempts → `ESCALATED` with exactly one GitHub issue, which the
+agent closes itself (one comment) once the finding is no longer open — a source that recovers or a
+later repair that lands never leaves a stale "needs-human" issue behind. Every
 step is a row in `agent_steps`, rendered as the chain on the finding card.
 
 Without `GITHUB_TOKEN` + `GITHUB_REPO` and `OPENROUTER_API_KEY` the agent runs **dry**: it

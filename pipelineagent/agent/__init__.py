@@ -77,6 +77,7 @@ class Agent:
     def run(self, opened: list[dict], deferred: list[dict], open_now: dict[tuple[str, str], dict]) -> None:
         self.open_now = open_now
         self.verify_pending(open_now)
+        self.close_recovered_issues(open_now)
         queue = list(opened) + [f for f in deferred if f["finding_id"] not in {o["finding_id"] for o in opened}]
         # The unit of work is a FEED, not a finding: several axes breaching on one feed are one
         # upstream problem. One triage, one patch, one PR per feed; the other axes JOIN the primary
@@ -195,6 +196,31 @@ class Agent:
             return self.ctx.github.contains(merged_sha, running_sha)
         except GitHubError:
             return False
+
+    def close_recovered_issues(self, open_now: dict[tuple[str, str], dict]) -> None:
+        """A 'needs-human' issue whose finding is no longer open (source recovered, or a later repair
+        fixed it) is closed with one comment, so the open-issue list stays the list of what still
+        needs a person. One issue may serve a feed's sibling findings; it is closed once."""
+        still_open = {f["finding_id"] for f in open_now.values()}
+        disps = self.wh.latest_dispositions()
+        done_urls: set[str] = set()
+        for fid, d in disps.items():
+            if fid in still_open:
+                continue
+            steps = self.steps_for(fid)
+            issue = next((str(s["ref"]) for s in reversed(steps) if s["step"] == "escalate" and s["outcome"] == "ok" and s.get("ref")
+                          and "/issues/" in str(s["ref"]) and not str(s["ref"]).startswith("dry-run://")), None)
+            if not issue or issue in done_urls or any(s["step"] == "issue_closed" and s.get("ref") == issue for s in steps):
+                continue
+            done_urls.add(issue)
+            comment = (f"Finding `{fid}` is no longer open on the live detectors. Current disposition: **{d['disposition']}** — "
+                       f"{d.get('note') or ''}" + (f" (evidence: {d['evidence_ref']})" if d.get("evidence_ref") else "") +
+                       "\n\nClosed automatically by PipelineAgent; reopen if a person still needs to look.")
+            try:
+                closed = self.ctx.github.close_issue(issue, comment)
+                self.step(fid, 0, "issue_closed", "ok", "closed: finding no longer open" if closed else "already closed", issue)
+            except GitHubError as e:
+                self.step(fid, 0, "issue_closed", "failed", str(e)[:400], issue)
 
     def verify_pending(self, open_now: dict[tuple[str, str], dict]) -> None:
         disps = self.wh.latest_dispositions()
