@@ -56,9 +56,12 @@ def test_stale_source_and_html_error_raise_like_the_real_client():
 
 
 def test_ground_truth_rows_and_runner_wiring(fleet, wh, monkeypatch):
+    """Ground truth is written and the injected bytes are archived under the run's sha.
+    Judged with stale_source (fails regardless of parser) + schema_rename (bytes only): a test
+    must never assert that the parser REJECTS the drill's rename, because the repair agent is
+    expected to make it accept it, and this suite is part of the gate that judges that repair."""
     from pipelineagent.runner import run
 
-    monkeypatch.setenv("PIPELINEAGENT_INJECT", "coingecko_prices=schema_rename")
     body = fixture_text("coingecko.json").encode()
 
     class Http(FakeHttp):
@@ -67,12 +70,21 @@ def test_ground_truth_rows_and_runner_wiring(fleet, wh, monkeypatch):
             self.last_body = body
             return Response(200, body, "application/json", None)
 
+    monkeypatch.setenv("PIPELINEAGENT_INJECT", "coingecko_prices=stale_source")
     rep = run(fleet, wh, http=Http(body), now=NOW, feeds=["coingecko_prices"], detect=False)
     r = rep.runs[0]
-    assert r["status"] == "failed" and r["reason"] == "exception:ValueError" and "schema" in r["error"]
-    assert r["content_sha256"]  # the injected bytes were archived under this hash
+    assert r["status"] == "failed" and "injected" in r["error"]
     gt = wh.conn.execute("SELECT feed, kind, failure_class FROM harness_injections").fetchall()
-    assert [tuple(x) for x in gt] == [("coingecko_prices", "schema_rename", "schema_drift")]
+    assert [tuple(x) for x in gt] == [("coingecko_prices", "stale_source", "stale_source")]
+
+    monkeypatch.setenv("PIPELINEAGENT_INJECT", "coingecko_prices=schema_rename")
+    rep2 = run(fleet, wh, http=Http(body), now=NOW, feeds=["coingecko_prices"], detect=False)
+    r2 = rep2.runs[0]
+    assert r2["content_sha256"]  # whatever the parser did with them, the injected bytes are archived under this hash
+    import hashlib
+    assert r2["content_sha256"] == hashlib.sha256(body.replace(b'"usd"', b'"usd_price"')).hexdigest()
+    gt2 = wh.conn.execute("SELECT kind FROM harness_injections ORDER BY ts").fetchall()
+    assert [x[0] for x in gt2] == ["stale_source", "schema_rename"]
 
 
 def test_injected_daily_feed_is_always_due(fleet, wh, monkeypatch):
