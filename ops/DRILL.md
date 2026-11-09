@@ -30,6 +30,10 @@ gcloud run jobs update pipelineagent-run --project=<PROJECT> --region=<REGION> -
 The patched parser keeps accepting the real `usd` key (the gate's healthy-payload check
 guarantees identical rows on unmodified payloads), so disarming is safe.
 
+**Two injections at once** need gcloud's custom delimiter, because `--update-env-vars` splits on
+commas: `--update-env-vars='^;^PIPELINEAGENT_INJECT=github_status=stale_source,ieso_ontario_demand=frozen_payload'`.
+Without it the second pair becomes a stray env var and the second drill never arms (seen 2026-11-09).
+
 ## Class 3 (stale source) on any feed — the "correct refusal" drill
 
 `PIPELINEAGENT_INJECT=<feed>=stale_source` makes every fetch time out. Expected: finding after the
