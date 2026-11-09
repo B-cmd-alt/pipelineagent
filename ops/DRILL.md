@@ -50,3 +50,18 @@ GROUP BY i.feed;
 
 Rules the drill does not relax: the agent never widens an SLA or disables a detector to make the
 finding go away; the gate rejects that, injection or not.
+
+## Record — class 2 drill, 2026-11-08/09
+
+The first live drill found four defects, every one of them in the repo's own tests or gate,
+none in the model's patches. Each was fixed and the finding re-queued:
+
+| attempt | gate verdict | real cause | fix |
+|---|---|---|---|
+| 1 | `TESTS_FAILED` | a harness test asserted the parser *rejects* `usd_price` | test asserts the injected bytes, not the parser's reaction (#4) |
+| 2 | `TESTS_FAILED` | wiring test asserted the injected run ends `failed` | test uses `stale_source` for failure assertions (#5); DESIGN §4 rule |
+| 3 | `REPLAY_FAILED` | stale feedback made the model keep the feed raising "to preserve alerting" | prompt rule "fixed means rows land"; human re-queue resets the budget (#7) |
+| 1′ | `REPLAY_FAILED,TESTS_FAILED` | replay failed any anomaly containing "schema" — the very string the prompt asks for; a test still pinned "missing key raises" | anomalies are informational; the missing-key behaviour is no longer pinned |
+
+Lesson: the gate must not contradict the prompt, and a test that pins the exact failure the
+agent is meant to repair turns every correct patch into `TESTS_FAILED`.

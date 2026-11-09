@@ -26,7 +26,9 @@ class ReplayResult:
 
     @property
     def loads_cleanly(self) -> bool:
-        return self.fetch_ok and self.rows > 0 and not any("schema" in a or "non-numeric" in a for a in self.anomalies)
+        # Rows landing is the contract. Anomaly strings are informational (the patch prompt
+        # ASKS the model to record drift there), so they never fail a replay.
+        return self.fetch_ok and self.rows > 0
 
 
 def load_payload_bodies(raw: bytes) -> list[bytes]:
