@@ -253,7 +253,15 @@ IESO's fixed-EST file is the natural fixture. Classes 4 (flat value) and 6
 invariant reported through `_runs`, which is the one open design question.
 Each injection writes a ground-truth row (`harness_injections`: ts, run_id, feed,
 kind, failure_class); the benchmark joins it against `findings` for MTTD and
-`dispositions` for MTTR. Injection happens between the HTTP client and the
+`dispositions` for MTTR.
+
+**Rule learned from the first live drill (twice):** the repository's own test
+suite is part of the gate, so a test that asserts the *pre-repair* behaviour
+("the parser rejects `usd_price`") blocks the very repair the drill is meant to
+exercise, and the agent cannot touch it (`TEST_WEAKENED`). Tests about the
+harness judge the injected bytes; tests about parser strictness use a key no
+repair is expected to accept. In general: never pin in a test the exact failure
+you intend the agent to fix. Injection happens between the HTTP client and the
 parser (`harness.InjectingClient`), so the archive, detectors, ledger, agent,
 gate and deploy all react to it exactly as to a real upstream change. Fixtures
 are synthetic, so recorded upstream payloads are never published.
