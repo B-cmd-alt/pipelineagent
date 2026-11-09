@@ -2,6 +2,11 @@
 
 **An autonomous detection-and-repair agent for data pipelines, with a dashboard that shows decisions, not just graphs.**
 
+**Live dashboard: <https://b-cmd-alt.github.io/pipelineagent/>** — regenerated after every hourly run; a red
+banner means the job itself has been silent for more than 26h. First real repair, end to end with zero human
+edits to the fetcher: [#10](https://github.com/B-cmd-alt/pipelineagent/pull/10) (record in `ops/DRILL.md`).
+License: MIT.
+
 Most pipeline monitoring watches the *job*: did it exit 0? PipelineAgent watches the
 *data*: did fresh rows land, is the newest timestamp recent, did the values stop
 moving? A job that exits 0 while writing nothing is the failure this project is built
@@ -151,7 +156,7 @@ Steady state is well under $2/month, plus a fraction of a cent per model call (o
 is attempted).
 
 The dashboard is published to the `gh-pages` branch after every render when the GitHub token is
-mounted (`PIPELINEAGENT_PAGES=0` disables); point GitHub Pages at that branch for a public URL.
+mounted (`PIPELINEAGENT_PAGES=0` disables); GitHub Pages serves it at <https://b-cmd-alt.github.io/pipelineagent/>.
 
 ## The seam to a release gate
 
