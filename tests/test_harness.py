@@ -95,3 +95,15 @@ def test_injected_daily_feed_is_always_due(fleet, wh, monkeypatch):
     assert rep.runs[0]["status"] == "failed" and "injected" in rep.runs[0]["error"]
     rep2 = run(fleet, wh, http=FakeHttp(b""), now=NOW, feeds=["ieso_ontario_demand"], detect=False)
     assert rep2.runs[0]["status"] == "failed"  # not 'skipped: not_due'
+
+
+def test_frozen_payload_serves_the_archived_healthy_bytes_with_http_200():
+    """Class 1 (green job, dead data): the request 'succeeds' but the bytes never change."""
+    inner = FakeHttp(b'{"live": 1}')
+    c = harness.InjectingClient(inner, harness.Injection("coingecko_prices", "frozen_payload"), [b'{"bitcoin":{"usd":1,"last_updated_at":1700000000}}'])
+    r = c.get("https://x", expect="json")
+    assert r.status == 200 and r.body == b'{"bitcoin":{"usd":1,"last_updated_at":1700000000}}' and inner.used == 1
+    assert c.last_body == r.body  # what gets archived is the frozen body, not the live one
+    with pytest.raises(SourceError, match="frozen_payload"):
+        c.get("https://x", expect="json")  # bodies are served in request order; none left -> loud
+    assert harness.rules_from_env("ieso_ontario_demand=frozen_payload")["ieso_ontario_demand"].failure_class == "green_job_dead_data"

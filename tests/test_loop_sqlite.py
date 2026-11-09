@@ -74,6 +74,7 @@ def test_full_loop_then_green_job_dead_data(fleet, wh, monkeypatch):
     assert data["summary"]["breach"] >= 2 and data["summary"]["not_declared"] == 1  # github_status flat undeclared
     assert all(f["opened_at"] for f in data["open_findings"])
     page = render_html(data)
+    assert "Last 24h:" in page and data["last_24h"]["rows"] >= 0
     assert "DEAD-MAN" not in page.split("<script>")[0] and "not declared" in page and "BREACH" in page
     assert 'data-generated-at="' in page and "page-stale" in page  # client-side staleness check is wired
     from pipelineagent.render_site import render_healthlog

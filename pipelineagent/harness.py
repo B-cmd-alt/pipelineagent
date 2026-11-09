@@ -7,6 +7,9 @@ Activated by PIPELINEAGENT_INJECT="feed=kind[,feed=kind]" on the job. Kinds:
   schema_rename  a key/column the parser depends on is renamed (failure class 2, schema drift)
   stale_source   the upstream times out (class 3; nothing to patch, the agent must escalate)
   html_error     the upstream serves an HTML error page with HTTP 200 (class 2/3 boundary)
+  frozen_payload the upstream keeps serving the last healthy bytes with HTTP 200 (class 1, green job /
+                 dead data): a daily feed sees no_change runs until write_recency breaches; an hourly
+                 append feed lands rows whose event_ts never moves until head_lag breaches. Nothing to patch.
 Deploy drift (class 7) is not an injection: deploy an older image and watch the hash check.
 """
 from __future__ import annotations
@@ -36,7 +39,8 @@ RENAMES: dict[str, tuple[bytes, bytes]] = {
     "open_meteo_current": (b'"temperature_2m"', b'"temp_2m"'),
     "nws_observations": (b'"timestamp"', b'"observedAt"'),
 }
-FAILURE_CLASS = {"schema_rename": "schema_drift", "stale_source": "stale_source", "html_error": "stale_source"}
+FAILURE_CLASS = {"schema_rename": "schema_drift", "stale_source": "stale_source", "html_error": "stale_source",
+                 "frozen_payload": "green_job_dead_data"}
 HTML_ERROR = b"<!DOCTYPE html><html><head><title>503 Service Unavailable</title></head><body><h1>Service Unavailable</h1></body></html>"
 
 
@@ -65,9 +69,10 @@ class InjectingClient:
     """Wraps the real HTTP client for ONE feed. Same surface the fetchers use (get / used / budget /
     last_body); the injected body is what gets archived, which is exactly what should be replayed."""
 
-    def __init__(self, inner, injection: Injection):
+    def __init__(self, inner, injection: Injection, frozen_bodies: list[bytes] | None = None):
         self.inner, self.injection = inner, injection
         self.last_body: bytes | None = None
+        self.frozen = list(frozen_bodies or [])  # frozen_payload: the archived healthy bodies, served in request order
 
     @property
     def used(self) -> int:
@@ -81,6 +86,14 @@ class InjectingClient:
         if self.injection.kind == "stale_source":
             self.inner.used += 1
             raise SourceError("transport: ReadTimeout [injected by the harness]")
+        if self.injection.kind == "frozen_payload":
+            self.inner.used += 1
+            if not self.frozen:
+                raise SourceError("frozen_payload: no archived healthy body to serve [harness]")
+            body = self.frozen.pop(0)
+            self.last_body = self.inner.last_body = body
+            ct = "application/json" if kw.get("expect", "json") == "json" else "text/csv"
+            return Response(200, body, ct, None)
         r = self.inner.get(url, **kw)
         if self.injection.kind == "html_error":
             self.last_body = self.inner.last_body = HTML_ERROR

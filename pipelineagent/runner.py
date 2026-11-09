@@ -96,6 +96,19 @@ def _payload_store():
     return write_local, read_local
 
 
+def _frozen_bodies(wh: Warehouse, feed_id: str) -> list[bytes]:
+    """The newest archived HEALTHY payload of a feed (for the class-1 frozen_payload injection)."""
+    from .agent.replay import load_payload_bodies
+
+    read = _payload_store()[1]
+    for run in wh.runs_for_feed(feed_id, 50):
+        if run["status"] == "ok" and run.get("content_sha256"):
+            raw = read(feed_id, run["content_sha256"])
+            if raw:
+                return load_payload_bodies(raw)
+    return []
+
+
 def archive_payload(feed_id: str, sha: str | None, raw: bytes | None) -> None:
     """Keep the exact bytes a run saw, keyed by content hash, so a failure can be replayed later."""
     if not sha or raw is None:
@@ -212,7 +225,10 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
         injections = harness.rules_from_env()
         harness.record(wh, {k: v for k, v in injections.items() if any(s.id == k for s in specs)}, report.run_id, now)
         for spec in specs:
-            client = harness.InjectingClient(http, injections[spec.id]) if spec.id in injections else http
+            client = http
+            if spec.id in injections:
+                frozen = _frozen_bodies(wh, spec.id) if injections[spec.id].kind == "frozen_payload" else None
+                client = harness.InjectingClient(http, injections[spec.id], frozen)
             r = run_feed(spec, fleet, wh, client, last_runs, report.run_id, now)
             report.runs.append(r)
             log.info("feed %-22s %-9s rows=%-4d %5.1fs %s", spec.id, r["status"], r["rows_written"], r["duration_s"], r["error"] or "")
