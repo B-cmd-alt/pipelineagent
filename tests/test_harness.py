@@ -6,7 +6,6 @@ from conftest import NOW, fixture_text
 
 from pipelineagent import harness
 from pipelineagent.feeds import coingecko_prices
-from pipelineagent.feeds.base import FetchContext
 from pipelineagent.http import Response, SourceError
 
 
@@ -28,18 +27,20 @@ def test_rules_from_env():
         harness.rules_from_env("x=explode")
 
 
-def test_schema_rename_breaks_the_parser_and_archives_the_injected_bytes(wh):
+def test_schema_rename_rewrites_the_bytes_the_parser_sees_and_archives_them(wh):
+    """The injection is judged on the BYTES, not on the parser's reaction: once the agent has
+    repaired the parser, the renamed key is accepted and that is the desired end state."""
     inner = FakeHttp(fixture_text("coingecko.json").encode())
     client = harness.InjectingClient(inner, harness.Injection("coingecko_prices", "schema_rename"))
-    ctx = FetchContext(client, {"coins": ["bitcoin", "ethereum"]}, None, wh, "coingecko_prices", NOW)
-    with pytest.raises(ValueError, match="schema"):
-        coingecko_prices.fetch(ctx)
-    assert b'"usd_price"' in client.last_body and client.last_body == inner.last_body  # what the parser saw is what gets archived
+    r = client.get("https://api.coingecko.com/api/v3/simple/price", expect="json")
+    assert b'"usd_price"' in r.body and b'"usd"' not in r.body.replace(b'"usd_price"', b"")
+    assert client.last_body == inner.last_body == r.body  # what the parser saw is what gets archived
+    assert client.used == 1 and client.budget == inner.budget
 
 
 def test_coingecko_missing_key_is_schema_error_but_null_value_is_data():
     with pytest.raises(ValueError, match="schema"):
-        coingecko_prices.parse({"bitcoin": {"usd_price": 1.0}}, ["bitcoin"])
+        coingecko_prices.parse({"bitcoin": {"price_in_dollars": 1.0}}, ["bitcoin"])  # a key no repair is expected to accept
     rows, anomalies = coingecko_prices.parse({"bitcoin": {"usd": None, "last_updated_at": 1700000000}}, ["bitcoin"])
     assert rows[0]["price_usd"] is None and anomalies == []
 

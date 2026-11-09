@@ -63,28 +63,42 @@ class Agent:
         return self.wh.agent_steps([fid])
 
     # ---- entry -------------------------------------------------------------------------
+    AXIS_PRIORITY = {"write_recency": 0, "head_lag": 1, "flat_value": 2}
+
     def run(self, opened: list[dict], deferred: list[dict], open_now: dict[tuple[str, str], dict]) -> None:
         self.open_now = open_now
         self.verify_pending(open_now)
         queue = list(opened) + [f for f in deferred if f["finding_id"] not in {o["finding_id"] for o in opened}]
-        # The unit of work is a FEED, not a finding: three axes breaching on one feed are one
-        # upstream problem, and the depth budget counts distinct feeds (no clustering rules needed).
-        feeds_in_order: list[str] = []
+        # The unit of work is a FEED, not a finding: several axes breaching on one feed are one
+        # upstream problem. One triage, one patch, one PR per feed; the other axes JOIN the primary
+        # (the most informative axis: write_recency, then head_lag, then flat_value) and inherit its
+        # outcome. The depth budget counts distinct feeds.
+        by_feed: dict[str, list[dict]] = {}
         for f in queue:
-            if f["feed"] not in feeds_in_order:
-                feeds_in_order.append(f["feed"])
-        budgeted = set(feeds_in_order[:DEPTH_BUDGET])
-        for f in queue:
-            if f["feed"] not in budgeted:
-                self.step(f["finding_id"], 0, "defer", "ok", f"depth budget {DEPTH_BUDGET} feeds/run exhausted; re-queued next run")
-                self.disposition(f["finding_id"], "DEFERRED", "depth_budget")
+            by_feed.setdefault(f["feed"], []).append(f)
+        for i, (feed, group) in enumerate(by_feed.items()):
+            group.sort(key=lambda g: self.AXIS_PRIORITY.get(g["axis"], 9))
+            primary, siblings = group[0], group[1:]
+            if i >= DEPTH_BUDGET:
+                for f in group:
+                    self.step(f["finding_id"], 0, "defer", "ok", f"depth budget {DEPTH_BUDGET} feeds/run exhausted; re-queued next run")
+                    self.disposition(f["finding_id"], "DEFERRED", "depth_budget")
                 continue
             try:
-                self.handle(f)
+                self.handle(primary)
             except Exception as e:  # noqa: BLE001 — one finding must not take the loop down
-                log.exception("agent failed on %s", f["finding_id"])
-                self.step(f["finding_id"], 0, "escalate", "failed", f"agent crashed: {e.__class__.__name__}: {str(e)[:300]}")
-                self.disposition(f["finding_id"], "DEFERRED", f"agent error {e.__class__.__name__}; retry next run")
+                log.exception("agent failed on %s", primary["finding_id"])
+                self.step(primary["finding_id"], 0, "escalate", "failed", f"agent crashed: {e.__class__.__name__}: {str(e)[:300]}")
+                self.disposition(primary["finding_id"], "DEFERRED", f"agent error {e.__class__.__name__}; retry next run")
+            if siblings:
+                outcome = self.wh.latest_dispositions().get(primary["finding_id"]) or {}
+                disp = outcome.get("disposition", "DEFERRED")
+                for f in siblings:
+                    self.step(f["finding_id"], 0, "join", "ok", f"follows sibling finding {primary['finding_id']} (same feed): {disp}", primary["finding_id"])
+                    if disp in ("ESCALATED", "BENIGN"):
+                        self.disposition(f["finding_id"], disp, f"follows {primary['finding_id']}: {outcome.get('note', '')}"[:900], outcome.get("evidence_ref"))
+                    else:
+                        self.disposition(f["finding_id"], "DEFERRED", f"follows {primary['finding_id']}")
 
     # ---- one finding -------------------------------------------------------------------
     def handle(self, f: dict) -> None:
@@ -182,6 +196,10 @@ class Agent:
             if not still_open:
                 self.step(fid, attempt, "verify", "ok", "finding cleared on the live detectors after deploy", deployed_sha)
                 self.disposition(fid, "FIXED", f"attempt {attempt}: merged {deployed_sha[:10]}, deployed, detector cleared", d.get("evidence_ref"))
+                for sid, sd in disps.items():
+                    if str(sd.get("note") or "").startswith(f"follows {fid}") and not any(g["finding_id"] == sid for g in open_now.values()):
+                        self.step(sid, attempt, "verify", "ok", f"cleared with sibling {fid}", deployed_sha)
+                        self.disposition(sid, "FIXED", f"fixed by the repair of sibling finding {fid}", d.get("evidence_ref"))
             elif runs_since + 1 >= VERIFY_RUNS:
                 self.step(fid, attempt, "verify", "failed", f"still open {runs_since + 1} runs after deploy; reverting", deployed_sha)
                 try:
