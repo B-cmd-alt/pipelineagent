@@ -251,3 +251,21 @@ def test_one_repair_per_feed_siblings_join(fleet, wh, tmp_path):
     steps = {(s["finding_id"], s["step"]) for s in wh.agent_steps([f1["finding_id"], f2["finding_id"]])}
     assert (f2["finding_id"], "join") in steps and (f2["finding_id"], "triage") not in steps
     assert wh.latest_dispositions()[f2["finding_id"]]["note"] == f"follows {f1['finding_id']}"
+
+
+def test_human_requeue_resets_the_attempt_budget(fleet, wh, tmp_path):
+    f = _open_finding(wh, "fred_dgs10", "write_recency")
+    from pipelineagent.schema import RUNS
+    from pipelineagent.ledger import dispose
+    wh.append("_runs", [run_row("failed", "exception:ValueError", "schema: expected columns observation_date,DGS10; got ['DATE', 'DGS10']", "sha-bad")], RUNS)
+    bad = PatchProposal((ROOT / "pipelineagent/feeds/fred_dgs10.py").read_text() + "\n# no-op\n", "test_agent_noop.py", "def test_noop():\n    assert True\n", "does nothing")
+    ctx = _ctx(fleet, tmp_path, lambda **k: bad, {"sha-bad": FRED_RENAMED.encode()})
+    for i in range(MAX_ATTEMPTS):
+        Agent(wh, ctx, f"r{i}", NOW + timedelta(hours=i)).run([f] if i == 0 else [], [] if i == 0 else [f], {})
+    assert wh.latest_dispositions()[f["finding_id"]]["disposition"] == "ESCALATED"
+    # a human re-queues it: the budget starts over instead of escalating at once
+    dispose(wh, f["finding_id"], "DEFERRED", "human:alice", "tests fixed, try again", NOW + timedelta(hours=MAX_ATTEMPTS))
+    Agent(wh, ctx, "r-again", NOW + timedelta(hours=MAX_ATTEMPTS + 1)).run([], [f], {})
+    steps = wh.agent_steps([f["finding_id"]])
+    assert [s["attempt"] for s in steps if s["step"] == "patch"][-1] == 1
+    assert wh.latest_dispositions()[f["finding_id"]]["disposition"] == "DEFERRED"
