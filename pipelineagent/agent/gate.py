@@ -101,9 +101,14 @@ def run_tests(head: Path, timeout_s: int = 300) -> tuple[bool, str]:
     if not (head / "tests").exists():
         return False, "no tests/ directory in the head tree"
     # the agent's own end-to-end tests spawn this gate; running them here would recurse
-    proc = subprocess.run([sys.executable, "-E", "-m", "pytest", "-q", "-x", "-p", "no:cacheprovider", "-m", "not agent_e2e"],
+    proc = subprocess.run([sys.executable, "-E", "-m", "pytest", "-q", "-x", "-rf", "--tb=short", "-p", "no:cacheprovider", "-m", "not agent_e2e"],
                           cwd=str(head), capture_output=True, text=True, timeout=timeout_s)
-    return proc.returncode == 0, (proc.stdout + proc.stderr)[-1500:]
+    out = proc.stdout + proc.stderr
+    if proc.returncode == 0:
+        return True, out[-1500:]
+    # the model reads this back as feedback: name the test and the assertion, not the tail of a traceback
+    key = [l for l in out.splitlines() if l.startswith(("FAILED", "ERROR", "E ")) or ".py:" in l and " in test_" in l]
+    return False, ("\n".join(key) or out)[-1500:]
 
 
 def check(base: Path, head: Path, feed_id: str, failing_payloads: list[bytes], healthy_payloads: list[bytes], fleet_rel: str = "fleet.yaml",
@@ -138,7 +143,7 @@ def check(base: Path, head: Path, feed_id: str, failing_payloads: list[bytes], h
         ok, out = run_tests(head)
         codes.append("TESTS_PASSED" if ok else "TESTS_FAILED")
         if not ok:
-            diag.append("tests: " + out[-600:])
+            diag.append("tests: " + out[-900:])
     codes = sorted(set(codes))
     verdict = "PASS" if set(codes) <= {"REPLAY_PASSED", "TESTS_PASSED"} and "REPLAY_PASSED" in codes else "FAIL"
     patch_text = "".join(f"{f}\n{(head / f).read_text(errors='ignore') if (head / f).exists() else ''}" for f in sorted(set(notes["modified"]) | set(notes["added"])))
