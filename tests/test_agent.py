@@ -233,3 +233,21 @@ def test_dry_run_escalation_does_not_count_as_an_open_issue(fleet, wh, tmp_path)
     gh = LiveStub()
     Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r1", NOW).run([], [f], {(f["feed"], f["axis"]): f})
     assert gh.opened and wh.latest_dispositions()[f["finding_id"]]["evidence_ref"] == "https://github.com/example/repo/issues/7"
+
+
+def test_one_repair_per_feed_siblings_join(fleet, wh, tmp_path):
+    f1 = _open_finding(wh, "fred_dgs10", "write_recency")
+    f2 = _open_finding(wh, "fred_dgs10", "head_lag")
+    from pipelineagent.schema import RUNS
+    wh.append("_runs", [run_row("failed", "exception:ValueError", "schema: expected columns observation_date,DGS10; got ['DATE', 'DGS10']", "sha-bad")], RUNS)
+    calls = []
+
+    def proposer(**k):
+        calls.append(1)
+        return None  # dry patch; we only count how often the model would be called
+
+    Agent(wh, _ctx(fleet, tmp_path, proposer, {"sha-bad": FRED_RENAMED.encode()}), "r1", NOW).run([f1, f2], [], {})
+    assert len(calls) == 1
+    steps = {(s["finding_id"], s["step"]) for s in wh.agent_steps([f1["finding_id"], f2["finding_id"]])}
+    assert (f2["finding_id"], "join") in steps and (f2["finding_id"], "triage") not in steps
+    assert wh.latest_dispositions()[f2["finding_id"]]["note"] == f"follows {f1['finding_id']}"
