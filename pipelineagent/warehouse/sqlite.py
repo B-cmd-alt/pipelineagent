@@ -151,6 +151,13 @@ class SQLiteWarehouse:
         cur = self.conn.execute("SELECT * FROM _runs WHERE feed = ? ORDER BY started_at DESC LIMIT ?", (feed, limit))
         return [self._row(r) for r in cur]
 
+    def injections(self):
+        try:
+            cur = self.conn.execute("SELECT * FROM harness_injections ORDER BY ts")
+        except sqlite3.OperationalError:
+            return []
+        return [self._row(r) for r in cur]
+
     def _row(self, r: sqlite3.Row) -> dict[str, Any]:
         d = dict(r)
         for k, v in list(d.items()):

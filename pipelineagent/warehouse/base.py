@@ -48,3 +48,4 @@ class Warehouse(Protocol):
     def latest_detections(self) -> list[dict[str, Any]]: ...
     def agent_steps(self, finding_ids: list[str]) -> list[dict[str, Any]]: ...  # chronological, for the given findings
     def runs_for_feed(self, feed: str, limit: int) -> list[dict[str, Any]]: ...  # newest first
+    def injections(self) -> list[dict[str, Any]]: ...  # harness ground truth, chronological; [] when the table does not exist
