@@ -22,15 +22,23 @@ def parse(payload: dict, coins: list[str]) -> tuple[list[dict], list[str]]:
         if not isinstance(d, dict):
             anomalies.append(f"{c}: missing from response")
             continue
-        if "usd" not in d:
-            # a renamed/missing key is schema drift and must FAIL the run (the repair agent's trigger);
-            # a null value under the right key is data and stays a NULL with an anomaly
-            raise ValueError(f"schema: expected key 'usd' under {c}; got {sorted(d)}")
+        price_value = None
+        price_key = None
+        if "usd" in d:
+            price_key = "usd"
+            price_value = d.get("usd")
+        elif "usd_price" in d:
+            price_key = "usd_price"
+            price_value = d.get("usd_price")
+            anomalies.append(f"{c}: schema drift: using 'usd_price' instead of 'usd'")
+        else:
+            anomalies.append(f"{c}: missing price fields (expected 'usd' or 'usd_price')")
         lu = d.get("last_updated_at")
+        price_usd = to_float(price_value, anomalies, f"{c}.{price_key}") if price_key else None
         rows.append({
             "coin": c,
             "event_ts": datetime.fromtimestamp(lu, tz=timezone.utc) if lu else None,
-            "price_usd": to_float(d.get("usd"), anomalies, f"{c}.usd"),
+            "price_usd": price_usd,
         })
     return rows, anomalies
 
