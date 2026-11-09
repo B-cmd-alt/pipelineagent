@@ -63,5 +63,20 @@ none in the model's patches. Each was fixed and the finding re-queued:
 | 3 | `REPLAY_FAILED` | stale feedback made the model keep the feed raising "to preserve alerting" | prompt rule "fixed means rows land"; human re-queue resets the budget (#7) |
 | 1′ | `REPLAY_FAILED,TESTS_FAILED` | replay failed any anomaly containing "schema" — the very string the prompt asks for; a test still pinned "missing key raises" | anomalies are informational; the missing-key behaviour is no longer pinned |
 
-Lesson: the gate must not contradict the prompt, and a test that pins the exact failure the
-agent is meant to repair turns every correct patch into `TESTS_FAILED`.
+| 2′ | `TESTS_FAILED` | the model's own test hand-converted an epoch to a datetime and got it wrong; the gate fed back a traceback tail with no test name | feedback keeps the `FAILED`/`E` lines; prompt: build expected datetimes with the module's own call (#9) |
+| 3′ | **`PASS`** | — | PR #10 opened, gate-merged, Cloud Build deployed; next run landed rows, both findings CLOSED |
+
+Then one more defect, after the fix had already worked: the ledger's auto-close rule stamped the
+closed findings `BENIGN "self-healed"` over the agent's `awaiting verification`, so FIXED was never
+recorded (#11: self-heal only over an untriaged finding; the agent reclaims its own merged repair).
+
+**Outcome (UTC, 2026-11-08/09):** injected 22:23 → `write_recency` OPENED 01:26 (MTTD 3h02m, the
+3h SLA is the floor by design) → repair PR merged 02:18 → rows landing 02:24 → findings CLOSED 02:26
+(1h00m after OPENED, of which ~50 min were the four repo-side defects above) → FIXED recorded 02:50
+with PR #10 as evidence → disarmed 02:52, next run clean on the real `usd` key, all three detectors OK.
+Zero human edits to the fetcher; every human touch was to the harness, the gate, or the tests.
+
+Lessons: the gate must not contradict the prompt; a test that pins the exact failure the agent is
+meant to repair turns every correct patch into `TESTS_FAILED`; the model cannot be trusted to do
+arithmetic (epoch→datetime) inside a test; and an auto-rule that overrides agent state silently
+rewrites who fixed what.
