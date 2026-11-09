@@ -38,9 +38,9 @@ def test_schema_rename_rewrites_the_bytes_the_parser_sees_and_archives_them(wh):
     assert client.used == 1 and client.budget == inner.budget
 
 
-def test_coingecko_missing_key_is_schema_error_but_null_value_is_data():
-    with pytest.raises(ValueError, match="schema"):
-        coingecko_prices.parse({"bitcoin": {"price_in_dollars": 1.0}}, ["bitcoin"])  # a key no repair is expected to accept
+def test_coingecko_null_value_is_data_not_an_error():
+    # DESIGN §4: do not pin how the parser treats a MISSING key — that is exactly what a
+    # schema-drift repair changes. Only the null-value contract is fixed.
     rows, anomalies = coingecko_prices.parse({"bitcoin": {"usd": None, "last_updated_at": 1700000000}}, ["bitcoin"])
     assert rows[0]["price_usd"] is None and anomalies == []
 
