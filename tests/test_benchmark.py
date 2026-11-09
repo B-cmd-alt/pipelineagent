@@ -36,7 +36,7 @@ def test_episodes_split_on_gaps_and_score_against_expected_outcome(wh):
     # an uninjected finding on another feed is listed, not scored
     apply(reconcile([Detection("fred_dgs10", "write_recency", "BREACH", 90.0, 80.0, "stale")], [], {}, "r4", NOW + timedelta(hours=5)), wh)
 
-    res = benchmark.run(wh, now=NOW + timedelta(days=3))
+    res = benchmark.run(wh, now=NOW + timedelta(days=5))  # past every PENDING window
     t = res["totals"]
     assert t["episodes"] == 3 and t["detected"] == 2 and t["correct"] == 2 and t["missed"] == 1 and t["uninjected_findings"] == 1
     assert t["median_mttd_min"] == 180 and t["median_mttr_min"] == 60 and t["gate_rejections"] == 1 and t["human_requeues"] == 1
@@ -46,3 +46,24 @@ def test_episodes_split_on_gaps_and_score_against_expected_outcome(wh):
     assert "CORRECT" in md and "MISSED" in md and "fred_dgs10" in md and "watchdog-only" in md
     # the same undetected episode is PENDING, not MISSED, while its detection window is still open
     assert benchmark.run(wh, now=NOW + timedelta(hours=31))["totals"]["pending"] == 1
+
+
+def test_a_human_requeue_after_escalation_reopens_the_episode_and_findings_belong_to_one_episode(wh):
+    _inject(wh, "coingecko_prices", "schema_rename", NOW)
+    _inject(wh, "coingecko_prices", "schema_rename", NOW + timedelta(hours=5))   # 2nd episode, windows overlap
+    d = reconcile([Detection("coingecko_prices", "write_recency", "BREACH", 4.0, 3.0, "s")], [], {}, "r1", NOW + timedelta(hours=3))
+    apply(d, wh)
+    fid = d.opened[0]["finding_id"]
+    dispose(wh, fid, "ESCALATED", "agent", "3 attempts", NOW + timedelta(hours=4), "https://example/issues/6")
+    dispose(wh, fid, "DEFERRED", "human:isabelle", "try again", NOW + timedelta(hours=4, minutes=30))
+    res = benchmark.run(wh, now=NOW + timedelta(hours=6))
+    e1, e2 = res["episodes"]
+    assert e1.finding_ids == [fid] and e2.finding_ids == [] and e2.pending          # claimed once
+    assert e1.outcome is None and e1.verdict == "OPEN" and e1.human_requeues == 1  # re-queued: not ESCALATED any more
+    assert benchmark._median([10, 30]) == 20 and benchmark._median([10, 30, 50]) == 30
+    # a never-detected episode stops being PENDING 48h after its FIRST injected run, however long it keeps running
+    for h in range(6, 60, 2):
+        _inject(wh, "github_status", "stale_source", NOW + timedelta(hours=h))
+    res2 = benchmark.run(wh, now=NOW + timedelta(hours=60))
+    gh = next(e for e in res2["episodes"] if e.feed == "github_status")
+    assert gh.verdict == "MISSED"

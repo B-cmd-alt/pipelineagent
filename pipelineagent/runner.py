@@ -101,11 +101,15 @@ def _frozen_bodies(wh: Warehouse, feed_id: str) -> list[bytes]:
     from .agent.replay import load_payload_bodies
 
     read = _payload_store()[1]
-    for run in wh.runs_for_feed(feed_id, 50):
-        if run["status"] == "ok" and run.get("content_sha256"):
-            raw = read(feed_id, run["content_sha256"])
-            if raw:
-                return load_payload_bodies(raw)
+    try:
+        for run in wh.runs_for_feed(feed_id, 200):
+            # no_change runs carry the same healthy sha, so a frozen daily feed keeps resolving for days
+            if run["status"] in ("ok", "no_change") and run.get("content_sha256"):
+                raw = read(feed_id, run["content_sha256"])
+                if raw:
+                    return load_payload_bodies(raw)
+    except Exception:  # noqa: BLE001 — an archive read failure must not abort the whole run; the drill just fails loudly
+        log.exception("frozen_payload: archive lookup failed for %s", feed_id)
     return []
 
 
