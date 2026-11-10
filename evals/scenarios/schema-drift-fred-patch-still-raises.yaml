@@ -1,0 +1,31 @@
+id: schema-drift-fred-patch-still-raises
+origin: 'drill attempt 3 (2026-11-09): a patch that keeps the feed failing must be rejected'
+feed: fred_dgs10
+t0: '2026-11-08T12:00:00'
+slow: true
+steps:
+- at_h: 0
+  body: fred_ok.csv
+- at_h: 24
+  body: fred_renamed.csv
+- at_h: 48
+  body: fred_renamed.csv
+- at_h: 72
+  body: fred_renamed.csv
+- at_h: 90
+  body: fred_renamed.csv
+proposal: fred_still_raises
+expect:
+  opened:
+  - write_recency
+  triage: schema_drift -> patch
+  steps:
+    gate: failed
+  gate_codes:
+  - REPLAY_FAILED
+  absent_steps:
+  - pr
+  - merge
+  disposition:
+    write_recency: DEFERRED
+  model_calls: 1

@@ -19,7 +19,7 @@ from .replay import ReplayResult, replay
 
 DETECTOR_FILES = ("pipelineagent/detectors.py", "pipelineagent/ledger.py", "pipelineagent/runner.py", "pipelineagent/heartbeat.py",
                   "pipelineagent/schema.py", "pipelineagent/config.py", "pipelineagent/warehouse/", "pipelineagent/agent/")
-POLICY_FILES = ("fleet.yaml", "ops/", "schemas/", "Dockerfile", "deploy.sh", "cloudbuild.yaml", ".github/", "pyproject.toml")
+POLICY_FILES = ("fleet.yaml", "ops/", "schemas/", "evals/", "Dockerfile", "deploy.sh", "cloudbuild.yaml", ".github/", "pyproject.toml")
 _PEM = "-" * 5 + "BEGIN [A-Z ]*PRIVATE KEY"  # assembled so this file does not itself look like a key dump
 SECRET_RE = re.compile(r"(AKIA[0-9A-Z]{16}|" + _PEM + r"|sk-ant-[A-Za-z0-9_-]{8,}|gh[pousr]_[A-Za-z0-9]{20,}|api[_-]?key\s*=\s*['\"][^'\"]{8,})", re.I)
 SKIP_LINT = re.compile(r"(^|/)(__pycache__|\.pytest_cache|site|\.git)(/|$)|\.pyc$|\.db$|^\.replay-")

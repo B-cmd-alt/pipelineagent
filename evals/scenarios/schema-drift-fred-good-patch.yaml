@@ -1,0 +1,31 @@
+id: schema-drift-fred-good-patch
+origin: 'class-2 drill 2026-11-09 (PR #10 shape) on FRED''s date column; reference patch, hand-written'
+feed: fred_dgs10
+t0: '2026-11-08T12:00:00'
+slow: true
+steps:
+- at_h: 0
+  body: fred_ok.csv
+- at_h: 24
+  body: fred_renamed.csv
+- at_h: 48
+  body: fred_renamed.csv
+- at_h: 72
+  body: fred_renamed.csv
+- at_h: 90
+  body: fred_renamed.csv
+proposal: fred_good
+expect:
+  opened:
+  - write_recency
+  triage: schema_drift -> patch
+  steps:
+    patch: ok
+    gate: ok
+    pr: dry_run
+  gate_codes:
+  - REPLAY_PASSED
+  - TESTS_PASSED
+  disposition:
+    write_recency: DEFERRED
+  model_calls: 1

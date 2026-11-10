@@ -1,0 +1,31 @@
+id: flat-value-coingecko
+origin: 'DESIGN class 4: the publisher keeps answering with the same price; nothing to patch'
+feed: coingecko_prices
+t0: '2026-11-08T12:00:00'
+steps:
+- at_h: 0
+  body: coingecko.json
+- at_h: 1
+  body: coingecko.json
+- at_h: 2
+  body: coingecko.json
+- at_h: 3
+  body: coingecko.json
+- at_h: 4
+  body: coingecko.json
+- at_h: 5
+  body: coingecko.json
+- at_h: 6
+  body: coingecko.json
+- at_h: 7
+  body: coingecko.json
+expect:
+  opened:
+  - flat_value
+  triage: flat_value -> escalate
+  disposition:
+    flat_value: ESCALATED
+  absent_steps:
+  - patch
+  - pr
+  model_calls: 0

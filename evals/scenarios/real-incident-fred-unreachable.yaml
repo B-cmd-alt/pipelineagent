@@ -1,0 +1,29 @@
+id: real-incident-fred-unreachable
+origin: 'real incident since 2026-11-08: FRED times out from the cloud, issue #3'
+feed: fred_dgs10
+t0: '2026-11-08T04:00:00'
+steps:
+- at_h: 0
+  fail: timeout
+- at_h: 1
+  fail: timeout
+- at_h: 2
+  fail: timeout
+expect:
+  opened:
+  - flat_value
+  - head_lag
+  - write_recency
+  triage_first: stale_source -> defer
+  triage: stale_source -> escalate
+  steps:
+    escalate: ok
+    join: ok
+  disposition:
+    flat_value: ESCALATED
+    head_lag: ESCALATED
+    write_recency: ESCALATED
+  absent_steps:
+  - patch
+  - pr
+  model_calls: 0

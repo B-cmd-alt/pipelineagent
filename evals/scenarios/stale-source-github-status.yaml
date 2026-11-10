@@ -1,0 +1,32 @@
+id: stale-source-github-status
+origin: 'class-3 drill 2026-11-09, finding b3848b3e3d5146b2, issue #19'
+feed: github_status
+t0: '2026-11-09T03:00:00'
+steps:
+- at_h: 0
+  body: github_status.json
+- at_h: 1
+  fail: timeout
+- at_h: 2
+  fail: timeout
+- at_h: 3
+  fail: timeout
+- at_h: 4
+  fail: timeout
+- at_h: 5
+  fail: timeout
+expect:
+  opened:
+  - write_recency
+  opened_at_h:
+    write_recency: 3
+  triage_first: stale_source -> defer
+  triage: stale_source -> escalate
+  steps:
+    escalate: ok
+  disposition:
+    write_recency: ESCALATED
+  absent_steps:
+  - patch
+  - pr
+  model_calls: 0
