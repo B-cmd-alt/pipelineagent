@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from .http import Response, SourceError
 from .schema import Column
@@ -38,6 +38,7 @@ RENAMES: dict[str, tuple[bytes, bytes]] = {
     "github_status": (b'"updated_at"', b'"last_updated"'),
     "open_meteo_current": (b'"temperature_2m"', b'"temp_2m"'),
     "nws_observations": (b'"timestamp"', b'"observedAt"'),
+    "canary_selfcheck": (b'"generated_at"', b'"generated"'),
 }
 FAILURE_CLASS = {"schema_rename": "schema_drift", "stale_source": "stale_source", "html_error": "stale_source",
                  "frozen_payload": "green_job_dead_data"}
@@ -48,6 +49,7 @@ HTML_ERROR = b"<!DOCTYPE html><html><head><title>503 Service Unavailable</title>
 class Injection:
     feed: str
     kind: str
+    variant: str = ""  # scheduled drills: a per-week suffix on the renamed key, so last drill's repair does not pre-fix this one
 
     @property
     def failure_class(self) -> str:
@@ -63,6 +65,26 @@ def rules_from_env(value: str | None = None) -> dict[str, Injection]:
             raise ValueError(f"unknown injection kind {kind!r} for {feed!r}; known: {sorted(FAILURE_CLASS)}")
         out[feed] = Injection(feed, kind)
     return out
+
+
+def scheduled(drills, now: datetime) -> dict[str, Injection]:
+    """Injections the fleet's drill schedule makes active at `now` (UTC). Weeks are counted from a
+    fixed Monday, so the rotation is a pure function of the clock: no state, nothing to arm."""
+    out: dict[str, Injection] = {}
+    epoch = datetime(2026, 1, 5, tzinfo=timezone.utc)  # a Monday
+    for d in drills:
+        for back in (0, 1):  # a window that started late on its weekday can run into the next week
+            week = (now - epoch).days // 7 - back
+            start = epoch + timedelta(weeks=week, days=d.weekday, hours=d.start_hour_utc)
+            if start <= now < start + timedelta(hours=d.duration_hours):
+                kind = d.rotation[week % len(d.rotation)]
+                out[d.feed] = Injection(d.feed, kind, f"w{week}" if kind == "schema_rename" else "")
+    return out
+
+
+def active(fleet, now: datetime) -> dict[str, Injection]:
+    """Scheduled drills, overridden per feed by PIPELINEAGENT_INJECT (the manual drill switch)."""
+    return {**scheduled(getattr(fleet, "drills", ()), now), **rules_from_env()}
 
 
 class InjectingClient:
@@ -99,6 +121,8 @@ class InjectingClient:
             self.last_body = self.inner.last_body = HTML_ERROR
             raise SourceError(f"html_error_page: expected {kw.get('expect', 'json')}, got HTML ({len(HTML_ERROR)} bytes) [injected by the harness]")
         old, new = RENAMES.get(self.injection.feed, (b"", b""))
+        if old and self.injection.variant:
+            new = new[:-1] + b"_" + self.injection.variant.encode() + b'"'
         body = r.body.replace(old, new) if old else r.body
         self.last_body = self.inner.last_body = body
         return Response(r.status, body, r.content_type, r.last_modified)

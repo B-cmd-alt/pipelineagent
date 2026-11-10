@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from .base import Feed
 from . import (
+    canary_selfcheck,
     coingecko_prices,
     fred_dgs10,
     github_status,
@@ -14,7 +15,7 @@ from . import (
 
 REGISTRY: dict[str, Feed] = {
     m.FEED.id: m.FEED
-    for m in (nws_observations, open_meteo_current, usgs_earthquakes_hour, fred_dgs10, github_status, coingecko_prices, ieso_ontario_demand)
+    for m in (nws_observations, open_meteo_current, usgs_earthquakes_hour, fred_dgs10, github_status, coingecko_prices, ieso_ontario_demand, canary_selfcheck)
 }
 
 

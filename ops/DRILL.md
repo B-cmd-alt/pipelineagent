@@ -80,6 +80,16 @@ Two things the drill exposed:
   reset the daily due-clock, so recovery waits for the next due fetch (~20h). A harness artefact; a
   real frozen publisher has the same shape, and the finding simply stays ESCALATED until data moves.
 
+## Scheduled drills (layer 2)
+
+`fleet.yaml` has a `drills:` block: `canary_selfcheck` is broken every Wednesday 02:00–10:00 UTC, the
+kind rotating by week number (`harness.scheduled`). Nobody arms or disarms it; the window closing is
+the recovery, and the agent closes its own issue. A schema-drift week ends with a real merged PR that
+teaches the canary parser that week's key. `PIPELINEAGENT_INJECT` still works for manual drills and
+overrides the schedule for the feeds it names. `drillwatch` raises an issue on a WRONG or MISSED
+verdict, or after eight days without a drill. Not yet drilled: the revert path (a patch that passes
+the gate but does not clear the finding live).
+
 ## Reading the result
 
 ```sql
