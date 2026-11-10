@@ -57,6 +57,14 @@ a scenario red; a scenario that crashes or is skipped counts as a failure; the a
 model with hand-written reference patches. Whether the live path still works (credentials, deploys,
 the model itself) is what the live drills are for.
 
+**The live path is tested on a schedule, too.** A canary feed (the project's own published
+`data.json`) is broken on purpose every Wednesday for eight hours; the failure kind rotates weekly
+(stale source, frozen payload, schema drift with a fresh key each time) and is a pure function of the
+clock, so nothing has to be armed. If a drill ends with the wrong outcome, is never detected, or no
+drill runs for eight days, `drillwatch` opens an issue and the dashboard's self-test line turns red.
+This is what catches an expired token, a broken deploy or a model that stopped producing usable
+patches before a real failure does.
+
 ## What runs
 
 ```

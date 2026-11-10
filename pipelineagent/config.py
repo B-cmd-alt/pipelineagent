@@ -59,6 +59,17 @@ class FeedSpec:
 
 
 @dataclass(frozen=True)
+class Drill:
+    """A scheduled self-test: once a week, for a few hours, the harness breaks `feed` on purpose.
+    The kind rotates by week number, so every class is exercised without anyone arming it."""
+    feed: str
+    rotation: tuple[str, ...]
+    weekday: int          # 0 = Monday (UTC)
+    start_hour_utc: int
+    duration_hours: int
+
+
+@dataclass(frozen=True)
 class Fleet:
     version: int
     project: str
@@ -69,6 +80,7 @@ class Fleet:
     daily_feed_refetch_after_hours: float
     feeds: tuple[FeedSpec, ...]
     path: Path
+    drills: tuple[Drill, ...] = ()
 
     def feed(self, feed_id: str) -> FeedSpec:
         for f in self.feeds:
@@ -128,6 +140,13 @@ def load_fleet(path: str | os.PathLike | None = None) -> Fleet:
         )
     if not feeds:
         raise ManifestError("fleet.yaml declares no feeds")
+    drills = []
+    for i, d in enumerate(raw.get("drills") or []):
+        if d.get("feed") not in seen:
+            raise ManifestError(f"drills[{i}].feed {d.get('feed')!r} is not a declared feed")
+        if not d.get("rotation") or not 0 <= int(d.get("weekday", -1)) <= 6 or not 1 <= int(d.get("duration_hours", 0)) <= 24:
+            raise ManifestError(f"drills[{i}] needs rotation, weekday 0-6 and duration_hours 1-24")
+        drills.append(Drill(str(d["feed"]), tuple(str(k) for k in d["rotation"]), int(d["weekday"]), int(d.get("start_hour_utc", 0)), int(d["duration_hours"])))
     return Fleet(
         version=1,
         project=str(raw.get("project", "PipelineAgent")),
@@ -138,4 +157,5 @@ def load_fleet(path: str | os.PathLike | None = None) -> Fleet:
         daily_feed_refetch_after_hours=float(raw.get("daily_feed_refetch_after_hours", 20)),
         feeds=tuple(feeds),
         path=p,
+        drills=tuple(drills),
     )

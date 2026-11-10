@@ -134,6 +134,10 @@ def collect(fleet: Fleet, wh: Warehouse, now: datetime | None = None) -> dict[st
     data["disposition_counts"] = {k: sum(1 for d in disp.values() if d["disposition"] == k) for k in ("FIXED", "BENIGN", "ESCALATED", "DEFERRED", "UNKNOWN")}
     day_ago = (now - timedelta(hours=24)).isoformat()
     led24 = [e for e in data["ledger"] if (e.get("ts") or "") >= day_ago]
+    def _drills():
+        from . import drillwatch
+        return drillwatch.status(fleet, wh, now)
+    data["drills"] = guarded("drills", _drills, []) or []
     data["last_24h"] = {
         "runs_failed": sum(g["runs_24h"]["failed"] for g in grid),
         "rows": sum(g["runs_24h"]["rows"] for g in grid),
@@ -161,7 +165,7 @@ CSS = """
 :root[data-theme=dark]{--bg:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--grid:#2c2c2a;--ring:rgba(255,255,255,.10);color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 main{max-width:1180px;margin:0 auto;padding:24px 16px 64px}h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:32px 0 10px}
-.sub{color:var(--ink2);font-size:13px}.banner{border-radius:8px;padding:12px 16px;margin:16px 0;font-weight:600;display:flex;gap:12px;align-items:center}
+.sub{color:var(--ink2);font-size:13px}.drill.BREACH{color:var(--breach);font-weight:600}.banner{border-radius:8px;padding:12px 16px;margin:16px 0;font-weight:600;display:flex;gap:12px;align-items:center}
 .banner.alive{background:color-mix(in srgb,var(--ok) 14%,var(--surface));border:1px solid var(--ok)}
 .banner.stale,.banner.missing{background:var(--breach);color:#fff;font-size:17px}
 .banner.drift{background:color-mix(in srgb,var(--unknown) 30%,var(--surface));border:1px solid var(--unknown);color:var(--ink)}
@@ -296,6 +300,18 @@ def render_html(data: dict[str, Any]) -> str:
     else:
         findings_html = "".join(cards)
 
+    drills_html = ""
+    for dr in data.get("drills") or []:
+        last = dr["last"]
+        if dr["alarms"]:
+            txt = "⚠ SELF-TEST FAILED: " + "; ".join(_e(a["why"]) for a in dr["alarms"])
+        elif last:
+            ev = f' · <a href="{_e(last["evidence"])}">evidence</a>' if last.get("evidence") else ""
+            txt = (f'Self-test on <code>{_e(dr["feed"])}</code>: {dr["correct"]}/{dr["episodes"]} drills correct · last: {_e(last["class"])} injected {_e(last["injected"][:16])}Z → '
+                   f'<b>{_e(last["verdict"])}</b>' + (f' ({_e(last["outcome"])}, detected in {last["mttd_min"]} min)' if last.get("outcome") else "") + ev)
+        else:
+            txt = f'Self-test on <code>{_e(dr["feed"])}</code>: no drill has run yet (scheduled weekly).'
+        drills_html += f'<p class="sub drill {_e(dr["state"])}">{txt}</p>'
     d24 = data.get("last_24h") or {k: 0 for k in ("runs_failed", "rows", "opened", "closed", "fixed", "escalated", "benign")}
     dc = data["disposition_counts"]
     disp_html = " · ".join(f'<span class="badge {k}">{k}</span> {v}' for k, v in dc.items())
@@ -306,6 +322,7 @@ def render_html(data: dict[str, Any]) -> str:
 <h1>PipelineAgent — fleet health</h1>
 <div class="sub">Generated {_e(data['generated_at'][:19])}Z · {len(data['grid'])} feeds · detectors read data, not exit codes · code <code>{_e(data['renderer']['code_sha256'][:12])}</code></div>
 {banner}{errs}{tiles}
+{drills_html}
 <p class="sub day">Last 24h: {d24["runs_failed"]} failed runs · {d24["rows"]} rows landed · findings {d24["opened"]} opened / {d24["closed"]} closed · dispositions {d24["fixed"]} FIXED · {d24["escalated"]} ESCALATED · {d24["benign"]} BENIGN · {s["unknown"]} UNKNOWN cells right now (blind, never green)</p>
 <h2>Fleet health grid</h2>{grid_html}
 <h2>Open findings ({len(data['open_findings'])})</h2>

@@ -226,7 +226,7 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
         except Exception:  # noqa: BLE001
             log.exception("could not read last runs; proceeding as first run")
             last_runs = {}
-        injections = harness.rules_from_env()
+        injections = harness.active(fleet, now)
         harness.record(wh, {k: v for k, v in injections.items() if any(s.id == k for s in specs)}, report.run_id, now)
         for spec in specs:
             client = http
@@ -255,6 +255,11 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
             report.heartbeat = beat(wh, report.run_id, at, str(fleet.path))
             if agent_ctx is not None:
                 _run_agent(fleet, wh, report, agent_ctx, at)
+                try:
+                    from . import drillwatch
+                    drillwatch.check(fleet, wh, agent_ctx.github, report.run_id, at)
+                except Exception:  # noqa: BLE001 — the self-test watchdog must never take the run down
+                    log.exception("drill watch failed")
         for d in report.detections:
             log.info("detect %-22s %-13s %-7s %s", d.feed, d.axis, d.state, d.detail)
 

@@ -71,7 +71,7 @@ def test_full_loop_then_green_job_dead_data(fleet, wh, monkeypatch):
 
     data = collect(fleet, wh, later + timedelta(hours=1))
     assert data["heartbeat"]["state"] == "ALIVE"
-    assert data["summary"]["breach"] >= 2 and data["summary"]["not_declared"] == 1  # github_status flat undeclared
+    assert data["summary"]["breach"] >= 2 and data["summary"]["not_declared"] == 2  # github_status and the canary declare no flat-value axis
     assert all(f["opened_at"] for f in data["open_findings"])
     page = render_html(data)
     assert "Last 24h:" in page and data["last_24h"]["rows"] >= 0
