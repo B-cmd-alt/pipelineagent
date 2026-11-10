@@ -160,3 +160,12 @@ def test_agent_picks_up_untriaged_backlog_not_only_this_runs_openings(fleet, wh,
     run(fleet, wh, http=StubHttp(), now=NOW, agent_ctx=ctx)
     steps = wh.conn.execute("SELECT finding_id, step, outcome, detail FROM agent_steps").fetchall()
     assert any(r["step"] == "triage" and "green_job_dead_data" in r["detail"] for r in steps), [tuple(r) for r in steps]
+
+
+def test_steps_of_one_run_render_in_the_order_the_agent_took_them():
+    from pipelineagent.render_site import _final_attempt, _ordered
+    ts = "2026-11-09T02:16:00+00:00"
+    steps = [{"step": s, "outcome": "ok", "ts": ts, "attempt": 3} for s in ("deploy", "gate", "merge", "triage", "pr", "patch", "replay")]
+    assert [x["step"] for x in _ordered(steps)] == ["triage", "patch", "replay", "gate", "pr", "merge", "deploy"]
+    earlier = [{"step": "triage", "outcome": "ok", "ts": "2026-11-09T01:00:00+00:00", "attempt": 1}, {"step": "gate", "outcome": "failed", "ts": "2026-11-09T01:00:00+00:00", "attempt": 1}]
+    assert [x["step"] for x in _final_attempt(earlier + steps)][0] == "triage" and len(_final_attempt(earlier + steps)) == 7
