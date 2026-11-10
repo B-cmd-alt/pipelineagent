@@ -65,6 +65,16 @@ drill runs for eight days, `drillwatch` opens an issue and the dashboard's self-
 This is what catches an expired token, a broken deploy or a model that stopped producing usable
 patches before a real failure does.
 
+**Unseen failures.** A failure the triage table does not recognise is classified `unknown` and
+escalated: no model call, no code change. What the system learns from it is bounded on purpose. When
+a person settles such a finding, or overrules the agent, `learn.py` opens a pull request with a
+scenario *draft*: the archived bytes of every run around the finding, replayable offline, plus what
+the agent and the person each concluded. A person writes the right answer and promotes the draft to
+`evals/scenarios/`; a new triage rule, if one is needed, is a separate human-reviewed PR that must keep
+every existing scenario green. The system grows its own test suite from real incidents; it never edits
+its own judge. The benchmark reports triage accuracy against the injected truth as the baseline any
+proposed rule has to beat.
+
 ## What runs
 
 ```

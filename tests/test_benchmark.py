@@ -67,3 +67,15 @@ def test_a_human_requeue_after_escalation_reopens_the_episode_and_findings_belon
     res2 = benchmark.run(wh, now=NOW + timedelta(hours=60))
     gh = next(e for e in res2["episodes"] if e.feed == "github_status")
     assert gh.verdict == "MISSED"
+
+
+def test_a_later_finding_in_the_same_episode_does_not_move_the_outcome(wh):
+    _inject(wh, "ieso_ontario_demand", "frozen_payload", NOW)
+    d = reconcile([Detection("ieso_ontario_demand", "write_recency", "BREACH", 31.0, 30.0, "s")], [], {}, "r1", NOW + timedelta(hours=27))
+    apply(d, wh)
+    dispose(wh, d.opened[0]["finding_id"], "ESCALATED", "agent", "green job", NOW + timedelta(hours=27, minutes=1), "https://example/issues/22")
+    d2 = reconcile([Detection("ieso_ontario_demand", "head_lag", "BREACH", 55.0, 54.0, "s")], wh.open_findings(), wh.latest_dispositions(), "r2", NOW + timedelta(hours=33))
+    apply(d2, wh)
+    dispose(wh, d2.opened[0]["finding_id"], "ESCALATED", "agent", "publisher late", NOW + timedelta(hours=33, minutes=1), "https://example/issues/22")
+    ep = benchmark.run(wh, now=NOW + timedelta(days=5))["episodes"][0]
+    assert len(ep.finding_ids) == 2 and ep.mttr_min == 1 and ep.outcome == "ESCALATED"

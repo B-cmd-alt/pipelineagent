@@ -226,7 +226,7 @@ def _chain(steps: list[dict]) -> str:
     last_attempt = max(int(s.get("attempt") or 0) for s in steps)
     latest: dict[str, dict] = {}
     for st in steps:
-        if int(st.get("attempt") or 0) == last_attempt or st["step"] in ("escalate", "defer", "revert", "join", "issue_closed"):
+        if int(st.get("attempt") or 0) == last_attempt or st["step"] in ("escalate", "defer", "revert", "join", "issue_closed", "scenario_draft"):
             latest[st["step"]] = st
     pills = []
     for step in CHAIN:
@@ -235,7 +235,7 @@ def _chain(steps: list[dict]) -> str:
             pills.append(f'<span class="{_e(st["outcome"])}" title="{_e(st.get("detail"))}">{STEP_ICON.get(st["outcome"], "?")} {step}</span>')
         else:
             pills.append(f'<span class="todo">{step}</span>')
-    for extra in ("join", "revert", "escalate", "defer", "issue_closed"):
+    for extra in ("join", "revert", "escalate", "defer", "issue_closed", "scenario_draft"):
         if extra in latest:
             st = latest[extra]
             pills.append(f'<span class="{_e(st["outcome"])}" title="{_e(st.get("detail"))}">{STEP_ICON.get(st["outcome"], "?")} {extra}</span>')
