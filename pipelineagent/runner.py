@@ -254,22 +254,30 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
             # the heartbeat means "the WHOLE loop completed", so it is written only after the ledger
             report.heartbeat = beat(wh, report.run_id, at, str(fleet.path))
             if agent_ctx is not None:
-                _run_agent(fleet, wh, report, agent_ctx, at)
-                try:
-                    from . import drillwatch
-                    drillwatch.check(fleet, wh, agent_ctx.github, report.run_id, at)
-                except Exception:  # noqa: BLE001 — the self-test watchdog must never take the run down
-                    log.exception("drill watch failed")
-                try:
-                    from . import learn
-                    learn.draft_scenarios(fleet, wh, agent_ctx.github, report.run_id, at, agent_ctx.payload_loader)
-                except Exception:  # noqa: BLE001 — learning is downstream of everything that matters
-                    log.exception("scenario drafting failed")
+                from .lease import agent_stage
+                with agent_stage(report.run_id, at) as held:
+                    if held:
+                        _agent_stage(fleet, wh, report, agent_ctx, at)
         for d in report.detections:
             log.info("detect %-22s %-13s %-7s %s", d.feed, d.axis, d.state, d.detail)
 
     report.duration_s = time.monotonic() - t0
     return report
+
+
+def _agent_stage(fleet: Fleet, wh: Warehouse, report: RunReport, agent_ctx, at: datetime) -> None:
+    """Everything that can open a PR or an issue; runs under the agent-stage lease."""
+    _run_agent(fleet, wh, report, agent_ctx, at)
+    try:
+        from . import drillwatch
+        drillwatch.check(fleet, wh, agent_ctx.github, report.run_id, at)
+    except Exception:  # noqa: BLE001 — the self-test watchdog must never take the run down
+        log.exception("drill watch failed")
+    try:
+        from . import learn
+        learn.draft_scenarios(fleet, wh, agent_ctx.github, report.run_id, at, agent_ctx.payload_loader)
+    except Exception:  # noqa: BLE001 — learning is downstream of everything that matters
+        log.exception("scenario drafting failed")
 
 
 def _run_agent(fleet: Fleet, wh: Warehouse, report: RunReport, agent_ctx, at: datetime) -> None:

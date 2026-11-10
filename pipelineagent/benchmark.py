@@ -13,6 +13,7 @@ finding waits for a person. That is the comparison the numbers make.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any
@@ -40,6 +41,7 @@ class Episode:
     gate_rejections: int = 0
     prs: int = 0
     human_requeues: int = 0
+    model_cost_usd: float = 0.0    # summed from the patch steps' recorded OpenRouter cost
     triaged_as: str | None = None  # the agent's FIRST classification of the primary finding, vs the injected truth
     pending: bool = False  # still inside the detection window; not yet a miss
 
@@ -104,6 +106,8 @@ def run(wh: Warehouse, now: datetime | None = None) -> dict[str, Any]:
         steps = wh.agent_steps(ep.finding_ids)
         tri = [str(s["detail"]).split("->", 1)[0].strip() for s in steps if s["step"] == "triage" and "->" in str(s["detail"])]
         ep.triaged_as = tri[0] if tri else None
+        ep.model_cost_usd = round(sum(float(m.group(1)) for s in steps if s["step"] == "patch"
+                                      for m in [re.search(r"cost \$([0-9.]+)\]", str(s["detail"]))] if m), 6)
         ep.gate_rejections = sum(1 for s in steps if s["step"] == "gate" and s["outcome"] == "failed")
         ep.prs = sum(1 for s in steps if s["step"] == "pr" and s["outcome"] == "ok")
         want = "pr" if ep.outcome == "FIXED" else "escalate"
@@ -124,6 +128,7 @@ def run(wh: Warehouse, now: datetime | None = None) -> dict[str, Any]:
             "pending": sum(1 for e in eps if e.verdict == "PENDING"),
             "human_requeues": sum(e.human_requeues for e in eps),
             "triaged": sum(1 for e in eps if e.triaged_as),
+            "model_cost_usd": round(sum(e.model_cost_usd for e in eps), 4),
             "triage_exact": sum(1 for e in eps if e.triaged_as and e.triaged_as == e.failure_class),
             "median_mttd_min": _median([e.mttd_min for e in detected]),
             "median_mttr_min": _median([e.mttr_min for e in resolved]),
@@ -146,6 +151,7 @@ def markdown(result: dict[str, Any]) -> str:
     lines = ["# Benchmark: injected failures vs. the ledger", "",
              f"Episodes {t['episodes']} · detected {t['detected']} · correct outcome {t['correct']} · wrong {t['wrong']} · still open {t['open']} · pending {t['pending']} · missed {t['missed']}",
              f"Median MTTD {t['median_mttd_min']} min · median MTTR {t['median_mttr_min']} min (detection → final FIXED/ESCALATED, human re-queues included: {t['human_requeues']}) · gate rejections {t['gate_rejections']} · uninjected findings {t['uninjected_findings']}",
+             f"Model spend on these episodes: ${t['model_cost_usd']} (recorded per patch from OpenRouter's billed usage; episodes before that was recorded show $0)",
              f"Triage classified {t['triage_exact']}/{t['triaged']} triaged episodes as the injected class (exact match; the baseline for any proposed triage rule)",
              "", "Baseline (watchdog-only): identical detectors, so identical MTTD; MTTR is undefined because nothing acts — every finding waits for a person.", "",
              "| feed | class | triaged as | injected (UTC) | detected | MTTD min | outcome | expected | MTTR min | gate rejects | PRs | verdict | evidence |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]

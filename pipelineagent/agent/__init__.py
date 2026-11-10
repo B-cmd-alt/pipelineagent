@@ -29,6 +29,7 @@ log = logging.getLogger("pipelineagent.agent")
 
 DEPTH_BUDGET = 2
 MAX_ATTEMPTS = 3
+MAX_PATCHES_PER_FEED_WEEK = 6  # circuit breaker: a feed that keeps breaking stops consuming model calls and merges
 VERIFY_RUNS = 2  # detector runs after a deploy before a non-clearing finding is reverted
 
 
@@ -64,6 +65,11 @@ class Agent:
 
     def steps_for(self, fid: str) -> list[dict]:
         return self.wh.agent_steps([fid])
+
+    def _patches_last_week(self, feed_id: str) -> int:
+        since = self.now - timedelta(days=7)
+        fids = sorted({e["finding_id"] for e in self.wh.ledger_events(5000) if e.get("kind") == "OPENED" and e.get("feed") == feed_id})
+        return sum(1 for s in self.wh.agent_steps(fids) if s["step"] == "patch" and s["outcome"] in ("ok", "failed") and s["ts"] >= since) if fids else 0
 
     def _last_human_requeue(self, fid: str):
         """Timestamp of the latest human DEFERRED disposition on this finding, if any."""
@@ -135,6 +141,9 @@ class Agent:
         if t.action == "escalate":
             return self.escalate(fid, attempt, f, t.rationale, prior, t.failure_class)
         # ---- patch path
+        used = self._patches_last_week(feed_id)
+        if used >= MAX_PATCHES_PER_FEED_WEEK:
+            return self.escalate(fid, attempt, f, f"repair budget for {feed_id} exhausted ({used} patches in 7 days); a feed that keeps breaking needs a person", prior, t.failure_class)
         failing_sha = t.evidence.get("content_sha256")
         payload = self.ctx.payload_loader(feed_id, failing_sha) if failing_sha else None
         if payload is None:
@@ -155,7 +164,8 @@ class Agent:
                 self.step(fid, attempt, "patch", "dry_run", "no model credentials or model declined; nothing proposed")
                 return self.disposition(fid, "DEFERRED", "patch step needs a model key (dry run)")
             apply_proposal(proposal, head, module_rel)
-            self.step(fid, attempt, "patch", "ok", proposal.explanation[:500])
+            spent = f" [model {proposal.model or '?'}, cost ${proposal.cost_usd:.4f}]" if proposal.cost_usd is not None else ""
+            self.step(fid, attempt, "patch", "ok", proposal.explanation[:480] + spent)
             verdict = gate_check(base, head, feed_id, [payload], healthy, fleet_rel="fleet.yaml", finding_id=fid)
             codes = ",".join(verdict["reason_codes"])
             if verdict["verdict"] != "PASS":
