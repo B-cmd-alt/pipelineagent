@@ -66,7 +66,7 @@ def test_request_contract_and_parse(calls):
     assert c["url"] == "https://openrouter.ai/api/v1/chat/completions"
     assert c["headers"]["Authorization"] == "Bearer sk-or-test"
     body = c["json"]
-    assert body["model"] == patch.DEFAULT_MODEL and "models" not in body
+    assert body["model"] == patch.DEFAULT_MODEL and body["models"] == patch.DEFAULT_MODELS.split(",")  # primary first, then the fallback
     rf = body["response_format"]
     assert rf["type"] == "json_schema" and rf["json_schema"]["strict"] is True and rf["json_schema"]["schema"] == patch.SCHEMA
     assert body["provider"]["require_parameters"] is True

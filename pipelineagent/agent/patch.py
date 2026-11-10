@@ -11,7 +11,7 @@ import ast
 import json
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import requests
@@ -21,13 +21,16 @@ from ..config import FeedSpec
 log = logging.getLogger("pipelineagent.patch")
 
 DEFAULT_MODEL = "deepseek/deepseek-v4-pro"
+# OpenRouter tries these in order when the first is down or cannot honour the strict JSON schema;
+# the fallback costs nothing until it is used. PIPELINEAGENT_MODEL overrides the whole list.
+DEFAULT_MODELS = "deepseek/deepseek-v4-pro,z-ai/glm-5.3"
 OPENROUTER_API = "https://openrouter.ai/api/v1"
 MAX_TOKENS = 32000  # reasoning tokens count against this; the answer is a whole module + a test file
 TIMEOUT_S = 600
 
 
 def models() -> list[str]:
-    raw = os.environ.get("PIPELINEAGENT_MODEL", "") or DEFAULT_MODEL
+    raw = os.environ.get("PIPELINEAGENT_MODEL", "") or DEFAULT_MODELS
     return [m.strip() for m in raw.split(",") if m.strip()] or [DEFAULT_MODEL]
 
 SYSTEM = """You repair one data-pipeline fetcher module in a Python project called PipelineAgent.
@@ -63,6 +66,9 @@ class PatchProposal:
     test_filename: str
     test_source: str
     explanation: str
+    # metadata, not content: two proposals with the same code are the same proposal
+    model: str = field(default="", compare=False)                # the model OpenRouter actually used (may be the fallback)
+    cost_usd: float | None = field(default=None, compare=False)  # summed over every round trip, as billed by OpenRouter
 
 
 def _strip_fences(text: str) -> str:
@@ -113,6 +119,9 @@ def problems(d: dict, original_module: str) -> list[str]:
     return out
 
 
+_spend: dict = {"usd": 0.0, "model": "", "seen": False}  # per propose() call; reset at its start
+
+
 def _call(messages: list[dict], key: str) -> tuple[dict | None, str]:
     """One chat-completions round trip. Returns (parsed object or None, raw content)."""
     ids = models()
@@ -124,6 +133,7 @@ def _call(messages: list[dict], key: str) -> tuple[dict | None, str]:
         # route only to providers that honour response_format/json_schema; never silently drop it
         "provider": {"require_parameters": True},
         "reasoning": {"effort": "high", "exclude": True},
+        "usage": {"include": True},  # OpenRouter returns the billed cost per request
     }
     if len(ids) > 1:
         body["models"] = ids
@@ -143,6 +153,11 @@ def _call(messages: list[dict], key: str) -> tuple[dict | None, str]:
     if r.status_code >= 400 or "error" in resp:
         log.error("model call failed: %s %s", r.status_code, str(resp.get("error") or r.text)[:300])
         return None, ""
+    usage = resp.get("usage") or {}
+    if isinstance(usage.get("cost"), (int, float)):
+        _spend["usd"] += float(usage["cost"])
+        _spend["seen"] = True
+    _spend["model"] = str(resp.get("model") or _spend["model"])
     choice = (resp.get("choices") or [{}])[0]
     msg = choice.get("message") or {}
     log.info("model %s via %s: finish=%s usage=%s", resp.get("model"), resp.get("provider"), choice.get("finish_reason"), resp.get("usage"))
@@ -174,6 +189,7 @@ def propose(spec: FeedSpec, module_source: str, error: str, payload_sample: str,
             f"Existing parser tests (for style; do not modify them):\n```python\n{existing_tests[:6000]}\n```\n"
             + (f"\nThe gate rejected the previous attempt with: {prior_gate_feedback}\n" if prior_gate_feedback else ""))
     messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": user}]
+    _spend.update(usd=0.0, model="", seen=False)
     d, content = _call(messages, key)
     if d is None:
         return None
@@ -190,7 +206,7 @@ def propose(spec: FeedSpec, module_source: str, error: str, payload_sample: str,
             d = d2
     if not d.get("test_filename", "").startswith("test_") or not d["test_filename"].endswith(".py"):
         d["test_filename"] = f"test_agent_fix_{spec.id}.py"
-    return PatchProposal(d["module_source"], d["test_filename"], d["test_source"], d["explanation"])
+    return PatchProposal(d["module_source"], d["test_filename"], d["test_source"], d["explanation"], _spend["model"], round(_spend["usd"], 6) if _spend["seen"] else None)
 
 
 def apply_proposal(p: PatchProposal, head: Path, module_rel: Path) -> None:
