@@ -7,6 +7,9 @@ Activated by PIPELINEAGENT_INJECT="feed=kind[,feed=kind]" on the job. Kinds:
   schema_rename  a key/column the parser depends on is renamed (failure class 2, schema drift)
   stale_source   the upstream times out (class 3; nothing to patch, the agent must escalate)
   html_error     the upstream serves an HTML error page with HTTP 200 (class 2/3 boundary)
+  moving_target  a schema rename whose new key changes every hour: a patch can pass the gate on the
+                 archived bytes yet cannot clear the finding live. Exercises merge -> verify fails ->
+                 revert -> redeploy, three times, then ESCALATED (the revert path; nothing else drills it)
   frozen_payload the upstream keeps serving the last healthy bytes with HTTP 200 (class 1, green job /
                  dead data): a daily feed sees no_change runs until write_recency breaches; an hourly
                  append feed lands rows whose event_ts never moves until head_lag breaches. Nothing to patch.
@@ -14,6 +17,7 @@ Deploy drift (class 7) is not an injection: deploy an older image and watch the 
 """
 from __future__ import annotations
 
+import hashlib
 import os
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
@@ -41,7 +45,7 @@ RENAMES: dict[str, tuple[bytes, bytes]] = {
     "canary_selfcheck": (b'"generated_at"', b'"generated"'),
 }
 FAILURE_CLASS = {"schema_rename": "schema_drift", "stale_source": "stale_source", "html_error": "stale_source",
-                 "frozen_payload": "green_job_dead_data"}
+                 "frozen_payload": "green_job_dead_data", "moving_target": "schema_drift"}
 HTML_ERROR = b"<!DOCTYPE html><html><head><title>503 Service Unavailable</title></head><body><h1>Service Unavailable</h1></body></html>"
 
 
@@ -94,6 +98,7 @@ class InjectingClient:
     def __init__(self, inner, injection: Injection, frozen_bodies: list[bytes] | None = None):
         self.inner, self.injection = inner, injection
         self.last_body: bytes | None = None
+        self.clock: datetime | None = None  # tests pin the hour; live runs use the wall clock
         self.frozen = list(frozen_bodies or [])  # frozen_payload: the archived healthy bodies, served in request order
 
     @property
@@ -123,6 +128,10 @@ class InjectingClient:
         old, new = RENAMES.get(self.injection.feed, (b"", b""))
         if old and self.injection.variant:
             new = new[:-1] + b"_" + self.injection.variant.encode() + b'"'
+        if old and self.injection.kind == "moving_target":
+            # a fresh key every hour with no common prefix, so no tolerant mapping can anticipate the next one
+            hour = (self.clock or datetime.now(timezone.utc)).strftime("%Y%m%d%H")
+            new = b'"k' + hashlib.sha256(f"{self.injection.feed}{hour}".encode()).hexdigest()[:8].encode() + b'"'
         body = r.body.replace(old, new) if old else r.body
         self.last_body = self.inner.last_body = body
         return Response(r.status, body, r.content_type, r.last_modified)

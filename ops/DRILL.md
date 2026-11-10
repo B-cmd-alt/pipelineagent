@@ -87,8 +87,11 @@ kind rotating by week number (`harness.scheduled`). Nobody arms or disarms it; t
 the recovery, and the agent closes its own issue. A schema-drift week ends with a real merged PR that
 teaches the canary parser that week's key. `PIPELINEAGENT_INJECT` still works for manual drills and
 overrides the schedule for the feeds it names. `drillwatch` raises an issue on a WRONG or MISSED
-verdict, or after eight days without a drill. Not yet drilled: the revert path (a patch that passes
-the gate but does not clear the finding live).
+verdict, or after eight days without a drill. The revert path has its own kind, `moving_target`, run by hand rather than weekly because each run
+adds three merges and three reverts to `main`: the renamed key changes every hour, so every patch
+passes the gate on the archived bytes and then fails live. Expected: merge → still open after 2 runs →
+automatic revert and redeploy, three times → ESCALATED with one issue. The benchmark scores the kind
+as expecting ESCALATED and counts the reverts.
 
 ## Reading the result
 

@@ -95,3 +95,24 @@ def test_dashboard_shows_the_self_test_line(fleet, wh):
     from pipelineagent.render_site import collect, render_html
     page = render_html(collect(fleet, wh, NOW))
     assert "Self-test on" in page and "no drill has run yet" in page
+
+
+def test_moving_target_renames_to_a_new_unrelated_key_every_hour_and_expects_escalation(wh):
+    class Inner:
+        used, budget, last_body = 0, 40, None
+
+        def get(self, url, **kw):
+            return Response(200, b'{"generated_at":"x"}', "application/json", None)
+
+    c = harness.InjectingClient(Inner(), harness.Injection("canary_selfcheck", "moving_target"))
+    c.clock = datetime(2026, 11, 11, 11, 5, tzinfo=timezone.utc)
+    a = c.get("u").body
+    c.clock = datetime(2026, 11, 11, 11, 55, tzinfo=timezone.utc)
+    assert c.get("u").body == a                      # stable within the hour, so the gate's replay is honest
+    c.clock = datetime(2026, 11, 11, 12, 5, tzinfo=timezone.utc)
+    b = c.get("u").body
+    assert a != b and b"generated" not in a + b       # a new key, sharing nothing with the old ones
+    from pipelineagent import benchmark
+    harness.record(wh, {"canary_selfcheck": harness.Injection("canary_selfcheck", "moving_target")}, "r", NOW)
+    ep = benchmark.run(wh, now=NOW + timedelta(days=5))["episodes"][0]
+    assert ep.failure_class == "schema_drift" and ep.expected == "ESCALATED"
