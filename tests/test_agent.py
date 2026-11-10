@@ -379,3 +379,24 @@ def test_shared_issue_stays_open_while_a_sibling_finding_is_open_and_a_failed_cl
     gh.fail = False
     Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}, gh=gh), "r3", NOW + timedelta(hours=2)).close_recovered_issues({})
     assert gh.closed == [url]
+
+
+def test_merge_deletes_the_repair_branch_and_a_failed_delete_is_not_fatal():
+    from pipelineagent.agent.github import GitHub, GitHubError, PullRequest
+
+    class Rec(GitHub):
+        def __init__(self, fail_delete=False):
+            self.calls, self.fail_delete, self.base_branch = [], fail_delete, "main"
+
+        def _req(self, method, path, **kw):
+            self.calls.append((method, path))
+            if method == "DELETE" and self.fail_delete:
+                raise GitHubError("DELETE: 422 Reference does not exist")
+            return {"sha": "m" * 40}
+
+    pr = PullRequest(10, "https://example/pull/10", "h" * 40, "agent/abc-1")
+    gh = Rec()
+    assert gh.merge_pr(pr) == "m" * 40
+    assert gh.calls == [("PUT", "/pulls/10/merge"), ("DELETE", "/git/refs/heads/agent/abc-1")]
+    gh2 = Rec(fail_delete=True)
+    assert gh2.merge_pr(pr) == "m" * 40  # the merge stands even if the branch stays

@@ -80,7 +80,17 @@ class GitHub:
 
     def merge_pr(self, pr: PullRequest) -> str:
         r = self._req("PUT", f"/pulls/{pr.number}/merge", json={"merge_method": "squash", "sha": pr.head_sha})
+        self.delete_branch(pr.branch)  # the squash commit carries the work; the branch is clutter
         return r["sha"]
+
+    def delete_branch(self, branch: str) -> bool:
+        """Best effort: the content is already on base, so a failure here is logged, never raised."""
+        try:
+            self._req("DELETE", f"/git/refs/heads/{branch}")
+            return True
+        except Exception as e:  # noqa: BLE001
+            log.warning("branch %s not deleted: %s", branch, str(e)[:200])
+            return False
 
     def revert(self, merge_sha: str) -> str:
         """Restore the files the merge touched to their pre-merge content via a new commit on base."""
@@ -105,7 +115,9 @@ class GitHub:
                     payload["sha"] = cur["sha"]
                 self._req("PUT", f"/contents/{path}", json=payload)
         pr = self._req("POST", "/pulls", json={"title": f"agent: revert {merge_sha[:10]}", "body": "Automatic revert: the merged repair did not clear its finding on the live detectors.", "head": branch, "base": self.base_branch})
-        return self._req("PUT", f"/pulls/{pr['number']}/merge", json={"merge_method": "squash"})["sha"]
+        sha = self._req("PUT", f"/pulls/{pr['number']}/merge", json={"merge_method": "squash"})["sha"]
+        self.delete_branch(branch)
+        return sha
 
     def open_issue(self, finding_id: str, title: str, body: str) -> str:
         r = self._req("POST", "/issues", json={"title": title, "body": body, "labels": ["pipelineagent", "needs-human"]})
