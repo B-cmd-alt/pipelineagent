@@ -40,7 +40,7 @@ def candidates(wh: Warehouse) -> list[dict[str, Any]]:
     out = []
     for fid, d in human.items():
         steps = steps_by.get(fid, [])
-        if fid not in opened or any(s["step"] == "scenario_draft" and s["outcome"] in ("ok", "dry_run") for s in steps):
+        if fid not in opened or any(s["step"] == "scenario_draft" and s["outcome"] in ("ok", "dry_run", "skipped") for s in steps):
             continue
         triages = [str(s["detail"]) for s in steps if s["step"] == "triage"]
         agent_rows = [e for e in events if e.get("kind") == "DISPOSITION" and e["finding_id"] == fid and e.get("actor") == "agent"]

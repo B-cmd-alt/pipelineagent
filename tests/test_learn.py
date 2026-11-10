@@ -57,6 +57,8 @@ def test_an_archive_gap_refuses_to_draft(fleet, wh, tmp_path, monkeypatch):
     assert learn.build_draft(fleet, wh, learn.candidates(wh)[0], lambda feed, sha: None) is None
     assert learn.draft_scenarios(fleet, wh, gh, "r9", T0 + timedelta(hours=8), lambda feed, sha: None) == []
     assert [s["outcome"] for s in wh.agent_steps([fid]) if s["step"] == "scenario_draft"] == ["skipped"]
+    learn.draft_scenarios(fleet, wh, gh, "r10", T0 + timedelta(hours=9), lambda feed, sha: None)  # archived bytes do not reappear:
+    assert [s["outcome"] for s in wh.agent_steps([fid]) if s["step"] == "scenario_draft"] == ["skipped"]  # refused once, not hourly
 
 
 def test_a_human_requeue_is_not_a_lesson(fleet, wh, tmp_path, monkeypatch):
