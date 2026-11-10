@@ -260,6 +260,11 @@ def run(fleet: Fleet, wh: Warehouse, *, feeds: list[str] | None = None, fetch: b
                     drillwatch.check(fleet, wh, agent_ctx.github, report.run_id, at)
                 except Exception:  # noqa: BLE001 — the self-test watchdog must never take the run down
                     log.exception("drill watch failed")
+                try:
+                    from . import learn
+                    learn.draft_scenarios(fleet, wh, agent_ctx.github, report.run_id, at, agent_ctx.payload_loader)
+                except Exception:  # noqa: BLE001 — learning is downstream of everything that matters
+                    log.exception("scenario drafting failed")
         for d in report.detections:
             log.info("detect %-22s %-13s %-7s %s", d.feed, d.axis, d.state, d.detail)
 

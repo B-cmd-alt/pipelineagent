@@ -47,6 +47,7 @@ class ScenarioHttp:
     def __init__(self):
         self.used, self.budget, self.last_body = 0, 40, None
         self.body: bytes | None = None
+        self.bodies: list[bytes] = []  # raw steps: archived bodies served in request order (multi-request feeds)
         self.fail: str | None = None
 
     def get(self, url, *, accept="*/*", expect="json", params=None, retries=1):
@@ -56,8 +57,9 @@ class ScenarioHttp:
         if self.fail == "html":
             self.last_body = b"<!DOCTYPE html><html><body>503</body></html>"
             raise SourceError(f"html_error_page: expected {expect}, got HTML [scenario]")
-        self.last_body = self.body
-        return Response(200, self.body or b"", "application/json" if expect == "json" else "text/csv", None)
+        body = self.bodies.pop(0) if len(self.bodies) > 1 else (self.bodies[0] if self.bodies else self.body)
+        self.last_body = body
+        return Response(200, body or b"", "application/json" if expect == "json" else "text/csv", None)
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -68,6 +70,10 @@ def load(path: Path) -> dict[str, Any]:
 
 def all_scenarios() -> list[dict[str, Any]]:
     return [load(p) for p in sorted(SCEN_DIR.glob("*.yaml"))]
+
+
+def all_drafts() -> list[dict[str, Any]]:
+    return [load(p) for p in sorted((ROOT / "evals" / "drafts").glob("*.yaml"))]
 
 
 def observe(sc: dict[str, Any]) -> dict[str, Any]:
@@ -104,14 +110,20 @@ def observe(sc: dict[str, Any]) -> dict[str, Any]:
             ctx = AgentContext(fleet=fleet, package_root=ROOT, github=DryRunGitHub(Path(tmp) / "site"), payload_loader=load_payload,
                                deployer=lambda sha: None, proposer=proposer, auto_merge=True)
             http, frozen = ScenarioHttp(), None
+            bodies = Path(sc.get("_bodies_root") or ROOT / "evals" / "bodies")
             for step in sc["steps"]:
                 now = t0 + timedelta(hours=float(step["at_h"]))
                 wh.now_override = now
                 http.fail = step.get("fail")
                 if step.get("freeze"):
-                    http.body = frozen
+                    http.body, http.bodies = frozen if isinstance(frozen, bytes) else None, list(frozen) if isinstance(frozen, list) else []
                 elif step.get("body"):
-                    http.body = frozen = render_body((ROOT / "evals" / "bodies" / step["body"]).read_text(), now)
+                    http.body, http.bodies = render_body((bodies / step["body"]).read_text(), now), []
+                    frozen = http.body
+                elif step.get("raw"):  # archived production bytes, served verbatim (no templating)
+                    from .agent.replay import load_payload_bodies
+                    http.body, http.bodies = None, load_payload_bodies((bodies / step["raw"]).read_bytes())
+                    frozen = list(http.bodies)
                 run(fleet, wh, feeds=[feed], http=http, now=now, agent_ctx=ctx)
             events = sorted(wh.ledger_events(5000), key=lambda e: e["ts"])
             opened = [e for e in events if e.get("kind") == "OPENED"]

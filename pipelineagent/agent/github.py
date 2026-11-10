@@ -51,7 +51,7 @@ class GitHub:
         """True when `sha` is `ancestor` or a descendant of it (GitHub compare: identical/ahead)."""
         return self._req("GET", f"/compare/{ancestor}...{sha}").get("status") in ("identical", "ahead")
 
-    def open_pr(self, branch: str, files: dict[str, str], title: str, body: str, verdict: dict) -> PullRequest:
+    def open_pr(self, branch: str, files: dict[str, str | bytes], title: str, body: str, verdict: dict | None) -> PullRequest:
         base = self.base_sha()
         try:
             self._req("POST", "/git/refs", json={"ref": f"refs/heads/{branch}", "sha": base})
@@ -61,17 +61,20 @@ class GitHub:
         sha = base
         for rel, content in files.items():
             path = self._p(rel)
-            payload = {"message": f"agent: {rel}", "content": base64.b64encode(content.encode()).decode(), "branch": branch}
+            data = content if isinstance(content, bytes) else content.encode()
+            payload = {"message": f"agent: {rel}", "content": base64.b64encode(data).decode(), "branch": branch}
             try:
                 existing = self._req("GET", f"/contents/{path}", params={"ref": branch})
                 payload["sha"] = existing["sha"]
             except GitHubError:
                 pass
             sha = self._req("PUT", f"/contents/{path}", json=payload)["commit"]["sha"]
-        vpath = self._p(f"verdicts/{verdict.get('finding_id','x')}.json")
-        self._req("PUT", f"/contents/{vpath}", json={"message": "agent: verdict.json", "content": base64.b64encode(json.dumps(verdict, indent=2, default=str).encode()).decode(), "branch": branch})
+        if verdict is not None:
+            vpath = self._p(f"verdicts/{verdict.get('finding_id','x')}.json")
+            self._req("PUT", f"/contents/{vpath}", json={"message": "agent: verdict.json", "content": base64.b64encode(json.dumps(verdict, indent=2, default=str).encode()).decode(), "branch": branch})
         pr = self._req("POST", "/pulls", json={"title": title, "body": body, "head": branch, "base": self.base_branch, "draft": False})
-        self.set_status(pr["head"]["sha"], verdict)
+        if verdict is not None:
+            self.set_status(pr["head"]["sha"], verdict)
         return PullRequest(pr["number"], pr["html_url"], pr["head"]["sha"], branch)
 
     def set_status(self, sha: str, verdict: dict) -> None:
@@ -176,9 +179,10 @@ class DryRunGitHub(GitHub):
         for rel, content in files.items():
             p = d / rel
             p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_text(content)
+            p.write_bytes(content if isinstance(content, bytes) else content.encode())
         (d / "PR.md").write_text(f"# {title}\n\n{body}\n")
-        (d / "verdict.json").write_text(json.dumps(verdict, indent=2, default=str))
+        if verdict is not None:
+            (d / "verdict.json").write_text(json.dumps(verdict, indent=2, default=str))
         self._n += 1
         log.info("dry-run PR written to %s", d)
         return PullRequest(self._n, f"dry-run://{d}", "dryrun" + "0" * 34, branch, dry_run=True)
