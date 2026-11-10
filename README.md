@@ -18,6 +18,30 @@ replay → patch → PR → gate → merge → deploy → verify, with revert an
 fault-injection harness and the benchmark are specified in [`DESIGN.md`](DESIGN.md) and
 come next.
 
+## Results: three injected failures, three correct outcomes
+
+Faults are injected between the HTTP client and the parser, so everything downstream reacts as it
+would to a real upstream change. Each injection writes a ground-truth row; `python -m pipelineagent
+benchmark` joins that against the ledger. Live numbers, 2026-11-08 to 2026-11-10:
+
+| injected failure | feed | detected after | agent's outcome | expected | time from detection to outcome | evidence |
+|---|---|---|---|---|---|---|
+| schema drift (a key renamed) | coingecko_prices | 182 min (3h SLA) | **FIXED** by its own PR | FIXED | 85 min | [#10](https://github.com/B-cmd-alt/pipelineagent/pull/10) |
+| stale source (every fetch times out) | github_status | 182 min (3h SLA) | **ESCALATED**, no PR | ESCALATED | 60 min | [#19](https://github.com/B-cmd-alt/pipelineagent/issues/19) |
+| green job, dead data (frozen payload, exit 0) | ieso_ontario_demand | 30h (the daily feed's SLA) | **ESCALATED**, no PR | ESCALATED | same run | [#22](https://github.com/B-cmd-alt/pipelineagent/issues/22) |
+
+- **Baseline.** Detectors without the agent find the same three failures at the same time and then
+  wait for a person. The agent's contribution is the last three columns.
+- **Knowing when not to patch** is half the result: two of three failures have nothing to fix in the
+  repo, and the agent opened one issue each, called no model, and closed its own issue when the
+  source recovered.
+- **The honest part.** The schema-drift repair took six gate rejections and one human re-queue. Every
+  rejection was a defect in this repo's own gate or tests (a test pinning the pre-repair behaviour, a
+  gate contradicting the prompt, feedback too terse to act on), none in the model's patches. They are
+  listed with their fixes in [`ops/DRILL.md`](ops/DRILL.md). The other two drills needed no human.
+- Findings with no injection active (FRED has been timing out from the cloud for days) are real
+  incidents; the benchmark lists them and does not score them.
+
 ## What runs
 
 ```

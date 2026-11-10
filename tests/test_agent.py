@@ -400,3 +400,14 @@ def test_merge_deletes_the_repair_branch_and_a_failed_delete_is_not_fatal():
     assert gh.calls == [("PUT", "/pulls/10/merge"), ("DELETE", "/git/refs/heads/agent/abc-1")]
     gh2 = Rec(fail_delete=True)
     assert gh2.merge_pr(pr) == "m" * 40  # the merge stands even if the branch stays
+
+
+def test_agent_disposition_wins_over_the_auto_row_written_in_the_same_run(fleet, wh, tmp_path):
+    """Live 2026-11-10: OPENED wrote auto UNKNOWN and the agent wrote ESCALATED with the same timestamp;
+    the tie let the auto row win and the finding was triaged again an hour later."""
+    f = _open_finding(wh, "fred_dgs10", "write_recency")          # auto UNKNOWN at NOW
+    a = Agent(wh, _ctx(fleet, tmp_path, lambda **k: None, {}), "r1", NOW)
+    a.disposition(f["finding_id"], "DEFERRED", "first")
+    a.disposition(f["finding_id"], "ESCALATED", "second", "https://example/issues/1")
+    d = wh.latest_dispositions()[f["finding_id"]]
+    assert d["decided_by"] == "agent" and d["disposition"] == "ESCALATED"

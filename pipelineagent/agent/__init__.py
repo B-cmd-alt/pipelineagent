@@ -11,7 +11,7 @@ import os
 import shutil
 import tempfile
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable
 
@@ -57,7 +57,10 @@ class Agent:
         log.info("agent %s attempt %d %-8s %-7s %s", fid, attempt, step, outcome, detail[:120])
 
     def disposition(self, fid: str, disp: str, note: str, evidence_ref: str | None = None) -> None:
-        dispose(self.wh, fid, disp, "agent", note, self.now, evidence_ref)
+        # strictly after the ledger's own rows of this run (the auto "awaiting triage" row shares self.now):
+        # on a tie "latest row wins" is a coin flip, and the finding would be triaged a second time
+        self._seq = getattr(self, "_seq", 0) + 1
+        dispose(self.wh, fid, disp, "agent", note, self.now + timedelta(milliseconds=self._seq), evidence_ref)
 
     def steps_for(self, fid: str) -> list[dict]:
         return self.wh.agent_steps([fid])

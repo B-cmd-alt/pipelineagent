@@ -64,6 +64,22 @@ Benchmark verdict CORRECT (expected ESCALATED), MTTR 60 min. The ESCALATED dispo
 record of what the agent decided; the issue list is back to what still needs a person. Zero defects
 found this time — the loop behaved exactly as DESIGN §4 row 3 says.
 
+## Record — class 1 drill on ieso_ontario_demand, 2026-11-09/10
+
+Armed 03:28Z on the 9th (`frozen_payload`). Every hourly run ended `no_change` with exit 0 for 27
+hours. `write_recency` OPENED 06:26Z on the 10th, exactly 30.0h after the last real write; the same
+run triaged `green_job_dead_data → escalate`: one issue (#22), ESCALATED, **no PR, no model call**.
+Benchmark verdict CORRECT. MTTD is 1616 min from injection, which is the 30h SLA of a daily feed, not
+slowness: for this class detection time is whatever the SLA is.
+
+Two things the drill exposed:
+- The agent's disposition and the ledger's auto "awaiting triage" row carried the same timestamp, so
+  "latest row wins" was a tie and the finding was triaged a second time an hour later (no second
+  issue, but a wrong MTTR). Agent rows are now written strictly after the run's ledger rows.
+- After disarming, the feed was `skipped: refreshed 0.6h ago`: the injected `no_change` runs had
+  reset the daily due-clock, so recovery waits for the next due fetch (~20h). A harness artefact; a
+  real frozen publisher has the same shape, and the finding simply stays ESCALATED until data moves.
+
 ## Reading the result
 
 ```sql
