@@ -107,6 +107,14 @@ def cmd_benchmark(args) -> int:
     return 0
 
 
+def cmd_eval(args) -> int:
+    from . import evals
+
+    results = evals.run_all()
+    print(evals.markdown(results))
+    return 0 if results and all(r["passed"] for r in results) else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=os.environ.get("LOG_LEVEL", "INFO"), format="%(asctime)s %(levelname)s %(message)s", stream=sys.stdout)
     p = argparse.ArgumentParser(prog="pipelineagent")
@@ -125,6 +133,7 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--no-render", action="store_true")
     r.set_defaults(fn=cmd_run)
     sub.add_parser("render").set_defaults(fn=cmd_render)
+    sub.add_parser("eval", help="replay every scenario under evals/ offline and compare with its recorded answer (exit 1 on any failure)").set_defaults(fn=cmd_eval)
     sub.add_parser("benchmark", help="harness ground truth vs the ledger: MTTD, MTTR, outcome per injected episode (markdown)").set_defaults(fn=cmd_benchmark)
     d = sub.add_parser("dispose", help="record a human disposition for a finding")
     d.add_argument("finding_id")

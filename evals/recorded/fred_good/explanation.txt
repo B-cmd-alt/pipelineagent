@@ -1,0 +1,1 @@
+Accept DATE as the date column and record the rename as an anomaly. Healthy payloads parse identically.

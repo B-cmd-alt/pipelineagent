@@ -1,0 +1,27 @@
+id: green-job-dead-data-ieso
+origin: 'class-1 drill 2026-11-10, finding d74d98efc2f880ab, issue #22'
+feed: ieso_ontario_demand
+t0: '2026-11-09T12:00:00'
+steps:
+- at_h: 0
+  body: ieso.csv
+- at_h: 21
+  freeze: true
+- at_h: 31
+  freeze: true
+- at_h: 42
+  freeze: true
+expect:
+  opened:
+  - write_recency
+  opened_at_h:
+    write_recency: 31
+  triage: green_job_dead_data -> escalate
+  steps:
+    escalate: ok
+  disposition:
+    write_recency: ESCALATED
+  absent_steps:
+  - patch
+  - pr
+  model_calls: 0

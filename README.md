@@ -42,6 +42,21 @@ benchmark` joins that against the ledger. Live numbers, 2026-11-08 to 2026-11-10
 - Findings with no injection active (FRED has been timing out from the cloud for days) are real
   incidents; the benchmark lists them and does not score them.
 
+## Evals: how a change is kept from breaking this
+
+`python -m pipelineagent eval` replays nine scripted scenarios through the real fetchers, detectors,
+ledger, agent and gate, offline, in seconds, and compares what the system concluded with a recorded
+answer. Each scenario has an origin: the three drills above, the real FRED incident, negative controls
+(a healthy feed and a quiet weekend must open nothing) and bad patches the gate must reject. It runs
+in the test suite on every change, and inside the agent's own gate.
+
+The evals are guarded too: an answer cannot change without a written reason; every scenario must fail
+when its answer is falsified; loosening an SLA, breaking triage or rubber-stamping the gate must turn
+a scenario red; a scenario that crashes or is skipped counts as a failure; the agent may not touch
+`evals/`. Details in [`evals/README.md`](evals/README.md). This layer tests everything around the
+model with hand-written reference patches. Whether the live path still works (credentials, deploys,
+the model itself) is what the live drills are for.
+
 ## What runs
 
 ```

@@ -1,0 +1,28 @@
+id: healthy-hourly-coingecko
+origin: 'negative control: a healthy hourly feed must open nothing'
+feed: coingecko_prices
+t0: '2026-11-08T12:00:00'
+steps:
+- at_h: 0
+  body: coingecko_moving.json
+- at_h: 1
+  body: coingecko_moving.json
+- at_h: 2
+  body: coingecko_moving.json
+- at_h: 3
+  body: coingecko_moving.json
+- at_h: 4
+  body: coingecko_moving.json
+- at_h: 5
+  body: coingecko_moving.json
+- at_h: 6
+  body: coingecko_moving.json
+- at_h: 7
+  body: coingecko_moving.json
+expect:
+  opened: []
+  absent_steps:
+  - triage
+  - escalate
+  - patch
+  model_calls: 0

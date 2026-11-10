@@ -1,0 +1,20 @@
+id: healthy-daily-fred-weekend
+origin: 'negative control: FRED''s Friday file is byte-identical all weekend (ops/SLA_CHANGES.md)'
+feed: fred_dgs10
+t0: '2026-11-06T22:00:00'
+steps:
+- at_h: 0
+  body: fred_ok.csv
+- at_h: 21
+  freeze: true
+- at_h: 42
+  freeze: true
+- at_h: 63
+  freeze: true
+expect:
+  opened: []
+  absent_steps:
+  - triage
+  - escalate
+  - patch
+  model_calls: 0

@@ -1,0 +1,1 @@
+Accept DATE, and also round values to one decimal.
