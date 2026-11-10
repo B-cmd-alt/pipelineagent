@@ -39,8 +39,11 @@ benchmark` joins that against the ledger. Live numbers, 2026-11-08 to 2026-11-10
   rejection was a defect in this repo's own gate or tests (a test pinning the pre-repair behaviour, a
   gate contradicting the prompt, feedback too terse to act on), none in the model's patches. They are
   listed with their fixes in [`ops/DRILL.md`](ops/DRILL.md). The other two drills needed no human.
-- Findings with no injection active (FRED has been timing out from the cloud for days) are real
-  incidents; the benchmark lists them and does not score them.
+- Findings with no injection active are real incidents; the benchmark lists them and does not score
+  them. The FRED one (every fetch timing out since 2026-11-08) was escalated as "the source is down".
+  It was not: FRED's website CSV endpoint stalls this client and answers others, so the remedy was a
+  human-made change of route to FRED's official API (`FRED_API_KEY`, [`ops/GO_LIVE.md`](ops/GO_LIVE.md)),
+  not something the agent may do.
 
 ## Evals: how a change is kept from breaking this
 
@@ -94,7 +97,7 @@ fleet.yaml ──► 7 public feeds ──► warehouse (append-only, vintage-st
 | `nws_observations` | api.weather.gov latest obs, 4 stations | hourly | sensors go null; station pages lag |
 | `open_meteo_current` | Open-Meteo current conditions | hourly | stable control feed |
 | `usgs_earthquakes_hour` | USGS GeoJSON all_hour | hourly | fast-moving data clock |
-| `fred_dgs10` | FRED fredgraph CSV | daily | `.` for missing values; business-day gaps; connection resets |
+| `fred_dgs10` | FRED official API (JSON) with `FRED_API_KEY`; fredgraph CSV without | daily | `.` for missing values; business-day gaps; connection resets |
 | `github_status` | Statuspage summary.json | hourly | legitimately flat for weeks (flat axis deliberately *not declared*) |
 | `coingecko_prices` | CoinGecko simple/price | hourly | HTTP 429 rate limits |
 | `ieso_ontario_demand` | IESO PUB_Demand.csv | daily | hour-ending in fixed EST all year: the obvious DST conversion is wrong |
