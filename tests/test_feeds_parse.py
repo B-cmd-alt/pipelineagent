@@ -65,3 +65,78 @@ def test_html_error_page_detection():
     assert looks_like_html(b"<!DOCTYPE html><html>...", "text/plain")
     assert looks_like_html(b"{}", "text/html; charset=utf-8")
     assert not looks_like_html(b'{"a": 1}', "application/json")
+
+
+FRED_API_BODY = json.dumps({"realtime_start": "2026-11-10", "realtime_end": "2026-11-10", "count": 3, "observations": [
+    {"realtime_start": "2026-11-10", "realtime_end": "2026-11-10", "date": "2026-11-09", "value": "."},
+    {"realtime_start": "2026-11-10", "realtime_end": "2026-11-10", "date": "2026-11-06", "value": "4.11"},
+    {"realtime_start": "2026-11-10", "realtime_end": "2026-11-10", "date": "2026-11-05", "value": "4.09"}]})
+
+
+class _FredHttp:
+    def __init__(self, body=b"", error=None):
+        self.body, self.error, self.calls = body, error, []
+
+    def get(self, url, *, accept="*/*", expect="json", params=None, retries=1):
+        from pipelineagent.http import Response
+
+        self.calls.append((url, dict(params or {})))
+        if self.error:
+            raise self.error
+        return Response(200, self.body, "", None)
+
+
+def _fred_ctx(http):
+    from pipelineagent.feeds.base import FetchContext
+
+    return FetchContext(http, {"series_id": "DGS10", "keep_last_n": 30}, None, None, "fred_dgs10", datetime(2026, 11, 10, tzinfo=timezone.utc))
+
+
+def test_fred_api_json_gives_the_same_row_shape_as_the_csv():
+    rows, anomalies = fred_dgs10.parse_json(FRED_API_BODY, "DGS10", 30)
+    csv_rows, _ = fred_dgs10.parse("observation_date,DGS10\n2026-11-05,4.09\n2026-11-06,4.11\n2026-11-09,.\n", "DGS10", 30)
+    assert rows == csv_rows and [r["observation_date"] for r in rows] == [date(2026, 11, 5), date(2026, 11, 6), date(2026, 11, 9)]
+    assert rows[-1]["value"] is None and any("missing" in a for a in anomalies)
+    import pytest
+
+    with pytest.raises(ValueError, match="schema"):
+        fred_dgs10.parse_json('{"error_code": 400}', "DGS10", 5)
+
+
+def test_fred_uses_the_official_api_only_when_a_key_is_set(monkeypatch):
+    monkeypatch.delenv("FRED_API_KEY", raising=False)
+    http = _FredHttp(b"observation_date,DGS10\n2026-11-06,4.11\n")
+    assert len(fred_dgs10.fetch(_fred_ctx(http)).rows) == 1 and http.calls[0][0] == fred_dgs10.CSV_URL
+    monkeypatch.setenv("FRED_API_KEY", "k" * 32)
+    http = _FredHttp(FRED_API_BODY.encode())
+    res = fred_dgs10.fetch(_fred_ctx(http))
+    assert http.calls[0][0] == fred_dgs10.API_URL and http.calls[0][1]["series_id"] == "DGS10" and len(res.rows) == 3
+
+
+def test_fred_api_hash_ignores_the_request_date_and_the_archive_replays(monkeypatch):
+    """The API stamps today's date on every response; a weekend must still be a no_change, and
+    the archived bytes must parse again with or without a key (replay has neither route)."""
+    import hashlib
+
+    monkeypatch.setenv("FRED_API_KEY", "k" * 32)
+    a = fred_dgs10.fetch(_fred_ctx(_FredHttp(FRED_API_BODY.encode())))
+    b = fred_dgs10.fetch(_fred_ctx(_FredHttp(FRED_API_BODY.replace("2026-11-10", "2026-11-11").encode())))
+    assert a.content_sha256 == b.content_sha256 == hashlib.sha256(a.raw).hexdigest()
+    monkeypatch.delenv("FRED_API_KEY")
+    assert fred_dgs10.fetch(_fred_ctx(_FredHttp(a.raw))).rows == a.rows
+    monkeypatch.setenv("FRED_API_KEY", "k" * 32)
+    assert len(fred_dgs10.fetch(_fred_ctx(_FredHttp(b"observation_date,DGS10\n2026-11-06,4.11\n"))).rows) == 1
+
+
+def test_fred_key_never_reaches_an_error_message(monkeypatch):
+    import pytest
+    from pipelineagent.http import SourceError
+
+    key = "s3cr3t" * 5
+    monkeypatch.setenv("FRED_API_KEY", key)
+    err = SourceError(f"transport: ConnectionError: Max retries exceeded with url: /fred/series/observations?series_id=DGS10&x={key}")
+    with pytest.raises(SourceError) as ei:
+        fred_dgs10.fetch(_fred_ctx(_FredHttp(error=err)))
+    assert key not in str(ei.value) and "***" in str(ei.value) and ei.value.__cause__ is None
+    with pytest.raises(SourceError, match="html_error_page"):
+        fred_dgs10.fetch(_fred_ctx(_FredHttp(b"<!doctype html><html>blocked</html>")))

@@ -45,6 +45,7 @@ Variables the agent reads:
 | `CLOUD_BUILD_PROJECT`, `CLOUD_BUILD_REGION`, `CLOUD_BUILD_SA`, `CLOUD_RUN_JOB` | enable the post-merge build + deploy trigger; the build runs as `CLOUD_BUILD_SA`, which needs permission to push images and update the job |
 | `CLOUD_RUN_JOB` | job to redeploy; Cloud Run sets it to the job's own name automatically and rejects it in `--update-env-vars` (reserved), so never pass it |
 | `PIPELINEAGENT_AGENT` | `0` turns the agent off entirely (default on) |
+| `FRED_API_KEY` | free key from fred.stlouisfed.org → My Account → API Keys; mount it as a secret like the two above. With it `fred_dgs10` reads FRED's official API; without it the feed falls back to the website CSV, which has timed out for this client on every run since 2026-11-08 |
 
 ## 4. Verify
 

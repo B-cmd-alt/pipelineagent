@@ -15,11 +15,13 @@ D = Drill("canary_selfcheck", ("stale_source", "frozen_payload", "schema_rename"
 WED = datetime(2026, 11, 11, 2, 0, tzinfo=timezone.utc)  # a Wednesday, week 44 from the fixed Monday
 
 
-def test_canary_parses_the_published_page_and_fails_loudly_on_a_renamed_clock():
+def test_canary_parses_the_published_page_and_fails_loudly_without_a_clock():
     rows, anomalies = canary_selfcheck.parse({"generated_at": "2026-11-10T17:56:01.912837+00:00", "summary": {"ok": 15, "breach": 3, "unknown": 2, "open_findings": 5}})
     assert rows[0]["event_ts"] == datetime(2026, 11, 10, 17, 56, 1, 912837, tzinfo=timezone.utc) and rows[0]["ok_cells"] == 15 and anomalies == []
     with pytest.raises(ValueError, match="schema"):
-        canary_selfcheck.parse({"generated_w44": "2026-11-10T17:56:01+00:00"})
+        # No clock at all, not a renamed one: a weekly drill renames the key and a correct repair accepts
+        # it, so pinning "generated_w44 raises" failed every good patch (2026-11-11 drill, issue #32).
+        canary_selfcheck.parse({"summary": {"ok": 15}})
 
 
 def test_schedule_is_a_pure_function_of_the_clock_and_rotates_weekly():
