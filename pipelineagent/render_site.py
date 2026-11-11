@@ -484,6 +484,9 @@ def render_html(data: dict[str, Any]) -> str:
                    f'<b>{_e(last["verdict"])}</b>' + (f' ({_e(last["outcome"])}, detected in {last["mttd_min"]} min)' if last.get("outcome") else "") + ev)
         else:
             txt = f'Self-test on <code>{_e(dr["feed"])}</code>: no drill has run yet (scheduled weekly).'
+        for st in dr.get("settled") or []:
+            fix = f' · <a href="{_e(st["evidence"])}">the fix</a>' if str(st.get("evidence") or "").startswith("http") else ""
+            txt += f'<br>Failed self-test, since resolved: {_e(st["why"])}. {_e(st["by"])} on {_e(st["at"][:10])}: {_e(st.get("note") or "")}{fix}'
         drills_html += f'<p class="sub drill {_e(dr["state"])}">{txt}</p>'
     repo = data.get("repo_url") or ""
     links = [("#benchmark", "Results"), ("#how", "How it works"), ("#fleet", "Live fleet")]

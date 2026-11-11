@@ -81,6 +81,17 @@ def test_a_wrong_drill_result_opens_exactly_one_issue_and_a_correct_one_none(fle
     assert len(raised) == 1 and "WRONG" in hub.opened[0][1]
     assert drillwatch.check(fleet, wh, hub, "r4", NOW + timedelta(hours=8)) == [] and len(hub.opened) == 1
     assert drillwatch.status(fleet, wh, NOW + timedelta(hours=8))[0]["state"] == "BREACH"
+    # only a person settles it, and the page then explains the failure instead of warning about it
+    alarm = raised[0]
+    dispose(wh, alarm, "FIXED", "agent", "self-cleared", NOW + timedelta(hours=9), "https://example/pull/2")
+    assert drillwatch.status(fleet, wh, NOW + timedelta(hours=9))[0]["state"] == "BREACH"
+    dispose(wh, alarm, "FIXED", "human:isabelle", "a test pinned the failure", NOW + timedelta(hours=10), "https://example/pull/3")
+    row = drillwatch.status(fleet, wh, NOW + timedelta(hours=10))[0]
+    assert row["state"] == "OK" and row["alarms"] == [] and row["settled"][0]["id"] == alarm and row["correct"] == 0
+    assert drillwatch.check(fleet, wh, hub, "r5", NOW + timedelta(hours=11)) == [] and len(hub.opened) == 1
+    from pipelineagent.render_site import collect, render_html
+    page = render_html(collect(fleet, wh, NOW + timedelta(hours=11)))
+    assert "SELF-TEST FAILED" not in page and "since resolved" in page and "a test pinned the failure" in page and "https://example/pull/3" in page
 
 
 def test_a_missed_drill_and_a_silent_schedule_both_alarm(fleet, wh):
