@@ -93,6 +93,16 @@ passes the gate on the archived bytes and then fails live. Expected: merge → s
 automatic revert and redeploy, three times → ESCALATED with one issue. The benchmark scores the kind
 as expecting ESCALATED and counts the reverts.
 
+A failed drill stays red on the dashboard until a person settles its alarm, with the cause and the
+fixing PR. The alarm id is in the watchdog's issue and in `data.json` (`drills[].alarms[].id`):
+
+```bash
+python -m pipelineagent dispose drill:canary_selfcheck:2026111102 FIXED --who <you> \
+  --note "<what was wrong and what fixed it>" --evidence-ref <PR url>
+```
+
+The episode keeps its WRONG verdict in the benchmark; the page then shows the explanation beside it.
+
 ## Reading the result
 
 ```sql
@@ -136,3 +146,14 @@ Lessons: the gate must not contradict the prompt; a test that pins the exact fai
 meant to repair turns every correct patch into `TESTS_FAILED`; the model cannot be trusted to do
 arithmetic (epoch→datetime) inside a test; and an auto-rule that overrides agent state silently
 rewrites who fixed what.
+
+## Record — first scheduled drill, canary schema_rename, 2026-11-11
+
+Injected 02:24Z, detected 04:26Z, three patches, all replayed cleanly, all rejected `TESTS_FAILED`,
+ESCALATED at 06:26Z where FIXED was expected; the watchdog raised its alarm (#32). Attempts 1 and 3
+were rejected by `tests/test_drills.py`, which asserted that a payload keyed `generated_w44` must
+raise: the test pinned the exact failure the drill asks the agent to repair, the same defect as
+attempt 1 of the class 2 drill above. Fixed in #33 (the test asserts the parser raises with no clock
+at all). Attempt 2 was rejected by `tests/test_evals.py` (`flat-value-coingecko`); not explained, not
+reproduced. The drill did what it is for: it found a defect in the repo's own tests before a real
+schema change on a real feed did.

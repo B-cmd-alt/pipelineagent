@@ -1,6 +1,11 @@
 """Layer-2 watchdog: the scheduled drills are only worth something if a bad result makes noise.
 After every run the drill feeds' benchmark episodes are read back; a WRONG or MISSED verdict, or
-no drill at all for more than eight days, opens exactly one issue and turns the dashboard line red."""
+no drill at all for more than eight days, opens exactly one issue and turns the dashboard line red.
+
+An alarm stays red until a person settles it: `pipelineagent dispose <alarm id> FIXED|BENIGN --who ...
+--note ... --evidence-ref <the fixing PR>`. The episode keeps its WRONG verdict in the benchmark; what
+changes is that the page shows the cause and the fix next to it instead of an unexplained warning.
+Only a person can do this: the agent never writes a disposition for an alarm id."""
 from __future__ import annotations
 
 from datetime import datetime, timedelta
@@ -11,6 +16,7 @@ from .schema import AGENT_STEPS
 from .warehouse.base import Warehouse
 
 STALE_AFTER = timedelta(days=8)
+SETTLES = ("FIXED", "BENIGN")
 
 
 def status(fleet, wh: Warehouse, now: datetime) -> list[dict[str, Any]]:
@@ -19,6 +25,7 @@ def status(fleet, wh: Warehouse, now: datetime) -> list[dict[str, Any]]:
     if not drills:
         return []
     eps = benchmark.run(wh, now)["episodes"]
+    disps = wh.latest_dispositions()
     out = []
     for d in drills:
         mine = [e for e in eps if e.feed == d.feed]
@@ -27,7 +34,14 @@ def status(fleet, wh: Warehouse, now: datetime) -> list[dict[str, Any]]:
                   for e in mine if e.verdict == "MISSED" or e.verdict.startswith("WRONG")]
         if last and now - last.end > STALE_AFTER:
             alarms.append({"id": f"drill:{d.feed}:stale:{now:%G%V}", "why": f"no drill has run since {last.end:%Y-%m-%d %H:%M}Z (more than {STALE_AFTER.days} days)"})
-        out.append({"feed": d.feed, "episodes": len(mine), "correct": sum(1 for e in mine if e.verdict == "CORRECT"),
+        settled = []
+        for al in alarms:
+            dd = disps.get(al["id"]) or {}
+            if str(dd.get("decided_by") or "").startswith("human:") and dd.get("disposition") in SETTLES:
+                settled.append({**al, "by": dd["decided_by"], "at": dd["decided_at"].isoformat(), "note": dd.get("note"), "evidence": dd.get("evidence_ref")})
+        done = {x["id"] for x in settled}
+        alarms = [al for al in alarms if al["id"] not in done]
+        out.append({"feed": d.feed, "episodes": len(mine), "correct": sum(1 for e in mine if e.verdict == "CORRECT"), "settled": settled,
                     "last": None if not last else {"class": last.failure_class, "kind": last.kind, "injected": last.start.isoformat(), "verdict": last.verdict,
                                                    "outcome": last.outcome, "mttd_min": last.mttd_min, "mttr_min": last.mttr_min, "evidence": last.evidence_ref},
                     "alarms": alarms, "state": "BREACH" if alarms else ("OK" if last else "UNKNOWN")})
