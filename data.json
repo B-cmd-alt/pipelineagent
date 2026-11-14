@@ -1,0 +1,4628 @@
+{
+ "generated_at": "2026-11-14T19:24:36.957632+00:00",
+ "project": "PipelineAgent",
+ "renderer": {
+  "version": "0.1.0",
+  "code_sha256": "c491b78d94dbeca285345317ed01b9caf995d63fadcd728207893cef0744e7a0",
+  "git_commit": "b34b639074a4ffed1b0ec808c4536643ee9a92c2"
+ },
+ "heartbeat_max_age_hours": 26.0,
+ "errors": [],
+ "heartbeat": {
+  "state": "ALIVE",
+  "age_hours": 0.01,
+  "last_ts": "2026-11-14T19:24:12.711801+00:00",
+  "max_age_hours": 26.0,
+  "code_sha256": "c491b78d94dbeca285345317ed01b9caf995d63fadcd728207893cef0744e7a0",
+  "git_commit": "b34b639074a4ffed1b0ec808c4536643ee9a92c2"
+ },
+ "grid": [
+  {
+   "feed": "nws_observations",
+   "description": "NOAA/NWS latest surface observations for four airport stations (api.weather.gov).",
+   "cadence": "hourly",
+   "table": "nws_observations",
+   "sla": {
+    "write_recency_max_hours": 3.0,
+    "head_lag_max_hours": 4.0,
+    "flat_value": {
+     "column": "temperature_c",
+     "max_consecutive": 12,
+     "group_by": "station"
+    }
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T19:23:24.692601+00:00 (0.0h ago)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T18:55:00+00:00 (0.5h behind now)",
+     "observed": 0.49,
+     "threshold": 4.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "OK",
+     "detail": "longest identical run 1 < 12 on temperature_c",
+     "observed": 1.0,
+     "threshold": 12.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    }
+   },
+   "last_run": {
+    "status": "ok",
+    "reason": null,
+    "finished_at": "2026-11-14T19:23:30.701601+00:00",
+    "rows_written": 4,
+    "error": null,
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 25,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 0,
+    "rows": 100
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "ok",
+     "rows": 4,
+     "error": null
+    }
+   ]
+  },
+  {
+   "feed": "open_meteo_current",
+   "description": "Open-Meteo current conditions for two points (no key).",
+   "cadence": "hourly",
+   "table": "open_meteo_current",
+   "sla": {
+    "write_recency_max_hours": 3.0,
+    "head_lag_max_hours": 3.0,
+    "flat_value": {
+     "column": "temperature_2m",
+     "max_consecutive": 12,
+     "group_by": "location"
+    }
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T19:23:24.692601+00:00 (0.0h ago)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T19:15:00+00:00 (0.2h behind now)",
+     "observed": 0.15,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "OK",
+     "detail": "longest identical run 1 < 12 on temperature_2m",
+     "observed": 1.0,
+     "threshold": 12.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    }
+   },
+   "last_run": {
+    "status": "ok",
+    "reason": null,
+    "finished_at": "2026-11-14T19:23:28.521601+00:00",
+    "rows_written": 2,
+    "error": null,
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 18,
+    "no_change": 0,
+    "failed": 7,
+    "skipped": 0,
+    "rows": 36
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "failed",
+     "rows": 0,
+     "error": "transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)"
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    }
+   ]
+  },
+  {
+   "feed": "usgs_earthquakes_hour",
+   "description": "USGS 'all earthquakes, past hour' GeoJSON summary feed.",
+   "cadence": "hourly",
+   "table": "usgs_earthquakes_hour",
+   "sla": {
+    "write_recency_max_hours": 3.0,
+    "head_lag_max_hours": 3.0,
+    "flat_value": {
+     "column": "feature_count",
+     "max_consecutive": 24,
+     "group_by": null
+    }
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T19:23:24.692601+00:00 (0.0h ago)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T19:22:50+00:00 (0.0h behind now)",
+     "observed": 0.02,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "OK",
+     "detail": "longest identical run 2 < 24 on feature_count",
+     "observed": 2.0,
+     "threshold": 24.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    }
+   },
+   "last_run": {
+    "status": "ok",
+    "reason": null,
+    "finished_at": "2026-11-14T19:23:29.916601+00:00",
+    "rows_written": 1,
+    "error": null,
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 25,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 0,
+    "rows": 25
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    }
+   ]
+  },
+  {
+   "feed": "fred_dgs10",
+   "description": "FRED 10-year Treasury constant-maturity yield (DGS10) via the public fredgraph CSV; '.' marks a missing value.",
+   "cadence": "daily",
+   "table": "fred_dgs10",
+   "sla": {
+    "write_recency_max_hours": 80.0,
+    "head_lag_max_hours": 120.0,
+    "flat_value": {
+     "column": "value",
+     "max_consecutive": 5,
+     "group_by": "series_id"
+    }
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T06:23:59.836961+00:00 (13.0h ago)",
+     "observed": 13.0,
+     "threshold": 80.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-12T00:00:00+00:00 (67.4h behind now)",
+     "observed": 67.4,
+     "threshold": 120.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "OK",
+     "detail": "longest identical run 1 < 5 on value",
+     "observed": 1.0,
+     "threshold": 5.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    }
+   },
+   "last_run": {
+    "status": "skipped",
+    "reason": "not_due",
+    "finished_at": "2026-11-14T19:23:24.692601+00:00",
+    "rows_written": 0,
+    "error": "daily feed refreshed 13.0h ago (< 20h)",
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 1,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 24,
+    "rows": 30
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 10.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 11.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 12.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 13.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 14.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 15.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 16.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 17.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 18.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 19.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 20.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 30,
+     "error": "2 missing ('.') prints in last 30"
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 1.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 2.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 3.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 4.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 5.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 6.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 7.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 8.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 9.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 10.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 11.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 12.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 13.0h ago (< 20h)"
+    }
+   ]
+  },
+  {
+   "feed": "github_status",
+   "description": "GitHub public status page summary (Statuspage API).",
+   "cadence": "hourly",
+   "table": "github_status",
+   "sla": {
+    "write_recency_max_hours": 3.0,
+    "head_lag_max_hours": 240.0,
+    "flat_value": null
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T19:23:24.692601+00:00 (0.0h ago)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T13:34:02.325000+00:00 (5.8h behind now)",
+     "observed": 5.84,
+     "threshold": 240.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "N/A",
+     "detail": "not declared in fleet.yaml"
+    }
+   },
+   "last_run": {
+    "status": "ok",
+    "reason": null,
+    "finished_at": "2026-11-14T19:23:26.671601+00:00",
+    "rows_written": 1,
+    "error": null,
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 25,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 0,
+    "rows": 25
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    }
+   ]
+  },
+  {
+   "feed": "coingecko_prices",
+   "description": "CoinGecko simple price endpoint for BTC and ETH (free tier, aggressively rate limited).",
+   "cadence": "hourly",
+   "table": "coingecko_prices",
+   "sla": {
+    "write_recency_max_hours": 3.0,
+    "head_lag_max_hours": 3.0,
+    "flat_value": {
+     "column": "price_usd",
+     "max_consecutive": 6,
+     "group_by": "coin"
+    }
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T19:23:24.692601+00:00 (0.0h ago)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T19:23:33+00:00 (0.0h behind now)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "OK",
+     "detail": "longest identical run 1 < 6 on price_usd",
+     "observed": 1.0,
+     "threshold": 6.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    }
+   },
+   "last_run": {
+    "status": "ok",
+    "reason": null,
+    "finished_at": "2026-11-14T19:23:27.154601+00:00",
+    "rows_written": 2,
+    "error": null,
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 25,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 0,
+    "rows": 50
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "ok",
+     "rows": 2,
+     "error": null
+    }
+   ]
+  },
+  {
+   "feed": "ieso_ontario_demand",
+   "description": "IESO hourly Ontario demand (PUB_Demand.csv); hour-ending in fixed Eastern Standard Time all year (no DST), a classic timezone trap.",
+   "cadence": "daily",
+   "table": "ieso_ontario_demand",
+   "sla": {
+    "write_recency_max_hours": 30.0,
+    "head_lag_max_hours": 54.0,
+    "flat_value": {
+     "column": "ontario_demand",
+     "max_consecutive": 6,
+     "group_by": null
+    }
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T16:23:59.157208+00:00 (3.0h ago)",
+     "observed": 3.0,
+     "threshold": 30.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T06:00:00+00:00 (13.4h behind now)",
+     "observed": 13.4,
+     "threshold": 54.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "OK",
+     "detail": "longest identical run 1 < 6 on ontario_demand",
+     "observed": 1.0,
+     "threshold": 6.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    }
+   },
+   "last_run": {
+    "status": "skipped",
+    "reason": "not_due",
+    "finished_at": "2026-11-14T19:23:24.692601+00:00",
+    "rows_written": 0,
+    "error": "daily feed refreshed 3.0h ago (< 20h)",
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 2,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 23,
+    "rows": 48
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 24,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 1.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 2.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 3.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 4.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 5.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 6.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 7.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 8.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 9.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 10.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 11.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 12.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 13.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 14.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 15.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 16.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 17.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 18.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 19.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 20.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 24,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 1.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 2.0h ago (< 20h)"
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "skipped",
+     "rows": 0,
+     "error": "daily feed refreshed 3.0h ago (< 20h)"
+    }
+   ]
+  },
+  {
+   "feed": "canary_selfcheck",
+   "description": "Canary: this project's own published data.json. The weekly self-test drills break this feed, not somebody else's data.",
+   "cadence": "hourly",
+   "table": "canary_selfcheck",
+   "sla": {
+    "write_recency_max_hours": 3.0,
+    "head_lag_max_hours": 4.0,
+    "flat_value": null
+   },
+   "cells": {
+    "write_recency": {
+     "state": "OK",
+     "detail": "last captured_at 2026-11-14T19:23:24.692601+00:00 (0.0h ago)",
+     "observed": 0.01,
+     "threshold": 3.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "head_lag": {
+     "state": "OK",
+     "detail": "newest event_ts 2026-11-14T18:24:44.652168+00:00 (1.0h behind now)",
+     "observed": 0.99,
+     "threshold": 4.0,
+     "detected_at": "2026-11-14T19:24:12.711801+00:00"
+    },
+    "flat_value": {
+     "state": "N/A",
+     "detail": "not declared in fleet.yaml"
+    }
+   },
+   "last_run": {
+    "status": "ok",
+    "reason": null,
+    "finished_at": "2026-11-14T19:23:28.589601+00:00",
+    "rows_written": 1,
+    "error": null,
+    "ago": "1m ago"
+   },
+   "runs_24h": {
+    "ok": 25,
+    "no_change": 0,
+    "failed": 0,
+    "skipped": 0,
+    "rows": 25
+   },
+   "timeline": [
+    {
+     "t": "2026-11-13T19:24:55.443216+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T20:23:29.561510+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T21:25:02.656750+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T22:24:48.778125+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-13T23:25:03.075477+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T00:23:36.438725+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T01:23:32.330806+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T02:23:39.431156+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T03:23:46.628463+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T04:23:52.363824+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T05:23:58.659669+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T06:23:59.836961+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T07:23:57.806597+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T08:23:50.956637+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T09:23:34.987200+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T10:23:55.167752+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T11:23:55.009341+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T12:24:11.526620+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T13:24:00.167348+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T14:24:03.120783+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T15:23:57.943739+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T16:23:59.157208+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T17:23:57.853178+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T18:23:42.806845+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    },
+    {
+     "t": "2026-11-14T19:23:24.692601+00:00",
+     "status": "ok",
+     "rows": 1,
+     "error": null
+    }
+   ]
+  }
+ ],
+ "runs_unavailable": false,
+ "open_findings": [],
+ "open_findings_unavailable": false,
+ "ledger": [
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "29847e08a7ac575f",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "92acc5d494f8c529",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "27ce026a77cd1733",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "6c21373465091519",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "cd270015ddd986f0",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: ethereum(1<6), bitcoin(1<6)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(1<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:02:30.137619+00:00",
+   "kind": "OPENED",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(1<12), oklahoma_city(1<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(2<12), oklahoma_city(2<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(2<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: ethereum(2<6), bitcoin(2<6)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:10:02.383758+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(3<12), oklahoma_city(3<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: bitcoin(3<6), ethereum(3<6)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(2<12), KDFW(2<12), KOKC(2<12), KORD(2<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(3<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:20:03.644150+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: oklahoma_city(4<12), chicago(4<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: ethereum(4<6), bitcoin(4<6)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(4<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(3<12), KOKC(3<12), KORD(3<12), KDFW(3<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T04:25:06.263531+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(5<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(5<12), oklahoma_city(5<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDFW(4<12), KDEN(4<12), KOKC(4<12), KORD(4<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T05:25:04.334577+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: ethereum(5<6), bitcoin(5<6)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "cd270015ddd986f0",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "self-healed without intervention",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KORD(5<12), KOKC(5<12), KDFW(5<12), KDEN(5<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(6<12), oklahoma_city(6<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(6<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T06:25:06.673411+00:00",
+   "kind": "CLOSED",
+   "finding_id": "cd270015ddd986f0",
+   "feed": "coingecko_prices",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "back to OK: longest identical run 1 < 6 on price_usd",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(6<12), KDFW(6<12), KOKC(6<12), KORD(6<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(7<12), oklahoma_city(7<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T07:25:09.359251+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(7<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(8<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: oklahoma_city(8<12), chicago(8<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KORD(7<12), KDFW(7<12), KDEN(7<12), KOKC(7<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T08:26:38.727319+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(9<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: oklahoma_city(9<12), chicago(9<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(8<12), KORD(8<12), KDFW(8<12), KOKC(8<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T09:26:40.410729+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: chicago(10<12), oklahoma_city(10<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(9<12), KORD(9<12), KDFW(9<12), KOKC(9<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T10:26:33.576749+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(10<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDFW(10<12), KOKC(10<12), KDEN(10<12), KORD(10<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: oklahoma_city(11<12), chicago(11<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(11<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T11:26:30.032530+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "CLOSED",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": "open_meteo_current",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "back to OK: longest identical run 2 < 12 on temperature_2m",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: KDEN(11<12), KORD(11<12), KDFW(11<12), KOKC(11<12)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(12<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T12:26:42.808151+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "6e5d3a9a6de9ef0f",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "self-healed without intervention",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "CLOSED",
+   "finding_id": "29847e08a7ac575f",
+   "feed": "nws_observations",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "back to OK: longest identical run 3 < 12 on temperature_c",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "29847e08a7ac575f",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "self-healed without intervention",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T13:26:17.180479+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(13<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T14:26:12.480677+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(14<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T14:26:12.480677+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T14:26:12.480677+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T14:26:12.480677+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T15:26:13.020277+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T15:26:13.020277+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(15<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T15:26:13.020277+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T15:26:13.020277+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T16:26:29.893062+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(16<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T16:26:29.893062+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T16:26:29.893062+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T16:26:29.893062+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:26:33.676787+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:26:33.676787+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "insufficient history: feature_count(17<24)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:26:33.676787+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:26:33.676787+00:00",
+   "kind": "STILL_OPEN",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "80e43604e3680013",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "OPENED",
+   "finding_id": "80e43604e3680013",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "UNKNOWN",
+   "detail": "no rows to read a head from",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "OPENED",
+   "finding_id": "b7152e86005cca2f",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "no rows captured inside the lookback window",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "OPENED",
+   "finding_id": "207080fdb07b08a2",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "UNKNOWN",
+   "detail": "no rows to evaluate value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:48:09.419230+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "207080fdb07b08a2",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "92acc5d494f8c529",
+   "feed": "usgs_earthquakes_hour",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "27ce026a77cd1733",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "CLOSED",
+   "finding_id": "6c21373465091519",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "92acc5d494f8c529",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "19142d7fe1f0613f",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "27ce026a77cd1733",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T17:55:38.680577+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "6c21373465091519",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "actor": "human:migration"
+  },
+  {
+   "ts": "2026-11-08T18:25:01.232051+00:00",
+   "kind": "OPENED",
+   "finding_id": "1855a49cd2088146",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "value": "BREACH",
+   "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (36.4h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T18:25:01.232051+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "1855a49cd2088146",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "1855a49cd2088146",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "no triage rule matched (axis=head_lag, state=BREACH, runs=[])",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "80e43604e3680013",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:54:17.357723+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "207080fdb07b08a2",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T18:56:43.846376+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "1855a49cd2088146",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "mis-specified SLA: IESO publishes once a day with the previous day's hours, head lag is 24-48h by design; head_lag SLA corrected 36->54h in ops/SLA_CHANGES.md",
+   "actor": "human:isabelle"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "207080fdb07b08a2",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "CLOSED",
+   "finding_id": "1855a49cd2088146",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-07T06:00:00+00:00 (37.0h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-08T19:01:54.216823+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "80e43604e3680013",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T21:15:29.614216+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "re-queued so the live agent opens the real GitHub issue for the FRED upstream outage (the earlier escalation was a dry run)",
+   "actor": "human:isabelle"
+  },
+  {
+   "ts": "2026-11-08T21:25:17.170424+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-08T21:28:16.357430+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "re-queued again after the dry-run-ref fix so the live agent opens the real GitHub issue for the FRED outage",
+   "actor": "human:isabelle"
+  },
+  {
+   "ts": "2026-11-08T21:32:12.728306+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b7152e86005cca2f",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:26:10.272917+00:00",
+   "kind": "OPENED",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": "coingecko_prices",
+   "axis": "head_lag",
+   "value": "BREACH",
+   "detail": "newest event_ts 2026-11-08T21:31:50+00:00 (3.9h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-09T01:26:10.272917+00:00",
+   "kind": "OPENED",
+   "finding_id": "9c13744e63c41b27",
+   "feed": "coingecko_prices",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "last captured_at 2026-11-08T21:30:30.473447+00:00 (3.9h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-09T01:26:10.272917+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-09T01:26:10.272917+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 1 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:26:10.272917+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 1 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:26:10.272917+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-09T01:42:52.384106+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 2 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:42:52.384106+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "follows 9c13744e63c41b27",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:49:32.246207+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "gate rejected 3 attempts (REPLAY_FAILED,TESTS_PASSED)",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:49:32.246207+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "follows 9c13744e63c41b27: gate rejected 3 attempts (REPLAY_FAILED,TESTS_PASSED)",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T01:55:25.348680+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "drill: attempts 1-2 were blocked by repo tests that pinned the pre-repair behaviour (fixed in PRs 4/5), attempt 3 was poisoned by that stale feedback; tests fixed, budget reset, try again",
+   "actor": "human:isabelle"
+  },
+  {
+   "ts": "2026-11-09T01:59:33.262822+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 1 rejected by gate (REPLAY_FAILED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T02:07:50.443368+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 2 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T02:16:06.477285+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "attempt 3 merged as 5039d36cdd; awaiting verification by the next 2 detector runs",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T02:26:13.407461+00:00",
+   "kind": "CLOSED",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": "coingecko_prices",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-09T02:25:40+00:00 (0.0h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-09T02:26:13.407461+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "BENIGN",
+   "detail": "self-healed without intervention",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-09T02:26:13.407461+00:00",
+   "kind": "CLOSED",
+   "finding_id": "9c13744e63c41b27",
+   "feed": "coingecko_prices",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "back to OK: last captured_at 2026-11-09T02:24:22.901401+00:00 (0.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-09T02:50:57.970682+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "aebb17a80d5aee81",
+   "feed": null,
+   "axis": null,
+   "value": "FIXED",
+   "detail": "fixed by the repair of sibling finding 9c13744e63c41b27",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T02:50:57.970682+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "9c13744e63c41b27",
+   "feed": null,
+   "axis": null,
+   "value": "FIXED",
+   "detail": "attempt 3: merged 5039d36cdd, deployed, detector cleared",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T06:25:50.259372+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b3848b3e3d5146b2",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout [injected by the harness]); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T06:25:50.259372+00:00",
+   "kind": "OPENED",
+   "finding_id": "b3848b3e3d5146b2",
+   "feed": "github_status",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "last captured_at 2026-11-09T03:09:12.474874+00:00 (3.3h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-09T06:25:50.259372+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b3848b3e3d5146b2",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-09T07:25:35.327294+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "b3848b3e3d5146b2",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "upstream keeps failing (source_error: transport: ReadTimeout [injected by the harness]); nothing in this repo can fix the source",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-09T07:40:51.619179+00:00",
+   "kind": "CLOSED",
+   "finding_id": "b3848b3e3d5146b2",
+   "feed": "github_status",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "back to OK: last captured_at 2026-11-09T07:39:01.221729+00:00 (0.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-10T06:26:43.176202+00:00",
+   "kind": "OPENED",
+   "finding_id": "d74d98efc2f880ab",
+   "feed": "ieso_ontario_demand",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "last captured_at 2026-11-09T00:24:00.175221+00:00 (30.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-10T06:26:43.176202+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "d74d98efc2f880ab",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "job reports success but no rows land inside the SLA window",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-10T06:26:43.176202+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "d74d98efc2f880ab",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-10T07:26:10.521056+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "d74d98efc2f880ab",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "job reports success but no rows land inside the SLA window",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-10T12:25:15.693142+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "8cb9419d68e19780",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-10T12:25:15.693142+00:00",
+   "kind": "OPENED",
+   "finding_id": "8cb9419d68e19780",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "value": "BREACH",
+   "detail": "newest event_ts 2026-11-08T06:00:00+00:00 (54.4h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-10T12:25:15.694142+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "8cb9419d68e19780",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "rows arrive but the data's own clock is behind the SLA; the publisher is late",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-11T04:26:47.772421+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "784fbcbdb72834f6",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-11T04:26:47.772421+00:00",
+   "kind": "OPENED",
+   "finding_id": "784fbcbdb72834f6",
+   "feed": "canary_selfcheck",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "last captured_at 2026-11-11T01:24:41.443829+00:00 (3.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T04:26:47.773421+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "784fbcbdb72834f6",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 1 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-11T05:26:44.937309+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "742db8d6c478240f",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-11T05:26:44.937309+00:00",
+   "kind": "OPENED",
+   "finding_id": "742db8d6c478240f",
+   "feed": "canary_selfcheck",
+   "axis": "head_lag",
+   "value": "BREACH",
+   "detail": "newest event_ts 2026-11-11T00:26:54.689682+00:00 (5.0h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T05:26:44.938309+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "784fbcbdb72834f6",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "attempt 2 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-11T05:26:44.939309+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "742db8d6c478240f",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "follows 784fbcbdb72834f6",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-11T06:26:52.264961+00:00",
+   "kind": "CLOSED",
+   "finding_id": "d74d98efc2f880ab",
+   "feed": "ieso_ontario_demand",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "back to OK: last captured_at 2026-11-11T06:24:59.539763+00:00 (0.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T06:26:52.264961+00:00",
+   "kind": "CLOSED",
+   "finding_id": "8cb9419d68e19780",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-10T06:00:00+00:00 (24.4h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T06:26:52.265961+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "784fbcbdb72834f6",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-11T06:26:52.266961+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "742db8d6c478240f",
+   "feed": null,
+   "axis": null,
+   "value": "ESCALATED",
+   "detail": "follows 784fbcbdb72834f6: gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-11T10:25:33.122466+00:00",
+   "kind": "CLOSED",
+   "finding_id": "784fbcbdb72834f6",
+   "feed": "canary_selfcheck",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "back to OK: last captured_at 2026-11-11T10:23:42.914697+00:00 (0.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T10:25:33.122466+00:00",
+   "kind": "CLOSED",
+   "finding_id": "742db8d6c478240f",
+   "feed": "canary_selfcheck",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-11T09:25:54.456012+00:00 (1.0h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T16:52:11.139017+00:00",
+   "kind": "CLOSED",
+   "finding_id": "b7152e86005cca2f",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "back to OK: last captured_at 2026-11-11T16:51:26.348563+00:00 (0.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T16:52:11.139017+00:00",
+   "kind": "CLOSED",
+   "finding_id": "80e43604e3680013",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-09T00:00:00+00:00 (64.9h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T16:52:11.139017+00:00",
+   "kind": "CLOSED",
+   "finding_id": "207080fdb07b08a2",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "value": "OK",
+   "detail": "back to OK: longest identical run 1 < 5 on value",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-11T17:10:19.335855+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "drill:canary_selfcheck:2026111102",
+   "feed": null,
+   "axis": null,
+   "value": "FIXED",
+   "detail": "A test pinned the exact failure the drill asks the agent to repair, so correct patches were rejected; the test was fixed.",
+   "actor": "human:B-cmd-alt"
+  },
+  {
+   "ts": "2026-11-14T11:24:55.147615+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "d2aaa98539d66d76",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-14T11:24:55.147615+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "bb65e2be3b9ed2af",
+   "feed": null,
+   "axis": null,
+   "value": "UNKNOWN",
+   "detail": "awaiting triage",
+   "actor": "auto"
+  },
+  {
+   "ts": "2026-11-14T11:24:55.147615+00:00",
+   "kind": "OPENED",
+   "finding_id": "d2aaa98539d66d76",
+   "feed": "open_meteo_current",
+   "axis": "head_lag",
+   "value": "BREACH",
+   "detail": "newest event_ts 2026-11-14T08:15:00+00:00 (3.2h behind now)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-14T11:24:55.147615+00:00",
+   "kind": "OPENED",
+   "finding_id": "bb65e2be3b9ed2af",
+   "feed": "open_meteo_current",
+   "axis": "write_recency",
+   "value": "BREACH",
+   "detail": "last captured_at 2026-11-14T08:23:50.956637+00:00 (3.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-14T11:24:55.148615+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "bb65e2be3b9ed2af",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)); waiting one run before escalating",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-14T11:24:55.149615+00:00",
+   "kind": "DISPOSITION",
+   "finding_id": "d2aaa98539d66d76",
+   "feed": null,
+   "axis": null,
+   "value": "DEFERRED",
+   "detail": "follows bb65e2be3b9ed2af",
+   "actor": "agent"
+  },
+  {
+   "ts": "2026-11-14T12:24:51.645957+00:00",
+   "kind": "CLOSED",
+   "finding_id": "bb65e2be3b9ed2af",
+   "feed": "open_meteo_current",
+   "axis": "write_recency",
+   "value": "OK",
+   "detail": "back to OK: last captured_at 2026-11-14T12:24:11.526620+00:00 (0.0h ago)",
+   "actor": "detector"
+  },
+  {
+   "ts": "2026-11-14T12:24:51.645957+00:00",
+   "kind": "CLOSED",
+   "finding_id": "d2aaa98539d66d76",
+   "feed": "open_meteo_current",
+   "axis": "head_lag",
+   "value": "OK",
+   "detail": "back to OK: newest event_ts 2026-11-14T12:15:00+00:00 (0.2h behind now)",
+   "actor": "detector"
+  }
+ ],
+ "repo_url": "https://github.com/B-cmd-alt/pipelineagent",
+ "benchmark": {
+  "totals": {
+   "episodes": 4,
+   "detected": 4,
+   "correct": 3,
+   "wrong": 1,
+   "open": 0,
+   "missed": 0,
+   "pending": 0,
+   "human_requeues": 1,
+   "triaged": 4,
+   "model_cost_usd": 0.0748,
+   "reverts": 0,
+   "triage_exact": 4,
+   "median_mttd_min": 182.0,
+   "median_mttr_min": 72.5,
+   "gate_rejections": 9,
+   "uninjected_findings": 13
+  },
+  "episodes": [
+   {
+    "feed": "coingecko_prices",
+    "kind": "schema_rename",
+    "failure_class": "schema_drift",
+    "triaged_as": "schema_drift",
+    "mttd_min": 182,
+    "mttr_min": 85,
+    "outcome": "FIXED",
+    "expected": "FIXED",
+    "verdict": "CORRECT",
+    "gate_rejections": 6,
+    "prs": 1,
+    "reverts": 0,
+    "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/pull/10",
+    "model_cost_usd": 0,
+    "injected": "2026-11-08T22:23:55.685975+00:00",
+    "detected": "2026-11-09T01:26:10.272917+00:00"
+   },
+   {
+    "feed": "github_status",
+    "kind": "stale_source",
+    "failure_class": "stale_source",
+    "triaged_as": "stale_source",
+    "mttd_min": 182,
+    "mttr_min": 60,
+    "outcome": "ESCALATED",
+    "expected": "ESCALATED",
+    "verdict": "CORRECT",
+    "gate_rejections": 0,
+    "prs": 0,
+    "reverts": 0,
+    "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/19",
+    "model_cost_usd": 0,
+    "injected": "2026-11-09T03:24:15.993069+00:00",
+    "detected": "2026-11-09T06:25:50.259372+00:00"
+   },
+   {
+    "feed": "ieso_ontario_demand",
+    "kind": "frozen_payload",
+    "failure_class": "green_job_dead_data",
+    "triaged_as": "green_job_dead_data",
+    "mttd_min": 1616,
+    "mttr_min": 59,
+    "outcome": "ESCALATED",
+    "expected": "ESCALATED",
+    "verdict": "CORRECT",
+    "gate_rejections": 0,
+    "prs": 0,
+    "reverts": 0,
+    "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22",
+    "model_cost_usd": 0,
+    "injected": "2026-11-09T03:30:57.984526+00:00",
+    "detected": "2026-11-10T06:26:43.176202+00:00"
+   },
+   {
+    "feed": "canary_selfcheck",
+    "kind": "schema_rename",
+    "failure_class": "schema_drift",
+    "triaged_as": "schema_drift",
+    "mttd_min": 122,
+    "mttr_min": 120,
+    "outcome": "ESCALATED",
+    "expected": "FIXED",
+    "verdict": "WRONG (ESCALATED)",
+    "gate_rejections": 3,
+    "prs": 0,
+    "reverts": 0,
+    "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/31",
+    "model_cost_usd": 0.0748,
+    "injected": "2026-11-11T02:24:30.403318+00:00",
+    "detected": "2026-11-11T04:26:47.772421+00:00"
+   }
+  ]
+ },
+ "resolved": [
+  {
+   "finding_id": "742db8d6c478240f",
+   "feed": "canary_selfcheck",
+   "axis": "head_lag",
+   "opened_at": "2026-11-11T05:26:44.937309+00:00",
+   "detail": "newest event_ts 2026-11-11T00:26:54.689682+00:00 (5.0h behind now)",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-11T06:26:52.266961+00:00",
+   "note": "follows 784fbcbdb72834f6: gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/31",
+   "agent_steps": [
+    {
+     "finding_id": "742db8d6c478240f",
+     "ts": "2026-11-11T05:26:44.937309+00:00",
+     "run_id": "3a5f1365607d",
+     "attempt": 0,
+     "step": "join",
+     "outcome": "ok",
+     "detail": "follows sibling finding 784fbcbdb72834f6 (same feed): DEFERRED",
+     "ref": "784fbcbdb72834f6"
+    },
+    {
+     "finding_id": "742db8d6c478240f",
+     "ts": "2026-11-11T06:26:52.264961+00:00",
+     "run_id": "45c3fa5737eb",
+     "attempt": 0,
+     "step": "join",
+     "outcome": "ok",
+     "detail": "follows sibling finding 784fbcbdb72834f6 (same feed): ESCALATED",
+     "ref": "784fbcbdb72834f6"
+    }
+   ]
+  },
+  {
+   "finding_id": "784fbcbdb72834f6",
+   "feed": "canary_selfcheck",
+   "axis": "write_recency",
+   "opened_at": "2026-11-11T04:26:47.772421+00:00",
+   "detail": "last captured_at 2026-11-11T01:24:41.443829+00:00 (3.0h ago)",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-11T06:26:52.265961+00:00",
+   "note": "gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/31",
+   "agent_steps": [
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T04:26:47.772421+00:00",
+     "run_id": "09a99f7c3908",
+     "attempt": 1,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Updated parse() to accept the new canary payload format that uses 'generated_w44' instead of 'generated_at' and grid-based cell states instead of a summary object. The function now falls back gracefully, computes cell counts from the grid, and records schema drifts as anomalies while keeping backwards compatibility with the old format. [model deepseek/deepseek-v4-pro, cost $0.0120]",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T04:26:47.772421+00:00",
+     "run_id": "09a99f7c3908",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'generated_at'; got ['benchmark', 'disposition_counts', 'drills', 'errors', 'generated_w44', 'grid', 'heartbeat', 'heartbeat_max_age_hours'",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T04:26:47.772421+00:00",
+     "run_id": "09a99f7c3908",
+     "attempt": 1,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'generated_at'; got ['benchmark', 'disposition_counts', 'drills', 'errors', 'generated_w44', 'grid', 'heartbeat', 'heartbeat_max_age_hours', 'last_24h', 'ledger', 'open_findings', 'open_findings_unavailable'] -> patched 1 rows; tests: tests/test_drills.py:21: in test_canary_parses_the_published_page_and_fails_loudly_on_a_renamed_clock\nE   Fa",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T05:26:44.937309+00:00",
+     "run_id": "3a5f1365607d",
+     "attempt": 2,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'generated_at'; got ['benchmark', 'disposition_counts', 'drills', 'errors', 'generated_w44', 'grid', 'heartbeat', 'heartbeat_max_age_hours', 'last_24h', 'ledger', 'open_findings', 'open_findings_unavailable'] -> patched 1 rows; tests: tests/test_evals.py:62: in test_scenario\nE   AssertionError: flat-value-coingecko\nE   assert [\"triage: exp..",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T05:26:44.937309+00:00",
+     "run_id": "3a5f1365607d",
+     "attempt": 2,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "The parse function now tolerates the 'generated_w44' clock key when 'generated_at' is missing and falls back to deriving cell counts from the 'grid' list and 'open_findings' key if no 'summary' is present, recording schema drift as anomalies. This allows the module to parse the new payload format while still raising a ValueError for payloads that lack both the clock and the necessary data fields, preserving the existing drill test. [model deepseek/deepseek-v4-pro, cost $0.0178]",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T05:26:44.937309+00:00",
+     "run_id": "3a5f1365607d",
+     "attempt": 2,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'generated_at'; got ['benchmark', 'disposition_counts', 'drills', 'errors', 'generated_w44', 'grid', 'heartbeat', 'heartbeat_max_age_hours'",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T06:26:52.264961+00:00",
+     "run_id": "45c3fa5737eb",
+     "attempt": 3,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'generated_at'; got ['benchmark', 'disposition_counts', 'drills', 'errors', 'generated_w44', 'grid', 'heartbeat', 'heartbeat_max_age_hours'",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T06:26:52.264961+00:00",
+     "run_id": "45c3fa5737eb",
+     "attempt": 3,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'generated_at'; got ['benchmark', 'disposition_counts', 'drills', 'errors', 'generated_w44', 'grid', 'heartbeat', 'heartbeat_max_age_hours', 'last_24h', 'ledger', 'open_findings', 'open_findings_unavailable'] -> patched 1 rows; tests: tests/test_drills.py:21: in test_canary_parses_the_published_page_and_fails_loudly_on_a_renamed_clock\nE   Fa",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T06:26:52.264961+00:00",
+     "run_id": "45c3fa5737eb",
+     "attempt": 3,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "The parser now accepts both the old generated_at/summary schema and the new generated_w44/disposition_counts/open_findings schema, mapping counts through tolerant aliases and using top-level open_findings length when needed. It records the schema drift as an anomaly instead of raising, and the new regression test verifies the failing payload lands one row with verbatim count values. [model deepseek/deepseek-v4-pro, cost $0.0450]",
+     "ref": null
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T06:26:52.264961+00:00",
+     "run_id": "45c3fa5737eb",
+     "attempt": 3,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/31"
+    },
+    {
+     "finding_id": "784fbcbdb72834f6",
+     "ts": "2026-11-11T10:25:33.122466+00:00",
+     "run_id": "35bf831d5720",
+     "attempt": 0,
+     "step": "issue_closed",
+     "outcome": "ok",
+     "detail": "closed: finding no longer open",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/31"
+    }
+   ]
+  },
+  {
+   "finding_id": "8cb9419d68e19780",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "opened_at": "2026-11-10T12:25:15.693142+00:00",
+   "detail": "newest event_ts 2026-11-08T06:00:00+00:00 (54.4h behind now)",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-10T12:25:15.694142+00:00",
+   "note": "rows arrive but the data's own clock is behind the SLA; the publisher is late",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22",
+   "agent_steps": [
+    {
+     "finding_id": "8cb9419d68e19780",
+     "ts": "2026-11-10T12:25:15.693142+00:00",
+     "run_id": "4a94aef69c95",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: rows arrive but the data's own clock is behind the SLA; the publisher is late",
+     "ref": null
+    },
+    {
+     "finding_id": "8cb9419d68e19780",
+     "ts": "2026-11-10T12:25:15.693142+00:00",
+     "run_id": "4a94aef69c95",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "rows arrive but the data's own clock is behind the SLA; the publisher is late (joined the feed's open issue)",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22"
+    },
+    {
+     "finding_id": "8cb9419d68e19780",
+     "ts": "2026-11-11T06:26:52.264961+00:00",
+     "run_id": "45c3fa5737eb",
+     "attempt": 0,
+     "step": "issue_closed",
+     "outcome": "ok",
+     "detail": "closed: finding no longer open",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22"
+    }
+   ]
+  },
+  {
+   "finding_id": "d74d98efc2f880ab",
+   "feed": "ieso_ontario_demand",
+   "axis": "write_recency",
+   "opened_at": "2026-11-10T06:26:43.176202+00:00",
+   "detail": "last captured_at 2026-11-09T00:24:00.175221+00:00 (30.0h ago)",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-10T07:26:10.521056+00:00",
+   "note": "job reports success but no rows land inside the SLA window",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22",
+   "agent_steps": [
+    {
+     "finding_id": "d74d98efc2f880ab",
+     "ts": "2026-11-10T06:26:43.176202+00:00",
+     "run_id": "57836c33f8d7",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "job reports success but no rows land inside the SLA window",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22"
+    },
+    {
+     "finding_id": "d74d98efc2f880ab",
+     "ts": "2026-11-10T06:26:43.176202+00:00",
+     "run_id": "57836c33f8d7",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "green_job_dead_data -> escalate: job reports success but no rows land inside the SLA window",
+     "ref": null
+    },
+    {
+     "finding_id": "d74d98efc2f880ab",
+     "ts": "2026-11-10T07:26:10.521056+00:00",
+     "run_id": "6c790b44009d",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "green_job_dead_data -> escalate: job reports success but no rows land inside the SLA window",
+     "ref": null
+    },
+    {
+     "finding_id": "d74d98efc2f880ab",
+     "ts": "2026-11-11T07:25:13.847239+00:00",
+     "run_id": "6a562230972c",
+     "attempt": 0,
+     "step": "issue_closed",
+     "outcome": "ok",
+     "detail": "already closed",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/22"
+    }
+   ]
+  },
+  {
+   "finding_id": "b3848b3e3d5146b2",
+   "feed": "github_status",
+   "axis": "write_recency",
+   "opened_at": "2026-11-09T06:25:50.259372+00:00",
+   "detail": "last captured_at 2026-11-09T03:09:12.474874+00:00 (3.3h ago)",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-09T07:25:35.327294+00:00",
+   "note": "upstream keeps failing (source_error: transport: ReadTimeout [injected by the harness]); nothing in this repo can fix the source",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/19",
+   "agent_steps": [
+    {
+     "finding_id": "b3848b3e3d5146b2",
+     "ts": "2026-11-09T06:25:50.259372+00:00",
+     "run_id": "135c2f26a5bf",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout [injected by the harness]); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "b3848b3e3d5146b2",
+     "ts": "2026-11-09T07:25:35.327294+00:00",
+     "run_id": "53ecbf5af32b",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout [injected by the harness]); nothing in this repo can fix the source",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/19"
+    },
+    {
+     "finding_id": "b3848b3e3d5146b2",
+     "ts": "2026-11-09T07:25:35.327294+00:00",
+     "run_id": "53ecbf5af32b",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout [injected by the harness]); nothing in this repo can fix the source",
+     "ref": null
+    },
+    {
+     "finding_id": "b3848b3e3d5146b2",
+     "ts": "2026-11-09T07:40:51.619179+00:00",
+     "run_id": "e4c92c1b067c",
+     "attempt": 0,
+     "step": "issue_closed",
+     "outcome": "ok",
+     "detail": "closed: finding no longer open",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/19"
+    }
+   ]
+  },
+  {
+   "finding_id": "9c13744e63c41b27",
+   "feed": "coingecko_prices",
+   "axis": "write_recency",
+   "opened_at": "2026-11-09T01:26:10.272917+00:00",
+   "detail": "last captured_at 2026-11-08T21:30:30.473447+00:00 (3.9h ago)",
+   "disposition": "FIXED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-09T02:50:57.970682+00:00",
+   "note": "attempt 3: merged 5039d36cdd, deployed, detector cleared",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/pull/10",
+   "agent_steps": [
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:26:10.272917+00:00",
+     "run_id": "c9b6c9954518",
+     "attempt": 1,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Modified parse to accept either 'usd' or 'usd_price' as the price key (tolerating the API rename) and raise only when neither is present. Added test fixture with the new payload to verify parsing.",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:26:10.272917+00:00",
+     "run_id": "c9b6c9954518",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:26:10.272917+00:00",
+     "run_id": "c9b6c9954518",
+     "attempt": 1,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price'] -> patched 2 rows; tests: ))\n        ctx = FetchContext(client, {\"coins\": [\"bitcoin\", \"ethereum\"]}, None, wh, \"coingecko_prices\", NOW)\n>       with pytest.raises(ValueError, match=\"schema\"):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueErro",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:42:52.384106+00:00",
+     "run_id": "b9e7fb795a81",
+     "attempt": 2,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Modified parse to accept both legacy 'usd' key and new 'usd_price' key from CoinGecko's updated response format, raising error only if both are missing. The new test verifies successful parsing of the failing payload.",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:42:52.384106+00:00",
+     "run_id": "b9e7fb795a81",
+     "attempt": 2,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:42:52.384106+00:00",
+     "run_id": "b9e7fb795a81",
+     "attempt": 2,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price'] -> patched 2 rows; tests: , feeds=[\"coingecko_prices\"], detect=False)\n        r = rep.runs[0]\n>       assert r[\"status\"] == \"failed\" and r[\"reason\"] == \"exception:ValueError\" and \"schema\" in r[\"error\"]\nE       AssertionError: assert ('ok' == 'failed'\nE         \nE         - failed\nE   ",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:49:32.246207+00:00",
+     "run_id": "92d7f745e218",
+     "attempt": 3,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Adjusted parse() to accept both \"usd\" (old) and \"usd_price\" (new) price keys, recording a schema-drift anomaly when the new key is used; fetch() now raises a ValueError with a corresponding message if any such anomaly is present so that the feed still fails for this payload and preserves existing alert behaviour, while parse() itself can process the new payload without crashing.",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:49:32.246207+00:00",
+     "run_id": "92d7f745e218",
+     "attempt": 3,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "gate rejected 3 attempts (REPLAY_FAILED,TESTS_PASSED)",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/6"
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:49:32.246207+00:00",
+     "run_id": "92d7f745e218",
+     "attempt": 3,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:49:32.246207+00:00",
+     "run_id": "92d7f745e218",
+     "attempt": 3,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_FAILED,TESTS_PASSED: failing payload 0: patched code still fails: ValueError: schema: unexpected price key 'usd_price' instead of 'usd'",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:59:33.262822+00:00",
+     "run_id": "978af85c617a",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:59:33.262822+00:00",
+     "run_id": "978af85c617a",
+     "attempt": 1,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_FAILED,TESTS_FAILED: failing payload 0: patched code still fails: [\"bitcoin: schema drift - expected 'usd' key missing, using 'usd_price'\", \"ethereum: schema drift - expected 'usd' key missing, using 'usd_price'\"]; tests: or_but_null_value_is_data _______\n\n    def test_coingecko_missing_key_is_schema_error_but_null_value_is_data():\n>       with pytest.raises(ValueError, match=\"schema\"):\n             ^^^^^^^^^^^^^^^^^^",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T01:59:33.262822+00:00",
+     "run_id": "978af85c617a",
+     "attempt": 1,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Adjusted the parse function to accept the new 'usd_price' key when the original 'usd' key is absent, recording a schema-drift anomaly instead of raising a ValueError. This allows the CoinGecko feed to land rows from the failing payload without breaking, while still parsing earlier payloads identically.",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:07:50.443368+00:00",
+     "run_id": "fbae0833c3bc",
+     "attempt": 2,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "The `parse` function now checks for both `usd` and `usd_price` keys, preferring the former and recording a drift anomaly when only `usd_price` is present; a `ValueError` is still raised when neither price key exists, preserving the original behavior for truly missing fields. This allows the failing payload to produce rows with anomalies while keeping the old healthy payloads identical.",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:07:50.443368+00:00",
+     "run_id": "fbae0833c3bc",
+     "attempt": 2,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price'] -> patched 2 rows; tests: atetime(2026, 11, 8, 0, 33, 52, tzinfo=datetime.timezone.utc)\nE        +  where datetime.datetime(2026, 11, 8, 0, 33, 52, tzinfo=datetime.timezone.utc) = datetime(2026, 11, 8, 0, 33, 52, tzinfo=datetime.timezone.utc)\nE        +    where datetime.timezone.utc ",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:07:50.443368+00:00",
+     "run_id": "fbae0833c3bc",
+     "attempt": 2,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Accept both usd and usd_price price keys, annotating the renamed key as a schema-drift anomaly instead of raising. The new test replays the failing payload and verifies the rows and drift anomaly.",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "pr",
+     "outcome": "ok",
+     "detail": "agent: repair coingecko_prices (schema_drift, finding 9c13744e63c41b27, attempt 3)",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/pull/10"
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "deploy",
+     "outcome": "ok",
+     "detail": "deploy of 5039d36cdd triggered",
+     "ref": "7b62d4aa-f44a-4cf4-bd0a-5d1bc39cdca9"
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "merge",
+     "outcome": "ok",
+     "detail": "squash-merged into main",
+     "ref": "5039d36cddd6b31da30205f9c49d9a8d0dda0c43"
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "replay",
+     "outcome": "ok",
+     "detail": "failing payload 0: base ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price'] -> patched 2 rows",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:16:06.477285+00:00",
+     "run_id": "f1907a7c81f5",
+     "attempt": 3,
+     "step": "gate",
+     "outcome": "ok",
+     "detail": "REPLAY_PASSED,TESTS_PASSED",
+     "ref": null
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T02:50:57.970682+00:00",
+     "run_id": "99b0fad63360",
+     "attempt": 3,
+     "step": "verify",
+     "outcome": "ok",
+     "detail": "finding cleared on the live detectors after deploy",
+     "ref": "5039d36cddd6b31da30205f9c49d9a8d0dda0c43"
+    },
+    {
+     "finding_id": "9c13744e63c41b27",
+     "ts": "2026-11-09T03:10:50.348649+00:00",
+     "run_id": "0df084b25b04",
+     "attempt": 0,
+     "step": "issue_closed",
+     "outcome": "ok",
+     "detail": "already closed",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/6"
+    }
+   ]
+  },
+  {
+   "finding_id": "aebb17a80d5aee81",
+   "feed": "coingecko_prices",
+   "axis": "head_lag",
+   "opened_at": "2026-11-09T01:26:10.272917+00:00",
+   "detail": "newest event_ts 2026-11-08T21:31:50+00:00 (3.9h behind now)",
+   "disposition": "FIXED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-09T02:50:57.970682+00:00",
+   "note": "fixed by the repair of sibling finding 9c13744e63c41b27",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/pull/10",
+   "agent_steps": [
+    {
+     "finding_id": "aebb17a80d5aee81",
+     "ts": "2026-11-09T01:26:10.272917+00:00",
+     "run_id": "c9b6c9954518",
+     "attempt": 1,
+     "step": "patch",
+     "outcome": "ok",
+     "detail": "Modified parse to iterate over accepted price keys (\"usd\", \"usd_price\"), picking the first found and adding an anomaly when the new key is used. Added a test that feeds the exact failing payload and verifies correct parsing with an anomaly logged.",
+     "ref": null
+    },
+    {
+     "finding_id": "aebb17a80d5aee81",
+     "ts": "2026-11-09T01:26:10.272917+00:00",
+     "run_id": "c9b6c9954518",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "schema_drift -> patch: parser rejects the current payload: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price']",
+     "ref": null
+    },
+    {
+     "finding_id": "aebb17a80d5aee81",
+     "ts": "2026-11-09T01:26:10.272917+00:00",
+     "run_id": "c9b6c9954518",
+     "attempt": 1,
+     "step": "gate",
+     "outcome": "failed",
+     "detail": "REPLAY_PASSED,TESTS_FAILED: failing payload 0: base ValueError: schema: expected key 'usd' under bitcoin; got ['last_updated_at', 'usd_price'] -> patched 2 rows; tests: ))\n        ctx = FetchContext(client, {\"coins\": [\"bitcoin\", \"ethereum\"]}, None, wh, \"coingecko_prices\", NOW)\n>       with pytest.raises(ValueError, match=\"schema\"):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueErro",
+     "ref": null
+    },
+    {
+     "finding_id": "aebb17a80d5aee81",
+     "ts": "2026-11-09T01:42:52.384106+00:00",
+     "run_id": "b9e7fb795a81",
+     "attempt": 0,
+     "step": "join",
+     "outcome": "ok",
+     "detail": "follows sibling finding 9c13744e63c41b27 (same feed): DEFERRED",
+     "ref": "9c13744e63c41b27"
+    },
+    {
+     "finding_id": "aebb17a80d5aee81",
+     "ts": "2026-11-09T01:49:32.246207+00:00",
+     "run_id": "92d7f745e218",
+     "attempt": 0,
+     "step": "join",
+     "outcome": "ok",
+     "detail": "follows sibling finding 9c13744e63c41b27 (same feed): ESCALATED",
+     "ref": "9c13744e63c41b27"
+    },
+    {
+     "finding_id": "aebb17a80d5aee81",
+     "ts": "2026-11-09T02:50:57.970682+00:00",
+     "run_id": "99b0fad63360",
+     "attempt": 3,
+     "step": "verify",
+     "outcome": "ok",
+     "detail": "cleared with sibling 9c13744e63c41b27",
+     "ref": "5039d36cddd6b31da30205f9c49d9a8d0dda0c43"
+    }
+   ]
+  },
+  {
+   "finding_id": "b7152e86005cca2f",
+   "feed": "fred_dgs10",
+   "axis": "write_recency",
+   "opened_at": "2026-11-08T17:48:09.419230+00:00",
+   "detail": "no rows captured inside the lookback window",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-08T21:32:12.728306+00:00",
+   "note": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "evidence_ref": "https://github.com/B-cmd-alt/pipelineagent/issues/3",
+   "agent_steps": [
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source (joined the feed's open issue)",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T21:25:17.170424+00:00",
+     "run_id": "84bb24059d63",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source (joined the feed's open issue)",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T21:25:17.170424+00:00",
+     "run_id": "84bb24059d63",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T21:32:12.728306+00:00",
+     "run_id": "d7e63db4dc54",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/3"
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-08T21:32:12.728306+00:00",
+     "run_id": "d7e63db4dc54",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    },
+    {
+     "finding_id": "b7152e86005cca2f",
+     "ts": "2026-11-11T16:52:11.139017+00:00",
+     "run_id": "31bacec33b3e",
+     "attempt": 0,
+     "step": "issue_closed",
+     "outcome": "ok",
+     "detail": "closed: finding no longer open",
+     "ref": "https://github.com/B-cmd-alt/pipelineagent/issues/3"
+    }
+   ]
+  },
+  {
+   "finding_id": "207080fdb07b08a2",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "opened_at": "2026-11-08T17:48:09.419230+00:00",
+   "detail": "no rows to evaluate value",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-08T19:01:54.216823+00:00",
+   "note": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "evidence_ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md",
+   "agent_steps": [
+    {
+     "finding_id": "207080fdb07b08a2",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "207080fdb07b08a2",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    },
+    {
+     "finding_id": "207080fdb07b08a2",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    }
+   ]
+  },
+  {
+   "finding_id": "80e43604e3680013",
+   "feed": "fred_dgs10",
+   "axis": "head_lag",
+   "opened_at": "2026-11-08T17:48:09.419230+00:00",
+   "detail": "no rows to read a head from",
+   "disposition": "ESCALATED",
+   "decided_by": "agent",
+   "decided_at": "2026-11-08T19:01:54.216823+00:00",
+   "note": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+   "evidence_ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md",
+   "agent_steps": [
+    {
+     "finding_id": "80e43604e3680013",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> defer: upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating",
+     "ref": null
+    },
+    {
+     "finding_id": "80e43604e3680013",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source (joined the feed's open issue)",
+     "ref": "dry-run:///app/site/agent/issues/207080fdb07b08a2.md"
+    },
+    {
+     "finding_id": "80e43604e3680013",
+     "ts": "2026-11-08T19:01:54.216823+00:00",
+     "run_id": "1bd6cec90ec8",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "stale_source -> escalate: upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source",
+     "ref": null
+    }
+   ]
+  },
+  {
+   "finding_id": "1855a49cd2088146",
+   "feed": "ieso_ontario_demand",
+   "axis": "head_lag",
+   "opened_at": "2026-11-08T18:25:01.232051+00:00",
+   "detail": "newest event_ts 2026-11-07T06:00:00+00:00 (36.4h behind now)",
+   "disposition": "BENIGN",
+   "decided_by": "human:isabelle",
+   "decided_at": "2026-11-08T18:56:43.846376+00:00",
+   "note": "mis-specified SLA: IESO publishes once a day with the previous day's hours, head lag is 24-48h by design; head_lag SLA corrected 36->54h in ops/SLA_CHANGES.md",
+   "evidence_ref": null,
+   "agent_steps": [
+    {
+     "finding_id": "1855a49cd2088146",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "escalate",
+     "outcome": "ok",
+     "detail": "no triage rule matched (axis=head_lag, state=BREACH, runs=[])",
+     "ref": "dry-run:///app/site/agent/issues/1855a49cd2088146.md"
+    },
+    {
+     "finding_id": "1855a49cd2088146",
+     "ts": "2026-11-08T18:54:17.357723+00:00",
+     "run_id": "3f614e0ced87",
+     "attempt": 1,
+     "step": "triage",
+     "outcome": "ok",
+     "detail": "unknown -> escalate: no triage rule matched (axis=head_lag, state=BREACH, runs=[])",
+     "ref": null
+    },
+    {
+     "finding_id": "1855a49cd2088146",
+     "ts": "2026-11-10T18:35:58.038546+00:00",
+     "run_id": "eaf6818b30bc",
+     "attempt": 0,
+     "step": "scenario_draft",
+     "outcome": "skipped",
+     "detail": "runs or archived bytes around the finding are missing; nothing replayable to draft",
+     "ref": null
+    }
+   ]
+  },
+  {
+   "finding_id": "19142d7fe1f0613f",
+   "feed": "fred_dgs10",
+   "axis": "flat_value",
+   "opened_at": "2026-11-08T04:02:30.137619+00:00",
+   "detail": "no rows to evaluate value",
+   "disposition": "BENIGN",
+   "decided_by": "human:migration",
+   "decided_at": "2026-11-08T17:55:38.680577+00:00",
+   "note": "superseded by the transitions-only ledger migration (not a data-quality outcome)",
+   "evidence_ref": null,
+   "agent_steps": []
+  }
+ ],
+ "disposition_counts": {
+  "FIXED": 3,
+  "BENIGN": 8,
+  "ESCALATED": 8,
+  "DEFERRED": 2,
+  "UNKNOWN": 0
+ },
+ "drills": [
+  {
+   "feed": "canary_selfcheck",
+   "episodes": 1,
+   "correct": 0,
+   "settled": [
+    {
+     "id": "drill:canary_selfcheck:2026111102",
+     "why": "schema_drift drill injected 2026-11-11 02:24Z ended WRONG (ESCALATED) (expected FIXED)",
+     "by": "human:B-cmd-alt",
+     "at": "2026-11-11T17:10:19.335855+00:00",
+     "note": "A test pinned the exact failure the drill asks the agent to repair, so correct patches were rejected; the test was fixed.",
+     "evidence": "https://github.com/B-cmd-alt/pipelineagent/pull/33"
+    }
+   ],
+   "last": {
+    "class": "schema_drift",
+    "kind": "schema_rename",
+    "injected": "2026-11-11T02:24:30.403318+00:00",
+    "verdict": "WRONG (ESCALATED)",
+    "outcome": "ESCALATED",
+    "mttd_min": 122,
+    "mttr_min": 120,
+    "evidence": "https://github.com/B-cmd-alt/pipelineagent/issues/31"
+   },
+   "alarms": [],
+   "state": "OK"
+  }
+ ],
+ "last_24h": {
+  "runs_failed": 7,
+  "rows": 339,
+  "opened": 2,
+  "closed": 2,
+  "fixed": 0,
+  "escalated": 0,
+  "benign": 0
+ },
+ "summary": {
+  "breach": 0,
+  "unknown": 0,
+  "ok": 22,
+  "not_declared": 2,
+  "open_findings": 0
+ }
+}

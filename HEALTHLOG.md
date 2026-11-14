@@ -1,0 +1,198 @@
+# PipelineAgent HEALTHLOG
+
+Generated 2026-11-14T19:24:36Z from the append-only `findings` and `dispositions` tables (oldest first). OPENED/CLOSED are detector transitions; DISPOSITION rows are automatic or human decisions.
+
+- 2026-11-08T04:02Z DISPOSITION `29847e08a7ac575f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `6e5d3a9a6de9ef0f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `92acc5d494f8c529` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `27ce026a77cd1733` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `6c21373465091519` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `19142d7fe1f0613f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z DISPOSITION `cd270015ddd986f0` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T04:02Z OPENED `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(1<6), bitcoin(1<6)
+- 2026-11-08T04:02Z OPENED `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:02Z OPENED `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)
+- 2026-11-08T04:02Z OPENED `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:02Z OPENED `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:02Z OPENED `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(1<24)
+- 2026-11-08T04:02Z OPENED `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(1<12), oklahoma_city(1<12)
+- 2026-11-08T04:10Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(2<12), oklahoma_city(2<12)
+- 2026-11-08T04:10Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:10Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(1<12), KDEN(1<12), KOKC(1<12), KORD(1<12)
+- 2026-11-08T04:10Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(2<24)
+- 2026-11-08T04:10Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(2<6), bitcoin(2<6)
+- 2026-11-08T04:10Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:10Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:20Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(3<12), oklahoma_city(3<12)
+- 2026-11-08T04:20Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: bitcoin(3<6), ethereum(3<6)
+- 2026-11-08T04:20Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:20Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(2<12), KDFW(2<12), KOKC(2<12), KORD(2<12)
+- 2026-11-08T04:20Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(3<24)
+- 2026-11-08T04:20Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T04:20Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T04:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(4<12), chicago(4<12)
+- 2026-11-08T04:25Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(4<6), bitcoin(4<6)
+- 2026-11-08T04:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T04:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(4<24)
+- 2026-11-08T04:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(3<12), KOKC(3<12), KORD(3<12), KDFW(3<12)
+- 2026-11-08T04:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T05:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T05:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T05:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(5<24)
+- 2026-11-08T05:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(5<12), oklahoma_city(5<12)
+- 2026-11-08T05:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T05:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(4<12), KDEN(4<12), KOKC(4<12), KORD(4<12)
+- 2026-11-08T05:25Z STILL_OPEN `cd270015ddd986f0` coingecko_prices/flat_value UNKNOWN — insufficient history: ethereum(5<6), bitcoin(5<6)
+- 2026-11-08T06:25Z DISPOSITION `cd270015ddd986f0` BENIGN (auto) — self-healed without intervention
+- 2026-11-08T06:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T06:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T06:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T06:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KORD(5<12), KOKC(5<12), KDFW(5<12), KDEN(5<12)
+- 2026-11-08T06:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(6<12), oklahoma_city(6<12)
+- 2026-11-08T06:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(6<24)
+- 2026-11-08T06:25Z CLOSED `cd270015ddd986f0` coingecko_prices/flat_value OK — back to OK: longest identical run 1 < 6 on price_usd
+- 2026-11-08T07:25Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T07:25Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T07:25Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T07:25Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(6<12), KDFW(6<12), KOKC(6<12), KORD(6<12)
+- 2026-11-08T07:25Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(7<12), oklahoma_city(7<12)
+- 2026-11-08T07:25Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(7<24)
+- 2026-11-08T08:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(8<24)
+- 2026-11-08T08:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(8<12), chicago(8<12)
+- 2026-11-08T08:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T08:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T08:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KORD(7<12), KDFW(7<12), KDEN(7<12), KOKC(7<12)
+- 2026-11-08T08:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T09:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T09:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T09:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(9<24)
+- 2026-11-08T09:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(9<12), chicago(9<12)
+- 2026-11-08T09:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(8<12), KORD(8<12), KDFW(8<12), KOKC(8<12)
+- 2026-11-08T09:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T10:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T10:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T10:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: chicago(10<12), oklahoma_city(10<12)
+- 2026-11-08T10:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(9<12), KORD(9<12), KDFW(9<12), KOKC(9<12)
+- 2026-11-08T10:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T10:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(10<24)
+- 2026-11-08T11:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T11:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDFW(10<12), KOKC(10<12), KDEN(10<12), KORD(10<12)
+- 2026-11-08T11:26Z STILL_OPEN `6e5d3a9a6de9ef0f` open_meteo_current/flat_value UNKNOWN — insufficient history: oklahoma_city(11<12), chicago(11<12)
+- 2026-11-08T11:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T11:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(11<24)
+- 2026-11-08T11:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T12:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T12:26Z CLOSED `6e5d3a9a6de9ef0f` open_meteo_current/flat_value OK — back to OK: longest identical run 2 < 12 on temperature_2m
+- 2026-11-08T12:26Z STILL_OPEN `29847e08a7ac575f` nws_observations/flat_value UNKNOWN — insufficient history: KDEN(11<12), KORD(11<12), KDFW(11<12), KOKC(11<12)
+- 2026-11-08T12:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T12:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T12:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(12<24)
+- 2026-11-08T12:26Z DISPOSITION `6e5d3a9a6de9ef0f` BENIGN (auto) — self-healed without intervention
+- 2026-11-08T13:26Z CLOSED `29847e08a7ac575f` nws_observations/flat_value OK — back to OK: longest identical run 3 < 12 on temperature_c
+- 2026-11-08T13:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T13:26Z DISPOSITION `29847e08a7ac575f` BENIGN (auto) — self-healed without intervention
+- 2026-11-08T13:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T13:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T13:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(13<24)
+- 2026-11-08T14:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(14<24)
+- 2026-11-08T14:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T14:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T14:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T15:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T15:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(15<24)
+- 2026-11-08T15:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T15:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T16:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(16<24)
+- 2026-11-08T16:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T16:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T16:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T17:26Z STILL_OPEN `6c21373465091519` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T17:26Z STILL_OPEN `92acc5d494f8c529` usgs_earthquakes_hour/flat_value UNKNOWN — insufficient history: feature_count(17<24)
+- 2026-11-08T17:26Z STILL_OPEN `27ce026a77cd1733` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T17:26Z STILL_OPEN `19142d7fe1f0613f` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T17:48Z DISPOSITION `80e43604e3680013` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T17:48Z DISPOSITION `b7152e86005cca2f` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T17:48Z OPENED `80e43604e3680013` fred_dgs10/head_lag UNKNOWN — no rows to read a head from
+- 2026-11-08T17:48Z OPENED `b7152e86005cca2f` fred_dgs10/write_recency BREACH — no rows captured inside the lookback window
+- 2026-11-08T17:48Z OPENED `207080fdb07b08a2` fred_dgs10/flat_value UNKNOWN — no rows to evaluate value
+- 2026-11-08T17:48Z DISPOSITION `207080fdb07b08a2` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T17:55Z CLOSED `92acc5d494f8c529` usgs_earthquakes_hour/flat_value OK — closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings
+- 2026-11-08T17:55Z CLOSED `19142d7fe1f0613f` fred_dgs10/flat_value OK — closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings
+- 2026-11-08T17:55Z CLOSED `27ce026a77cd1733` fred_dgs10/write_recency OK — closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings
+- 2026-11-08T17:55Z CLOSED `6c21373465091519` fred_dgs10/head_lag OK — closed by the 2026-11-08 ledger migration to transitions-only events; FRED axes continue under new finding ids opened 17:48Z, the four flat-value warm-ups are transient and no longer open findings
+- 2026-11-08T17:55Z DISPOSITION `92acc5d494f8c529` BENIGN (human:migration) — superseded by the transitions-only ledger migration (not a data-quality outcome)
+- 2026-11-08T17:55Z DISPOSITION `19142d7fe1f0613f` BENIGN (human:migration) — superseded by the transitions-only ledger migration (not a data-quality outcome)
+- 2026-11-08T17:55Z DISPOSITION `27ce026a77cd1733` BENIGN (human:migration) — superseded by the transitions-only ledger migration (not a data-quality outcome)
+- 2026-11-08T17:55Z DISPOSITION `6c21373465091519` BENIGN (human:migration) — superseded by the transitions-only ledger migration (not a data-quality outcome)
+- 2026-11-08T18:25Z OPENED `1855a49cd2088146` ieso_ontario_demand/head_lag BREACH — newest event_ts 2026-11-07T06:00:00+00:00 (36.4h behind now)
+- 2026-11-08T18:25Z DISPOSITION `1855a49cd2088146` UNKNOWN (auto) — awaiting triage
+- 2026-11-08T18:54Z DISPOSITION `1855a49cd2088146` ESCALATED (agent) — no triage rule matched (axis=head_lag, state=BREACH, runs=[])
+- 2026-11-08T18:54Z DISPOSITION `b7152e86005cca2f` DEFERRED (agent) — upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating
+- 2026-11-08T18:54Z DISPOSITION `80e43604e3680013` DEFERRED (agent) — upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating
+- 2026-11-08T18:54Z DISPOSITION `207080fdb07b08a2` DEFERRED (agent) — upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); waiting one run before escalating
+- 2026-11-08T18:56Z DISPOSITION `1855a49cd2088146` BENIGN (human:isabelle) — mis-specified SLA: IESO publishes once a day with the previous day's hours, head lag is 24-48h by design; head_lag SLA corrected 36->54h in ops/SLA_CHANGES.md
+- 2026-11-08T19:01Z DISPOSITION `207080fdb07b08a2` ESCALATED (agent) — upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source
+- 2026-11-08T19:01Z DISPOSITION `b7152e86005cca2f` ESCALATED (agent) — upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source
+- 2026-11-08T19:01Z CLOSED `1855a49cd2088146` ieso_ontario_demand/head_lag OK — back to OK: newest event_ts 2026-11-07T06:00:00+00:00 (37.0h behind now)
+- 2026-11-08T19:01Z DISPOSITION `80e43604e3680013` ESCALATED (agent) — upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source
+- 2026-11-08T21:15Z DISPOSITION `b7152e86005cca2f` DEFERRED (human:isabelle) — re-queued so the live agent opens the real GitHub issue for the FRED upstream outage (the earlier escalation was a dry run)
+- 2026-11-08T21:25Z DISPOSITION `b7152e86005cca2f` ESCALATED (agent) — upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source
+- 2026-11-08T21:28Z DISPOSITION `b7152e86005cca2f` DEFERRED (human:isabelle) — re-queued again after the dry-run-ref fix so the live agent opens the real GitHub issue for the FRED outage
+- 2026-11-08T21:32Z DISPOSITION `b7152e86005cca2f` ESCALATED (agent) — upstream keeps failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)); nothing in this repo can fix the source
+- 2026-11-09T01:26Z OPENED `aebb17a80d5aee81` coingecko_prices/head_lag BREACH — newest event_ts 2026-11-08T21:31:50+00:00 (3.9h behind now)
+- 2026-11-09T01:26Z OPENED `9c13744e63c41b27` coingecko_prices/write_recency BREACH — last captured_at 2026-11-08T21:30:30.473447+00:00 (3.9h ago)
+- 2026-11-09T01:26Z DISPOSITION `aebb17a80d5aee81` UNKNOWN (auto) — awaiting triage
+- 2026-11-09T01:26Z DISPOSITION `9c13744e63c41b27` DEFERRED (agent) — attempt 1 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run
+- 2026-11-09T01:26Z DISPOSITION `aebb17a80d5aee81` DEFERRED (agent) — attempt 1 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run
+- 2026-11-09T01:26Z DISPOSITION `9c13744e63c41b27` UNKNOWN (auto) — awaiting triage
+- 2026-11-09T01:42Z DISPOSITION `9c13744e63c41b27` DEFERRED (agent) — attempt 2 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run
+- 2026-11-09T01:42Z DISPOSITION `aebb17a80d5aee81` DEFERRED (agent) — follows 9c13744e63c41b27
+- 2026-11-09T01:49Z DISPOSITION `9c13744e63c41b27` ESCALATED (agent) — gate rejected 3 attempts (REPLAY_FAILED,TESTS_PASSED)
+- 2026-11-09T01:49Z DISPOSITION `aebb17a80d5aee81` ESCALATED (agent) — follows 9c13744e63c41b27: gate rejected 3 attempts (REPLAY_FAILED,TESTS_PASSED)
+- 2026-11-09T01:55Z DISPOSITION `9c13744e63c41b27` DEFERRED (human:isabelle) — drill: attempts 1-2 were blocked by repo tests that pinned the pre-repair behaviour (fixed in PRs 4/5), attempt 3 was poisoned by that stale feedback; tests fixed, budget reset, try again
+- 2026-11-09T01:59Z DISPOSITION `9c13744e63c41b27` DEFERRED (agent) — attempt 1 rejected by gate (REPLAY_FAILED,TESTS_FAILED); retry next run
+- 2026-11-09T02:07Z DISPOSITION `9c13744e63c41b27` DEFERRED (agent) — attempt 2 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run
+- 2026-11-09T02:16Z DISPOSITION `9c13744e63c41b27` UNKNOWN (agent) — attempt 3 merged as 5039d36cdd; awaiting verification by the next 2 detector runs
+- 2026-11-09T02:26Z CLOSED `aebb17a80d5aee81` coingecko_prices/head_lag OK — back to OK: newest event_ts 2026-11-09T02:25:40+00:00 (0.0h behind now)
+- 2026-11-09T02:26Z DISPOSITION `9c13744e63c41b27` BENIGN (auto) — self-healed without intervention
+- 2026-11-09T02:26Z CLOSED `9c13744e63c41b27` coingecko_prices/write_recency OK — back to OK: last captured_at 2026-11-09T02:24:22.901401+00:00 (0.0h ago)
+- 2026-11-09T02:50Z DISPOSITION `aebb17a80d5aee81` FIXED (agent) — fixed by the repair of sibling finding 9c13744e63c41b27
+- 2026-11-09T02:50Z DISPOSITION `9c13744e63c41b27` FIXED (agent) — attempt 3: merged 5039d36cdd, deployed, detector cleared
+- 2026-11-09T06:25Z DISPOSITION `b3848b3e3d5146b2` DEFERRED (agent) — upstream failing (source_error: transport: ReadTimeout [injected by the harness]); waiting one run before escalating
+- 2026-11-09T06:25Z OPENED `b3848b3e3d5146b2` github_status/write_recency BREACH — last captured_at 2026-11-09T03:09:12.474874+00:00 (3.3h ago)
+- 2026-11-09T06:25Z DISPOSITION `b3848b3e3d5146b2` UNKNOWN (auto) — awaiting triage
+- 2026-11-09T07:25Z DISPOSITION `b3848b3e3d5146b2` ESCALATED (agent) — upstream keeps failing (source_error: transport: ReadTimeout [injected by the harness]); nothing in this repo can fix the source
+- 2026-11-09T07:40Z CLOSED `b3848b3e3d5146b2` github_status/write_recency OK — back to OK: last captured_at 2026-11-09T07:39:01.221729+00:00 (0.0h ago)
+- 2026-11-10T06:26Z OPENED `d74d98efc2f880ab` ieso_ontario_demand/write_recency BREACH — last captured_at 2026-11-09T00:24:00.175221+00:00 (30.0h ago)
+- 2026-11-10T06:26Z DISPOSITION `d74d98efc2f880ab` ESCALATED (agent) — job reports success but no rows land inside the SLA window
+- 2026-11-10T06:26Z DISPOSITION `d74d98efc2f880ab` UNKNOWN (auto) — awaiting triage
+- 2026-11-10T07:26Z DISPOSITION `d74d98efc2f880ab` ESCALATED (agent) — job reports success but no rows land inside the SLA window
+- 2026-11-10T12:25Z DISPOSITION `8cb9419d68e19780` UNKNOWN (auto) — awaiting triage
+- 2026-11-10T12:25Z OPENED `8cb9419d68e19780` ieso_ontario_demand/head_lag BREACH — newest event_ts 2026-11-08T06:00:00+00:00 (54.4h behind now)
+- 2026-11-10T12:25Z DISPOSITION `8cb9419d68e19780` ESCALATED (agent) — rows arrive but the data's own clock is behind the SLA; the publisher is late
+- 2026-11-11T04:26Z DISPOSITION `784fbcbdb72834f6` UNKNOWN (auto) — awaiting triage
+- 2026-11-11T04:26Z OPENED `784fbcbdb72834f6` canary_selfcheck/write_recency BREACH — last captured_at 2026-11-11T01:24:41.443829+00:00 (3.0h ago)
+- 2026-11-11T04:26Z DISPOSITION `784fbcbdb72834f6` DEFERRED (agent) — attempt 1 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run
+- 2026-11-11T05:26Z DISPOSITION `742db8d6c478240f` UNKNOWN (auto) — awaiting triage
+- 2026-11-11T05:26Z OPENED `742db8d6c478240f` canary_selfcheck/head_lag BREACH — newest event_ts 2026-11-11T00:26:54.689682+00:00 (5.0h behind now)
+- 2026-11-11T05:26Z DISPOSITION `784fbcbdb72834f6` DEFERRED (agent) — attempt 2 rejected by gate (REPLAY_PASSED,TESTS_FAILED); retry next run
+- 2026-11-11T05:26Z DISPOSITION `742db8d6c478240f` DEFERRED (agent) — follows 784fbcbdb72834f6
+- 2026-11-11T06:26Z CLOSED `d74d98efc2f880ab` ieso_ontario_demand/write_recency OK — back to OK: last captured_at 2026-11-11T06:24:59.539763+00:00 (0.0h ago)
+- 2026-11-11T06:26Z CLOSED `8cb9419d68e19780` ieso_ontario_demand/head_lag OK — back to OK: newest event_ts 2026-11-10T06:00:00+00:00 (24.4h behind now)
+- 2026-11-11T06:26Z DISPOSITION `784fbcbdb72834f6` ESCALATED (agent) — gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)
+- 2026-11-11T06:26Z DISPOSITION `742db8d6c478240f` ESCALATED (agent) — follows 784fbcbdb72834f6: gate rejected 3 attempts (REPLAY_PASSED,TESTS_FAILED)
+- 2026-11-11T10:25Z CLOSED `784fbcbdb72834f6` canary_selfcheck/write_recency OK — back to OK: last captured_at 2026-11-11T10:23:42.914697+00:00 (0.0h ago)
+- 2026-11-11T10:25Z CLOSED `742db8d6c478240f` canary_selfcheck/head_lag OK — back to OK: newest event_ts 2026-11-11T09:25:54.456012+00:00 (1.0h behind now)
+- 2026-11-11T16:52Z CLOSED `b7152e86005cca2f` fred_dgs10/write_recency OK — back to OK: last captured_at 2026-11-11T16:51:26.348563+00:00 (0.0h ago)
+- 2026-11-11T16:52Z CLOSED `80e43604e3680013` fred_dgs10/head_lag OK — back to OK: newest event_ts 2026-11-09T00:00:00+00:00 (64.9h behind now)
+- 2026-11-11T16:52Z CLOSED `207080fdb07b08a2` fred_dgs10/flat_value OK — back to OK: longest identical run 1 < 5 on value
+- 2026-11-11T17:10Z DISPOSITION `drill:canary_selfcheck:2026111102` FIXED (human:B-cmd-alt) — A test pinned the exact failure the drill asks the agent to repair, so correct patches were rejected; the test was fixed.
+- 2026-11-14T11:24Z DISPOSITION `d2aaa98539d66d76` UNKNOWN (auto) — awaiting triage
+- 2026-11-14T11:24Z DISPOSITION `bb65e2be3b9ed2af` UNKNOWN (auto) — awaiting triage
+- 2026-11-14T11:24Z OPENED `d2aaa98539d66d76` open_meteo_current/head_lag BREACH — newest event_ts 2026-11-14T08:15:00+00:00 (3.2h behind now)
+- 2026-11-14T11:24Z OPENED `bb65e2be3b9ed2af` open_meteo_current/write_recency BREACH — last captured_at 2026-11-14T08:23:50.956637+00:00 (3.0h ago)
+- 2026-11-14T11:24Z DISPOSITION `bb65e2be3b9ed2af` DEFERRED (agent) — upstream failing (source_error: transport: ReadTimeout: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=10)); waiting one run before escalating
+- 2026-11-14T11:24Z DISPOSITION `d2aaa98539d66d76` DEFERRED (agent) — follows bb65e2be3b9ed2af
+- 2026-11-14T12:24Z CLOSED `bb65e2be3b9ed2af` open_meteo_current/write_recency OK — back to OK: last captured_at 2026-11-14T12:24:11.526620+00:00 (0.0h ago)
+- 2026-11-14T12:24Z CLOSED `d2aaa98539d66d76` open_meteo_current/head_lag OK — back to OK: newest event_ts 2026-11-14T12:15:00+00:00 (0.2h behind now)
